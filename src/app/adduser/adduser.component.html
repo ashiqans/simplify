@@ -1,0 +1,87 @@
+<div class="addNewUser">
+  <form [formGroup]="addUserForm">
+    <mat-form-field class="form">
+      <mat-label>Name</mat-label>
+      <input type="text" matInput placeholder="Enter Name" formControlName="name" minlength="3" maxlength="15" />
+      <mat-error *ngIf="newUser?.['name']?.touched && newUser?.['name']?.errors?.['required']">
+        Name is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="newUser?.['name']?.touched && newUser?.['name']?.errors?.['minlength']">
+        Name length minimum 3 and maximum 15 is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="form">
+      <mat-label>Email Id</mat-label>
+      <input type="text" matInput placeholder="Enter Email" formControlName="email" />
+      <mat-error *ngIf="
+          newUser?.['email']?.touched && newUser?.['email']?.errors?.['required']
+        ">
+        Email Id is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="
+          newUser?.['email']?.touched && newUser?.['email']?.errors?.['email']
+        ">
+        Enter a valid <strong>email Id</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="form">
+      <mat-label>Mobile</mat-label>
+      <input type="text" matInput placeholder="Enter Mobile Number" formControlName="mobile" minlength="10"
+        maxlength="10" (keypress)="numberOnly($event)" />
+      <mat-error *ngIf="
+          newUser?.['mobile']?.touched && newUser?.['mobile']?.errors?.['required']
+        ">
+        Mobile number is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="
+          newUser?.['mobile']?.touched && newUser?.['mobile']?.errors?.['minlength']
+        ">
+        Minimum 10 digit number is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="form">
+      <mat-label>Password</mat-label>
+      <input [type]="viewPassword ? 'text' : 'password'" matInput placeholder="Enter password"
+        formControlName="password" minlength="6" maxlength="14" />
+      <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon>
+      <mat-error *ngIf="
+          newUser?.['password']?.touched &&
+          newUser?.['password']?.errors?.['required']
+        ">
+        Password is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="
+          newUser?.['password']?.touched &&
+          newUser?.['password']?.errors?.['minlength']
+        ">
+        Password length minimum 6 and maximum 14 is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field class="form">
+      <mat-label>City</mat-label>
+      <input type="text" matInput placeholder="Enter city" formControlName="city" minlength="3" maxlength="20" />
+      <mat-error *ngIf="
+          newUser?.['city']?.touched &&
+          newUser?.['city']?.errors?.['required']
+        ">
+        City is <strong>required</strong>
+      </mat-error>
+      <mat-error *ngIf="
+          newUser?.['city']?.touched &&
+          newUser?.['city']?.errors?.['minlength']
+        ">
+        City length minimum 3 is <strong>required</strong>
+      </mat-error>
+    </mat-form-field>
+  </form>
+
+  <div class="action">
+    <button mat-stroked-button color="primary" id="saveButton" (click)="saveUser()" id="add"
+      [disabled]="!addUserForm.valid">
+      Save
+    </button>
+    <button mat-stroked-button color="accent" id="saveButton" (click)="cancel()">
+      Cancel
+    </button>
+  </div>
+</div>

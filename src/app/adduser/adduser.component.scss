@@ -1,0 +1,21 @@
+.addNewUser {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  margin: 2em;
+
+  .form {
+    margin: 0.5em 1em;
+    width: 18em;
+  }
+
+  #saveButton {
+    margin-right: auto;
+  }
+
+  #add {
+    margin-right: 1em;
+  }
+}
