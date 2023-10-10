@@ -1,39 +1,53 @@
-<div class="toolbar">
+<!-- <div class="toolbar">
   <h2>User Master</h2>
-</div>
-<div class="login-content">
-  <mat-card>
-    <mat-card-content>
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-        <p>Please Login to continue</p>
-        <mat-form-field class="full-width-input">
-          <input matInput placeholder="User Email" formControlName="userName" required minlength="6" maxlength="20">
-          <mat-error
-            *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['required']">
-            Please enter your User Name
-          </mat-error>
-          <mat-error
-            *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
-            Please enter minimum 6 and maximum 14 characters
-          </mat-error>
-        </mat-form-field>
-        <mat-form-field class="full-width-input">
-          <input matInput [type]="viewPassword ? 'text' : 'password'" placeholder="Password" formControlName="password"
-            required minlength="6" maxlength="20">
-          <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon>
-          <mat-error
-            *ngIf="loginForm.controls?.['password']?.touched && loginForm.controls?.['password']?.errors?.['required']">
-            Please enter your password
-          </mat-error>
-          <mat-error
-            *ngIf="loginForm.controls?.['password']?.touched && loginForm.controls?.['password']?.errors?.['minlength']">
-            Please enter minimum 6 and maximum 14 characters
-          </mat-error>
-        </mat-form-field>
-        <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Login</button>
-        <mat-error *ngIf="isUserInvalid">Invalid User details. Please try again!</mat-error>
-      </form>
-    </mat-card-content>
-  </mat-card>
+</div> -->
+<!-- <div class="backgroundImage"></div> -->
+<div class="content">
+  <div class="textContent">
+    <h1>Suggestion..</h1>
+    <ul>
+      <li>An idea or plan put forward for consideration.!</li>
+      <li>Something that implies or indicates a certain fact or situation.!</li>
+      <li>Here are some suggestions for tackling the problem.!</li>
+    </ul>
+  </div>
+  <div class="loginContent">
+    <mat-card>
+      <mat-card-content>
+        <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+          <p class="headerText">Log in to continue</p>
+          <mat-form-field class="full-width-input" floatLabel="always">
+            <mat-label>User ID</mat-label>
+            <input matInput placeholder="Enter your User ID" formControlName="userName" required minlength="6"
+              maxlength="20">
+            <mat-error
+              *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['required']">
+              Please enter your User ID
+            </mat-error>
+            <mat-error
+              *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
+              Please enter minimum 6 and maximum 14 characters
+            </mat-error>
+          </mat-form-field>
+          <mat-form-field class="full-width-input" floatLabel="always">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="viewPassword ? 'text' : 'password'" placeholder="Enter your Password"
+              formControlName="password" required minlength="6" maxlength="20">
+            <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon>
+            <mat-error
+              *ngIf="loginForm.controls?.['password']?.touched && loginForm.controls?.['password']?.errors?.['required']">
+              Please enter your password
+            </mat-error>
+            <mat-error
+              *ngIf="loginForm.controls?.['password']?.touched && loginForm.controls?.['password']?.errors?.['minlength']">
+              Please enter minimum 6 and maximum 14 characters
+            </mat-error>
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Log in</button>
+          <mat-error *ngIf="isUserInvalid">Invalid User details. Please try again!</mat-error>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
 <router-outlet></router-outlet>
