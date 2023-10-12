@@ -44,4 +44,18 @@ export class AuthenticationService {
     sessionStorage.setItem('isLoggedIn', 'false');
     this.router.navigate(['login']);
   }
+
+  test1(testObj: any) {
+    return this.http.post(`${this.baseURL}/CreateSuggestion`, testObj)
+      .pipe(map((user: any) => {
+        return user;
+      }));
+  }
+
+  test2() {
+    return this.http.get(`${this.baseURL}/MstZone?LineID=3`)
+      .pipe(map((user: any) => {
+        return user;
+      }));
+  }
 }

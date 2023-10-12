@@ -9,11 +9,24 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSidenavModule } from "@angular/material/sidenav";
+import { MatListModule } from "@angular/material/list";
+import { NavMenuComponent } from '../app-lists/suggestion/nav-menu/nav-menu.component';
+import { AppListsComponent } from '../app-lists/app-lists.component';
+import { ViewSuggestionComponent } from '../app-lists/suggestion/view-suggestion/view-suggestion.component';
+import { SuggestionComponent } from '../app-lists/suggestion/suggestion.component';
+import { DashboardComponent } from '../app-lists/suggestion/dashboard/dashboard.component';
 
 
 @NgModule({
   declarations: [
-    LoginComponent
+    LoginComponent,
+    NavMenuComponent,
+    AppListsComponent,
+    SuggestionComponent,
+    ViewSuggestionComponent,
+    DashboardComponent
   ],
   imports: [
     CommonModule,
@@ -23,12 +36,15 @@ import { MatIconModule } from '@angular/material/icon';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatIconModule,
+    MatTooltipModule,
+    MatListModule,
     MatButtonModule,
     MatInputModule,
-
+    MatSidenavModule
   ],
   exports: [
-    LoginComponent
+    LoginComponent,
+    MatSidenavModule
   ]
 })
 export class LoginModule { }

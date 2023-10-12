@@ -46,6 +46,10 @@
           <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Log in</button>
           <mat-error *ngIf="isUserInvalid">Invalid User details. Please try again!</mat-error>
         </form>
+
+        <hr class="hrText" data-content="OR">
+        <button mat-raised-button color="primary" type="submit" (click)="navigateToViewSuggestion()">View Suggestion
+          List</button>
       </mat-card-content>
     </mat-card>
   </div>

@@ -1,0 +1,27 @@
+.container {
+  display: flex;
+  justify-content: flex-start;
+  align-items: stretch;
+  background-color: var(--sub-color2);
+  width: 90vw;
+}
+
+.filterSection {
+  // flex-grow: 2;
+  flex: 0 0 24%;
+  padding: 0 1em;
+  border-right: 2px solid var(--border-color1);
+}
+
+.suggestionListSection {
+  // flex-grow: 2;
+  flex: 0 0 23%;
+  padding: 0 1em;
+  border-right: 2px solid var(--border-color1);
+}
+
+.activeBoardSection {
+  // flex-grow: 6;
+  flex: 0 0 50%;
+  padding: 0 1em;
+}

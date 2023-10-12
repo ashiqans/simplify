@@ -5,7 +5,9 @@
 :root {
   --main-color: #553c9a;
   --sub-color1: #b393d3;
-  --sub-color2: #fafafa;
+  --sub-color2: #F6F8FC;
+  --sub-color3: #F6F8FC;
+  --border-color1: #b393d36b;
   --font-stack: 'Roboto', sans-serif;
 }
 
@@ -49,6 +51,36 @@ body {
 //   @include angular-material-theme($alternate-theme);
 // }
 // Material Theme ends
+
+// https://medium.com/wineofbits/how-to-change-angular-material-theme-in-just-5-minutes-d8719d1f026 change material theme
+// https://m2.material.io/design/color/the-color-system.html#tools-for-picking-colors color system
+// https://www.youtube.com/watch?v=s0rBpHKZDPU input field
+// https://www.youtube.com/watch?v=AMjzS1B_txo button
+
+// Side menu style starts
+mat-sidenav[style] {
+  visibility: visible !important;
+}
+
+.mat-drawer[style*="visibility: hidden"] {
+  display: block !important;
+}
+
+.mat-drawer {
+  transform: none !important;
+}
+
+.sidenav .mdc-list-item__primary-text {
+  display: flex !important;
+  padding-top: 1em;
+
+  p {
+    padding-left: 1em;
+  }
+}
+
+// Side menu style ends
+
 .mat-mdc-card {
   border-radius: 1em !important;
   box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 1),
@@ -71,8 +103,9 @@ body {
   font-size: 1em !important;
 }
 
-.mat-mdc-raised-button .mat-primary {
-  background-color: var(--main-color) !important;
+.mat-mdc-raised-button.mat-primary {
+  --mdc-protected-button-container-color: var(--main-color) !important;
+
 }
 
 // Material Elements Styles Overwrite Ends

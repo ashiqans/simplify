@@ -1,0 +1,53 @@
+.sidenav {
+  width: 250px;
+
+  .toggle {
+    justify-content: space-around;
+  }
+}
+
+.toggle {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  padding: 25px 0;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.nav {
+  .active-link {
+    background-color: var(--sub-color2);
+    border-left: solid 3px var(--main-color);
+  }
+
+  .hover {
+    transition-duration: 400ms;
+    transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
+    transition-property: transform, border, background-color;
+  }
+
+  mat-list-item,
+  a {
+    border: none;
+    box-sizing: border-box;
+    text-decoration: none;
+
+    &:hover {
+      cursor: pointer;
+      background-color: var(--sub-color2);
+      border-left: solid 3px var(--main-color);
+    }
+  }
+
+  mat-icon {
+    color: var(--main-color);
+  }
+
+  .mdc-list-item__primary-text {
+    display: flex !important;
+  }
+
+}

@@ -22,6 +22,25 @@ export class LoginComponent {
       userName: ['', Validators.required],
       password: ['', Validators.required]
     });
+
+    // let testObj = {
+    //   "EmpID": "string",
+    //   "EmpName": "string",
+    //   "Department": "string",
+    //   "Line": "string",
+    //   "Zone": "string",
+    //   "Title": "string",
+    //   "Issue": "string",
+    //   "Idea": "string",
+    //   "Remarks": "string"
+    // }
+    // this.authService.test1(testObj).subscribe(res => {
+    //   console.log(res);
+    // })
+
+    // this.authService.test2().subscribe(res => {
+    //   console.log(res)
+    // })
   }
 
   onSubmit() {
@@ -44,5 +63,9 @@ export class LoginComponent {
 
   togglePasswordVisibility() {
     this.viewPassword = !this.viewPassword;
+  }
+
+  navigateToViewSuggestion() {
+    this.router.navigate(['suggestion']);
   }
 }
