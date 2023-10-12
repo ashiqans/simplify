@@ -8,19 +8,23 @@ import { AuthenticationService } from '../services/authentication.service';
 @Component({
   selector: 'app-login',
   templateUrl: 'login.component.html',
-  styleUrls: ['login.component.scss']
+  styleUrls: ['login.component.scss'],
 })
 export class LoginComponent {
   loginForm!: FormGroup;
   isUserInvalid = false;
   viewPassword: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private router: Router, private authService: AuthenticationService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router,
+    private authService: AuthenticationService
+  ) {}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
       userName: ['', Validators.required],
-      password: ['', Validators.required]
+      password: ['', Validators.required],
     });
 
     // let testObj = {
@@ -46,8 +50,8 @@ export class LoginComponent {
   onSubmit() {
     let userObj = {
       email: this.loginForm.get('userName')?.value,
-      password: this.loginForm.get('password')?.value
-    }
+      password: this.loginForm.get('password')?.value,
+    };
     this.authService.login(userObj).subscribe((res: any) => {
       if (res?.jwtToken && res?.status == 1) {
         this.authService.isLoggedIn = true;
@@ -58,7 +62,7 @@ export class LoginComponent {
         this.isUserInvalid = true;
         this.authService.isLoggedIn = false;
       }
-    })
+    });
   }
 
   togglePasswordVisibility() {
@@ -66,6 +70,6 @@ export class LoginComponent {
   }
 
   navigateToViewSuggestion() {
-    this.router.navigate(['suggestion']);
+    this.router.navigate(['suggestion/viewSuggestion']);
   }
 }
