@@ -19,7 +19,7 @@ export class LoginComponent {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthenticationService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
@@ -27,24 +27,24 @@ export class LoginComponent {
       password: ['', Validators.required],
     });
 
-    // let testObj = {
-    //   "EmpID": "string",
-    //   "EmpName": "string",
-    //   "Department": "string",
-    //   "Line": "string",
-    //   "Zone": "string",
-    //   "Title": "string",
-    //   "Issue": "string",
-    //   "Idea": "string",
-    //   "Remarks": "string"
-    // }
-    // this.authService.test1(testObj).subscribe(res => {
-    //   console.log(res);
-    // })
+    let testObj = {
+      "EmpID": "string",
+      "EmpName": "string",
+      "Department": "string",
+      "Line": "string",
+      "Zone": "string",
+      "Title": "string",
+      "Issue": "string",
+      "Idea": "string",
+      "Remarks": "string"
+    }
+    this.authService.test1(testObj).subscribe(res => {
+      console.log(res);
+    })
 
-    // this.authService.test2().subscribe(res => {
-    //   console.log(res)
-    // })
+    this.authService.test2().subscribe(res => {
+      console.log(res)
+    })
   }
 
   onSubmit() {

@@ -16,8 +16,86 @@
 .suggestionListSection {
   // flex-grow: 2;
   flex: 0 0 23%;
-  padding: 0 1em;
+  padding: 0 0.5em;
   border-right: 2px solid var(--border-color1);
+
+  .mat-mdc-card-content {
+    padding: 4px !important;
+    border-radius: 0.1em !important;
+    // box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 1),
+    //   0 1px 1px 0 rgba(0, 0, 0, 1),
+    //   0 1px 3px 0 rgba(0, 0, 0, 1) !important;
+  }
+
+  .mat-icon {
+    font-size: 1.3em !important;
+    height: 14px !important;
+    width: 14px !important;
+    color: var(--main-color);
+  }
+
+  .detail1 {
+    grid-area: header;
+    border-bottom: 1px solid var(--border-color1);
+  }
+
+  #detail1 {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .profileImage {
+    grid-area: menu;
+  }
+
+  .detail2 {
+    grid-area: main;
+  }
+
+  #detail2 {
+    display: flex;
+    flex-flow: column;
+
+    p {
+      margin-bottom: 0.2em !important;
+    }
+  }
+
+  .detail3 {
+    grid-area: subFooter;
+    border-top: 1px solid var(--border-color1);
+    border-bottom: 1px solid var(--border-color1);
+  }
+
+  #detail3 {
+    display: flex;
+    justify-content: space-between;
+
+    span {
+      margin-top: 0.5em;
+    }
+
+    .mat-icon {
+      padding-right: 0.3em;
+    }
+  }
+
+  .detail4 {
+    grid-area: footer;
+  }
+
+  .detailsGridContainer {
+    display: grid;
+    grid-template-areas:
+      'menu menu header header header header'
+      'menu menu main main main main'
+      'subFooter subFooter subFooter subFooter subFooter subFooter'
+      'footer footer footer footer footer footer';
+    gap: 10px;
+    font-size: 0.8em;
+    // background-color: #2196F3;
+    // padding: 10px;
+  }
 }
 
 .activeBoardSection {
