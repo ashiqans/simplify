@@ -3,24 +3,42 @@
   justify-content: flex-start;
   align-items: stretch;
   background-color: var(--sub-color2);
-  width: 90vw;
+  // width: 90vw;
 }
 
 .filterSection {
   // flex-grow: 2;
-  flex: 0 0 24%;
+  flex: 0 0 21%;
   padding: 0 1em;
   border-right: 2px solid var(--border-color1);
+
+  height: 94vh;
+  overflow: scroll;
+  overflow-x: hidden;
 }
+
+// .listViewScrollContainer {
+//   overflow-x: hidden;
+//   overflow-y: scroll;
+//   white-space: nowrap;
+// }
 
 .suggestionListSection {
   // flex-grow: 2;
-  flex: 0 0 23%;
+  flex: 0 0 27%;
   padding: 0 0.5em;
   border-right: 2px solid var(--border-color1);
 
+  height: 94vh;
+  overflow: scroll;
+  overflow-x: hidden;
+
+  .mat-mdc-card {
+    margin-bottom: 1em !important;
+  }
+
   .mat-mdc-card-content {
-    padding: 4px !important;
+    padding: 0.7em !important;
     border-radius: 0.1em !important;
     // box-shadow: 0 1px 1px -1px rgba(0, 0, 0, 1),
     //   0 1px 1px 0 rgba(0, 0, 0, 1),
@@ -32,6 +50,12 @@
     height: 14px !important;
     width: 14px !important;
     color: var(--main-color);
+    margin-right: 0.2em;
+  }
+
+  #iconLabel {
+    display: flex;
+    align-items: center;
   }
 
   .detail1 {
@@ -44,12 +68,28 @@
     justify-content: space-between;
   }
 
-  .profileImage {
-    grid-area: menu;
-  }
-
   .detail2 {
     grid-area: main;
+    display: contents;
+  }
+
+  .profileImage {
+    grid-area: menu;
+    text-align: end;
+    padding-right: 1em;
+    border-right: 1px solid var(--border-color1);
+
+
+    .mat-icon {
+      font-size: 5em !important;
+      height: 1em !important;
+      width: 1em !important;
+    }
+
+    #nameLabel {
+      margin: 0;
+      font-weight: 500;
+    }
   }
 
   #detail2 {
@@ -72,7 +112,7 @@
     justify-content: space-between;
 
     span {
-      margin-top: 0.5em;
+      margin: 0.2em;
     }
 
     .mat-icon {
@@ -87,11 +127,11 @@
   .detailsGridContainer {
     display: grid;
     grid-template-areas:
-      'menu menu header header header header'
+      'header header header header header header'
       'menu menu main main main main'
       'subFooter subFooter subFooter subFooter subFooter subFooter'
       'footer footer footer footer footer footer';
-    gap: 10px;
+    gap: 0.5em;
     font-size: 0.8em;
     // background-color: #2196F3;
     // padding: 10px;

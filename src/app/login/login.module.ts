@@ -12,6 +12,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { MatListModule } from "@angular/material/list";
+import { MatChipsModule } from '@angular/material/chips';
 import { NavMenuComponent } from '../app-lists/suggestion/nav-menu/nav-menu.component';
 import { AppListsComponent } from '../app-lists/app-lists.component';
 import { ViewSuggestionComponent } from '../app-lists/suggestion/view-suggestion/view-suggestion.component';
@@ -40,7 +41,8 @@ import { DashboardComponent } from '../app-lists/suggestion/dashboard/dashboard.
     MatListModule,
     MatButtonModule,
     MatInputModule,
-    MatSidenavModule
+    MatSidenavModule,
+    MatChipsModule
   ],
   exports: [
     LoginComponent,

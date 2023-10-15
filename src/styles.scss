@@ -7,6 +7,7 @@
   --sub-color1: #b393d3;
   --sub-color2: #F6F8FC;
   --sub-color3: #F6F8FC;
+  --sub-color4: #B2FF59;
   --border-color1: #b393d36b;
   --font-stack: 'Roboto', sans-serif;
 }
@@ -23,6 +24,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   height: 100%;
+  overflow: hidden;
 }
 
 .spinner-container {
@@ -105,7 +107,26 @@ mat-sidenav[style] {
 
 .mat-mdc-raised-button.mat-primary {
   --mdc-protected-button-container-color: var(--main-color) !important;
+}
 
+.listCardChip {
+  --mdc-chip-container-height: 1.5em !important;
+  background-color: var(--sub-color4) !important;
+
+  .mat-mdc-chip-action-label {
+    font-size: 1em !important;
+  }
+}
+
+.listCardTitleChip {
+  width: fit-content !important;
+  --mdc-chip-container-height: 1.5em !important;
+  background-color: var(--main-color) !important;
+
+  .mat-mdc-chip-action-label {
+    font-size: 1em !important;
+    color: var(--sub-color2) !important;
+  }
 }
 
 // Material Elements Styles Overwrite Ends
