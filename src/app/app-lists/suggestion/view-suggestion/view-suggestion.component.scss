@@ -26,7 +26,7 @@
 .suggestionListSection {
   // flex-grow: 2;
   flex: 0 0 27%;
-  padding: 0 0.5em;
+  padding: 0.5em;
   border-right: 2px solid var(--border-color1);
 
   height: 94vh;
@@ -75,8 +75,8 @@
 
   .profileImage {
     grid-area: menu;
-    text-align: end;
-    padding-right: 1em;
+    text-align: center;
+    // padding-right: 1em;
     border-right: 1px solid var(--border-color1);
 
 
@@ -128,7 +128,7 @@
     display: grid;
     grid-template-areas:
       'header header header header header header'
-      'menu menu main main main main'
+      'menu main main main main main'
       'subFooter subFooter subFooter subFooter subFooter subFooter'
       'footer footer footer footer footer footer';
     gap: 0.5em;
@@ -142,4 +142,32 @@
   // flex-grow: 6;
   flex: 0 0 50%;
   padding: 0 1em;
+
+  height: 94vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+.addSuggestionContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 1em;
+
+  .addSuggestionBtn {
+    .mat-icon {
+      color: var(--sub-color3) !important;
+      height: 18px !important;
+      width: 18px !important;
+    }
+  }
+}
+
+.scrollBar1 {
+  margin-left: 30px;
+  float: left;
+  height: 300px;
+  width: 65px;
+  background: #F5F5F5;
+  overflow-y: scroll;
+  margin-bottom: 25px;
 }

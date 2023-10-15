@@ -129,4 +129,47 @@ mat-sidenav[style] {
   }
 }
 
+.addSuggestionBtn {
+  position: fixed !important;
+  bottom: 0 !important;
+  padding: 0 0.5em !important;
+  margin-bottom: 1em;
+
+  .mat-icon {
+    color: var(--sub-color3) !important;
+    height: 18px !important;
+    width: 18px !important;
+  }
+
+  .mat-mdc-raised-button.mat-primary {}
+
+  .mdc-button__label {
+    font-size: 0.7em !important;
+  }
+}
+
 // Material Elements Styles Overwrite Ends
+
+// Scrollbar style starts
+#scrollBar::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+  background-color: var(--sub-color3);
+  border-radius: 0.5em;
+}
+
+#scrollBar::-webkit-scrollbar {
+  width: 0.3em;
+  background-color: var(--sub-color3);
+}
+
+#scrollBar::-webkit-scrollbar-thumb {
+  border-radius: 0.5em;
+  background-image: -webkit-gradient(linear,
+      left bottom,
+      left top,
+      color-stop(0.44, var(--sub-color1)),
+      color-stop(0.72, var(--main-color)),
+      color-stop(0.86, var(--main-color)));
+}
+
+// Scrollbar style ends

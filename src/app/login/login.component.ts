@@ -28,15 +28,15 @@ export class LoginComponent {
     });
 
     let testObj = {
-      "EmpID": "string",
-      "EmpName": "string",
-      "Department": "string",
-      "Line": "string",
-      "Zone": "string",
-      "Title": "string",
-      "Issue": "string",
-      "Idea": "string",
-      "Remarks": "string"
+      "EmpID": "asd",
+      "EmpName": "ghfghf",
+      "Department": "hjh",
+      "Line": "jkj",
+      "Zone": "hj",
+      "Title": "hhg",
+      "Issue": "hjg",
+      "Idea": "khg",
+      "Remarks": "hhh"
     }
     this.authService.test1(testObj).subscribe(res => {
       console.log(res);

@@ -1,6 +1,6 @@
 <div class="container">
   <!-- Filter Section S -->
-  <div class="filterSection">
+  <div class="filterSection" id="scrollBar">
     <div class="filterCardContainer">
       <h1>Filter section</h1>
       <mat-card>
@@ -21,9 +21,8 @@
 
   <!-- Suggestion Section S -->
   <!-- <div class="listViewScrollContainer"> -->
-  <div class="suggestionListSection">
+  <div class="suggestionListSection" id="scrollBar">
     <div class="listCardContainer">
-      <h1>List section</h1>
       <div class="suggestionCard">
         <mat-card>
           <mat-card-content>
@@ -166,14 +165,23 @@
         </mat-card>
 
       </div>
+      <div class="addSuggestionContainer">
+        <button mat-raised-button color="primary" type="submit" (click)="createSuggestion()"
+          class="addSuggestionBtn"><mat-icon>add_circle</mat-icon> Add Suggestion </button>
+      </div>
     </div>
   </div>
   <!-- </div> -->
   <!-- Suggestion Section E -->
 
   <!-- active board Section S -->
-  <div class="activeBoardSection">
+  <div class="activeBoardSection" id="scrollBar">
     <h1>Add suggestion & suggestion tracker here</h1>
+    <!-- Add Suggestion section starts -->
+    <!-- Add Suggestion section ends -->
+
+    <!-- View status section starts -->
+    <!-- View status section ends -->
   </div>
   <!-- active board Section E -->
 </div>
