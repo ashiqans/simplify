@@ -8,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class ViewSuggestionComponent {
   addSuggestionForm!: FormGroup;
-  showAddSuggestion: boolean = false;
+  showAddSuggestion: boolean = false; 
 
   constructor(private formBuilder: FormBuilder) { }
 
@@ -25,6 +25,15 @@ export class ViewSuggestionComponent {
       idea: ['', Validators.required],
       remarks: ['', Validators.required]
     })
+  }
+
+  addSuggestion() {
+
+  }
+
+  cancelSuggestion() {
+    this.addSuggestionForm.reset();
+    this.showAddSuggestion = false;
   }
 
 }

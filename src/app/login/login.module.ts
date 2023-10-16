@@ -18,6 +18,8 @@ import { AppListsComponent } from '../app-lists/app-lists.component';
 import { ViewSuggestionComponent } from '../app-lists/suggestion/view-suggestion/view-suggestion.component';
 import { SuggestionComponent } from '../app-lists/suggestion/suggestion.component';
 import { DashboardComponent } from '../app-lists/suggestion/dashboard/dashboard.component';
+import { MatOptionModule } from '@angular/material/core';
+import { MatSelectModule} from '@angular/material/select';
 
 
 @NgModule({
@@ -42,7 +44,9 @@ import { DashboardComponent } from '../app-lists/suggestion/dashboard/dashboard.
     MatButtonModule,
     MatInputModule,
     MatSidenavModule,
-    MatChipsModule
+    MatChipsModule,
+    MatOptionModule,
+    MatSelectModule
   ],
   exports: [
     LoginComponent,

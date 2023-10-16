@@ -175,32 +175,149 @@
   <!-- Suggestion Section E -->
 
   <!-- active board Section S -->
-  <div class="activeBoardSection" id="scrollBar">
+  <div class="activeBoardSection" >
     <!-- <h1>Add suggestion & suggestion tracker here</h1> -->
     <!-- Add Suggestion section starts -->
-    <div class="addSuggestion" *ngIf="showAddSuggestion">
+    <div class="addSuggestion" *ngIf="showAddSuggestion" id="scrollBar">
       <mat-card>
         <mat-card-content>
           <form [formGroup]="addSuggestionForm">
             <p class="headerText">Add Suggestion</p>
-            <mat-form-field class="full-width-input" floatLabel="always">
-              <mat-label>Employee ID</mat-label>
-              <input matInput placeholder="Enter your Employee ID" formControlName="empId" required minlength="4"
-                maxlength="10">
-              <mat-error
-                *ngIf="addSuggestionForm.controls?.['empId']?.touched && addSuggestionForm.controls?.['empId']?.errors?.['required']">
-                Please enter your User ID
-              </mat-error>
-              <!-- <mat-error
-                *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
-                Please enter minimum 6 and maximum 14 characters
-              </mat-error> -->
-            </mat-form-field>
+            <!-- Row 1 -->
+            <div class="flexItem">
+              <mat-form-field class="flexItemLeft" floatLabel="always">
+                <mat-label>Employee ID</mat-label>
+                <input matInput type="text" placeholder="Enter your Employee ID" formControlName="empId" required minlength="4"
+                  maxlength="10">
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['empId']?.touched && addSuggestionForm.controls?.['empId']?.errors?.['required']">
+                  Please enter your Employee ID
+                </mat-error>
+                <!-- <mat-error
+                  *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
+                  Please enter minimum 6 and maximum 14 characters
+                </mat-error> -->
+              </mat-form-field>
+              <mat-form-field class="flexItemRight" floatLabel="always">
+                <mat-label>Employee Name</mat-label>
+                <input matInput type="text" placeholder="Enter your Name" formControlName="empName" required minlength="4"
+                  maxlength="20">
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['empName']?.touched && addSuggestionForm.controls?.['empName']?.errors?.['required']">
+                  Please enter your Name
+                </mat-error>
+              </mat-form-field>
+            </div>
 
+            <!-- Row 2 -->
+            <div class="flexItem">
+              <mat-form-field class="flexItemLeft" floatLabel="always">
+                <mat-label>Employee Department</mat-label>
+                <mat-select placeholder="Select your Department" formControlName="department" ngDefaultControl required>
+                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
+                    {{ food.viewValue }}
+                  </mat-option> -->
+                  <mat-option value="1">Value 1</mat-option>
+                  <mat-option value="2">Value 2</mat-option>
+                  <mat-option value="3">Value 3</mat-option>
+                </mat-select>
 
-            <button mat-raised-button color="primary" type="submit"
-              [disabled]="!addSuggestionForm.valid">Submit</button>
-            <button mat-raised-button color="primary">Cancel</button>
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['department']?.touched && addSuggestionForm.controls?.['department']?.errors?.['required']">
+                  Please select your Department
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="flexItemRight" floatLabel="always">
+                <mat-label>Employee Line</mat-label>
+                <mat-select placeholder="Select your Line" formControlName="line" ngDefaultControl required>
+                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
+                    {{ food.viewValue }}
+                  </mat-option> -->
+                  <mat-option value="1">Value 1</mat-option>
+                  <mat-option value="2">Value 2</mat-option>
+                  <mat-option value="3">Value 3</mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['line']?.touched && addSuggestionForm.controls?.['line']?.errors?.['required']">
+                  Please enter your Line
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="flexItem">
+              <mat-form-field class="flexItemLeft" floatLabel="always">
+                <mat-label>Employee Zone</mat-label>
+                <mat-select placeholder="Select your Zone" formControlName="zone" ngDefaultControl required>
+                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
+                    {{ food.viewValue }}
+                  </mat-option> -->
+                  <mat-option value="1">Value 1</mat-option>
+                  <mat-option value="2">Value 2</mat-option>
+                  <mat-option value="3">Value 3</mat-option>
+                </mat-select>
+
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['zone']?.touched && addSuggestionForm.controls?.['zone']?.errors?.['required']">
+                  Please select your Zone
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="flexItemRight" floatLabel="always">
+                <mat-label>Suggestion Title</mat-label>
+                <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" placeholder="Enter Suggestion Title" formControlName="title"></textarea>
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['title']?.touched && addSuggestionForm.controls?.['title']?.errors?.['required']">
+                  Please enter suggestion Title
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="flexItem">
+              <mat-form-field class="flexItemLeft" floatLabel="always">
+                <mat-label>Issue</mat-label>
+                <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" placeholder="Enter Issue" formControlName="issue"></textarea>
+
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['issue']?.touched && addSuggestionForm.controls?.['issue']?.errors?.['required']">
+                  Please enter Issue details
+                </mat-error>
+              </mat-form-field>
+
+              <mat-form-field class="flexItemRight" floatLabel="always">
+                <mat-label>Suggestion Idea</mat-label>
+                <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" placeholder="Enter Suggestion idea" formControlName="idea"></textarea>
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['idea']?.touched && addSuggestionForm.controls?.['idea']?.errors?.['required']">
+                  Please enter suggestion Idea
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <!-- Row 5 -->
+            <div class="flexItem">
+              <mat-form-field class="flexItemCenter" floatLabel="always">
+                <mat-label>Remarks</mat-label>
+                <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" placeholder="Enter Remarks" formControlName="remarks"></textarea>
+
+                <mat-error
+                  *ngIf="addSuggestionForm.controls?.['remarks']?.touched && addSuggestionForm.controls?.['remarks']?.errors?.['required']">
+                  Please enter Remark
+                </mat-error>
+              </mat-form-field>
+            </div>
+
+            <div class="flexItem actionBtn">
+              <button mat-raised-button color="primary" (click)="addSuggestion()"
+                [disabled]="!addSuggestionForm.valid">Submit</button>
+              <button mat-raised-button color="warn" (click)="cancelSuggestion()">Cancel</button>
+            </div>
           </form>
         </mat-card-content>
       </mat-card>
