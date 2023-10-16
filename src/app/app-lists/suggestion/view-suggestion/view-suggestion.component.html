@@ -176,11 +176,41 @@
 
   <!-- active board Section S -->
   <div class="activeBoardSection" id="scrollBar">
-    <h1>Add suggestion & suggestion tracker here</h1>
+    <!-- <h1>Add suggestion & suggestion tracker here</h1> -->
     <!-- Add Suggestion section starts -->
+    <div class="addSuggestion" *ngIf="showAddSuggestion">
+      <mat-card>
+        <mat-card-content>
+          <form [formGroup]="addSuggestionForm">
+            <p class="headerText">Add Suggestion</p>
+            <mat-form-field class="full-width-input" floatLabel="always">
+              <mat-label>Employee ID</mat-label>
+              <input matInput placeholder="Enter your Employee ID" formControlName="empId" required minlength="4"
+                maxlength="10">
+              <mat-error
+                *ngIf="addSuggestionForm.controls?.['empId']?.touched && addSuggestionForm.controls?.['empId']?.errors?.['required']">
+                Please enter your User ID
+              </mat-error>
+              <!-- <mat-error
+                *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
+                Please enter minimum 6 and maximum 14 characters
+              </mat-error> -->
+            </mat-form-field>
+
+
+            <button mat-raised-button color="primary" type="submit"
+              [disabled]="!addSuggestionForm.valid">Submit</button>
+            <button mat-raised-button color="primary">Cancel</button>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
     <!-- Add Suggestion section ends -->
 
     <!-- View status section starts -->
+    <div class="viewStatus" *ngIf="!showAddSuggestion">
+      <p class="headerText">View Status</p>
+    </div>
     <!-- View status section ends -->
   </div>
   <!-- active board Section E -->
