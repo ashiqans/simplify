@@ -6,15 +6,93 @@
   // width: 90vw;
 }
 
+.headerText {
+  color: var(--main-color);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-decoration: underline;
+  text-underline-offset: 0.5em;
+}
+
 .filterSection {
   // flex-grow: 2;
   flex: 0 0 21%;
-  padding: 0 1em;
+  padding: 0.5em;
   border-right: 2px solid var(--border-color1);
 
   height: 94vh;
   overflow: scroll;
   overflow-x: hidden;
+
+  .mat-mdc-card {
+    margin-bottom: 1em !important;
+  }
+
+  .mat-mdc-card-content {
+    padding: 0.7em !important;
+    border-radius: 0.1em !important;
+  }
+
+  .mainFilterField {
+    width: 100%;
+    // margin-bottom: 0.3em;
+    font-size: 1em;
+
+    .mat-mdc-form-field-error {
+      font-size: 0.8em !important;
+    }
+
+    .mat-mdc-select {
+      font-size: 1em;
+    }
+
+    .mat-mdc-form-field-subscript-wrapper .mat-mdc-form-field-bottom-align {
+      height: 1.5em !important;
+    }
+  }
+
+  .actionBtn {
+    display: flex;
+    justify-content: space-evenly;
+  }
+
+  .filterCard {
+    display: flex;
+    justify-content: space-between;
+    margin: 1em 0;
+
+    .cardButton {
+      display: flex;
+      flex-flow: column;
+      padding: 0.5em;
+      border-radius: 0.5em;
+      // border: 2px solid var(--main-color);
+      cursor: pointer;
+      background-color: var(--sub-color3);
+
+      #noSpan {
+        font-weight: 600;
+      }
+
+      #textSpan {
+        font-size: 0.9em;
+      }
+    }
+
+    .cardButton:hover {
+      outline: solid 1px var(--main-color);
+      // transition: outline 2s linear;
+      // background-color: var(--border-color1);
+    }
+
+    .active {
+      border: 3px solid var(--main-color);
+
+      #noSpan {
+        color: var(--main-color);
+      }
+    }
+  }
 }
 
 // .listViewScrollContainer {

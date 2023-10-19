@@ -1,6 +1,11 @@
 .content-container {
   min-height: 100vh;
   box-sizing: border-box;
-  padding: 25px 0;
+  padding: 0.5em 0;
   // margin-left: 100px;
+}
+
+mat-sidenav {
+  background-color: var(--main-color);
+  color: var(--sub-color2);
 }

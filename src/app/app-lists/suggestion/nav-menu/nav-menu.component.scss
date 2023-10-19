@@ -1,5 +1,5 @@
 .sidenav {
-  width: 250px;
+  width: 200px;
 
   .toggle {
     justify-content: space-around;
@@ -10,7 +10,7 @@
   width: 100%;
   display: flex;
   justify-content: space-around;
-  padding: 25px 0;
+  padding: 0.5em 0;
 
   &:hover {
     cursor: pointer;
@@ -18,15 +18,28 @@
 }
 
 .nav {
+  mat-icon, p {
+    color: var(--sub-color2) !important;
+    // font-size: 1em !important;
+  }
+  
   .active-link {
     background-color: var(--sub-color2);
     border-left: solid 3px var(--main-color);
+
+    mat-icon, p {
+      color: var(--main-color) !important;
+    }
   }
 
   .hover {
     transition-duration: 400ms;
     transition-timing-function: cubic-bezier(0.25, 0.8, 0.25, 1);
     transition-property: transform, border, background-color;
+
+    mat-icon, p {
+      // color: var(--main-color) !important;
+    }
   }
 
   mat-list-item,
@@ -39,15 +52,20 @@
       cursor: pointer;
       background-color: var(--sub-color2);
       border-left: solid 3px var(--main-color);
-    }
-  }
 
-  mat-icon {
-    color: var(--main-color);
+      mat-icon, p {
+        color: var(--main-color) !important;
+      }
+    }
   }
 
   .mdc-list-item__primary-text {
     display: flex !important;
   }
+}
 
+.logIn {
+  position: absolute !important;
+  bottom: 0 !important;
+  width: -webkit-fill-available !important;
 }

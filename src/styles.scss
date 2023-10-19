@@ -34,7 +34,6 @@ body {
   background-color: #fafafa;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, .2), 0 8px 10px 1px rgba(0, 0, 0, .14), 0 3px 14px 2px rgba(0, 0, 0, .12)
 }
-
 // Material Elements Styles Overwrite Starts
 
 // Material Theme starts
@@ -145,6 +144,44 @@ mat-sidenav[style] {
 
   .mdc-button__label {
     font-size: 0.7em !important;
+  }
+}
+
+.filterSection {
+  .mainFilterField {
+    .mat-mdc-form-field-error-wrapper  {
+      padding: 0 !important;
+      margin-top: -0.5em !important;
+      // margin-bottom: 0.5em !important;
+    }
+  
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+      min-height: 32px !important;
+      padding-top: 4px !important;
+      padding-bottom: 4px !important;
+    }
+  }
+  
+  .mat-mdc-form-field-subscript-wrapper {
+    height: 1.5em !important;
+  }
+
+  .mat-mdc-raised-button.mat-mdc-button-base {
+    height: 2em !important;
+  }
+
+  .mdc-button__label {
+    font-size: 0.7em !important;
+  }
+
+  .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+    height: 32px !important;
+  }
+  .mat-mdc-icon-button {
+    padding: 0 !important;
+    svg {
+      vertical-align: super !important;
+    }  
   }
 }
 

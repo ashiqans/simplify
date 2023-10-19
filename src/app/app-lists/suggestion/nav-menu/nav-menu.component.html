@@ -13,4 +13,11 @@
       <p matLine *ngIf="isExpanded">{{ route.name }}</p>
     </a>
   </mat-list>
+
+  <mat-list class="nav logIn">
+    <a mat-list-item class="hover" routerLink="">
+      <mat-icon mat-list-icon [matTooltip]="!isExpanded ? 'Log In' : 'null'" matTooltipPosition="right">person</mat-icon>
+      <p matLine *ngIf="isExpanded">Log In</p>
+    </a>
+  </mat-list>
 </section>

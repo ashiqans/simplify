@@ -19,8 +19,9 @@ import { ViewSuggestionComponent } from '../app-lists/suggestion/view-suggestion
 import { SuggestionComponent } from '../app-lists/suggestion/suggestion.component';
 import { DashboardComponent } from '../app-lists/suggestion/dashboard/dashboard.component';
 import { MatOptionModule } from '@angular/material/core';
-import { MatSelectModule} from '@angular/material/select';
-
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -46,7 +47,9 @@ import { MatSelectModule} from '@angular/material/select';
     MatSidenavModule,
     MatChipsModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
   exports: [
     LoginComponent,

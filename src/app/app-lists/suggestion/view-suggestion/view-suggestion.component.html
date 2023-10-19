@@ -2,19 +2,116 @@
   <!-- Filter Section S -->
   <div class="filterSection" id="scrollBar">
     <div class="filterCardContainer">
-      <h1>Filter section</h1>
+      <div class="headerText"><p>Filter Section:</p></div>
+      <!-- Main filter section Starts -->
       <mat-card>
         <mat-card-content>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Itaque eius hic pariatur dicta sapiente. Quos vero
-          laboriosam autem iusto recusandae quidem laborum officia, cum ratione necessitatibus harum nemo vitae rerum.
-          <hr>
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Ratione distinctio praesentium assumenda eum minima
-          nostrum numquam maiores atque provident error at ullam, expedita nisi? Aperiam magnam porro quis nemo autem.
-          <hr>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Et cum sed error quod fugiat corrupti saepe eum
-          natus? Ipsum enim deserunt expedita pariatur voluptatem, similique totam rem impedit amet nihil?
+          <form [formGroup]="filterForm">
+              <mat-form-field class="mainFilterField" floatLabel="always">
+                <mat-label>Employee ID</mat-label>
+                <input matInput type="text" placeholder="Enter your Employee ID" formControlName="empId" minlength="4"
+                  maxlength="10">
+                <mat-error
+                  *ngIf="filterForm.controls?.['empId']?.touched && filterForm.controls?.['empId']?.errors?.['minlength']">
+                  Employee ID minimum length is 4
+                </mat-error>
+                <!-- <mat-error
+                  *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
+                  Please enter minimum 6 and maximum 14 characters
+                </mat-error> -->
+              </mat-form-field>
+              <mat-form-field class="mainFilterField" floatLabel="always">
+                <mat-label>Suggestion ID</mat-label>
+                <input matInput type="text" placeholder="Enter your Name" formControlName="suggestionId" minlength="4"
+                  maxlength="20">
+                <mat-error
+                  *ngIf="filterForm.controls?.['suggestionId']?.touched && filterForm.controls?.['suggestionId']?.errors?.['minlength']">
+                  Suggestion ID minimum length is 4
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="mainFilterField" floatLabel="always">
+                <mat-label>Suggestion Title</mat-label>
+                <input matInput type="text" placeholder="Enter your Name" formControlName="suggestionTitle" minlength="4"
+                  maxlength="20">
+                <mat-error
+                  *ngIf="filterForm.controls?.['suggestionTitle']?.touched && filterForm.controls?.['suggestionTitle']?.errors?.['minlength']">
+                  Suggestion title minimum length is 4
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field class="mainFilterField" floatLabel="always">
+                <mat-label>Status</mat-label>
+                <mat-select placeholder="Select your Department" formControlName="status">
+                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
+                    {{ food.viewValue }}
+                  </mat-option> -->
+                  <mat-option value="1">Value 1</mat-option>
+                  <mat-option value="2">Value 2</mat-option>
+                  <mat-option value="3">Value 3</mat-option>
+                </mat-select>
+
+                <!-- <mat-error
+                  *ngIf="filterForm.controls?.['status']?.touched && filterForm.controls?.['status']?.errors?.['required']">
+                  Please select your Status
+                </mat-error> -->
+              </mat-form-field>
+              <mat-form-field class="mainFilterField" floatLabel="always">
+                <mat-label>Grade</mat-label>
+                <mat-select placeholder="Select your Grade" formControlName="grade">
+                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
+                    {{ food.viewValue }}
+                  </mat-option> -->
+                  <mat-option value="1">Value 1</mat-option>
+                  <mat-option value="2">Value 2</mat-option>
+                  <mat-option value="3">Value 3</mat-option>
+                </mat-select>
+                <!-- <mat-error
+                  *ngIf="filterForm.controls?.['grade']?.touched && filterForm.controls?.['grade']?.errors?.['required']">
+                  Please enter your Line
+                </mat-error> -->
+              </mat-form-field>
+              <mat-form-field class="mainFilterField dateRange" floatLabel="always">
+                <mat-label>Select a Date Range</mat-label>
+                <mat-date-range-input [rangePicker]="picker">
+                  <input matStartDate formControlName="fromDate" placeholder="DD-MM-YYYY">
+                  <input matEndDate formControlName="toDate" placeholder="DD-MM-YYYY">
+                </mat-date-range-input>
+                <!-- <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint> -->
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+              </mat-form-field>
+
+            <div class="flexItem actionBtn">
+              <button mat-raised-button color="primary" (click)="applyFilter()">Apply</button>
+              <button mat-raised-button color="warn" (click)="cancelFilter()">Reset</button>
+            </div>
+          </form>
         </mat-card-content>
       </mat-card>
+      <!-- Main filter section Ends -->
+      <!-- Secondary filter starts -->
+      <mat-card>
+        <mat-card-content>
+          <div class="filterCard">
+            <div class="cardButton" (click)="cardFilterChange('All')" [ngClass]="filterType == 'All' ? 'active' : ''">
+              <span id="noSpan">777</span>
+              <span id="textSpan">All Suggestions</span>
+            </div>
+
+            <div class="cardButton" (click)="cardFilterChange('My')" [ngClass]="filterType == 'My' ? 'active' : ''">
+              <span id="noSpan">222</span>
+              <span id="textSpan">My Suggestions</span>
+            </div>
+          </div>
+
+          <div class="filterCard">
+          <div class="cardButton" (click)="cardFilterChange('Pen')" [ngClass]="filterType == 'Pen' ? 'active' : ''">
+            <span id="noSpan">111</span>
+            <span id="textSpan">My Pending Suggestions</span>
+          </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+      <!-- Secondary filter ends -->
     </div>
   </div>
   <!-- Filter Section E -->
@@ -24,6 +121,7 @@
   <div class="suggestionListSection" id="scrollBar">
     <div class="listCardContainer">
       <div class="suggestionCard">
+        <div class="headerText"><p>Suggestion List:</p></div>
         <mat-card>
           <mat-card-content>
             <div class="detailsGridContainer">
@@ -179,10 +277,10 @@
     <!-- <h1>Add suggestion & suggestion tracker here</h1> -->
     <!-- Add Suggestion section starts -->
     <div class="addSuggestion" *ngIf="showAddSuggestion" id="scrollBar">
+      <div class="headerText"><p>Create Suggestion:</p></div>
       <mat-card>
         <mat-card-content>
           <form [formGroup]="addSuggestionForm">
-            <p class="headerText">Add Suggestion</p>
             <!-- Row 1 -->
             <div class="flexItem">
               <mat-form-field class="flexItemLeft" floatLabel="always">
@@ -267,7 +365,7 @@
               <mat-form-field class="flexItemRight" floatLabel="always">
                 <mat-label>Suggestion Title</mat-label>
                 <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" placeholder="Enter Suggestion Title" formControlName="title"></textarea>
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Suggestion Title" formControlName="title"></textarea>
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['title']?.touched && addSuggestionForm.controls?.['title']?.errors?.['required']">
                   Please enter suggestion Title
@@ -280,7 +378,7 @@
               <mat-form-field class="flexItemLeft" floatLabel="always">
                 <mat-label>Issue</mat-label>
                 <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" placeholder="Enter Issue" formControlName="issue"></textarea>
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" placeholder="Enter Issue" formControlName="issue"></textarea>
 
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['issue']?.touched && addSuggestionForm.controls?.['issue']?.errors?.['required']">
@@ -291,7 +389,7 @@
               <mat-form-field class="flexItemRight" floatLabel="always">
                 <mat-label>Suggestion Idea</mat-label>
                 <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" placeholder="Enter Suggestion idea" formControlName="idea"></textarea>
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" placeholder="Enter Suggestion idea" formControlName="idea"></textarea>
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['idea']?.touched && addSuggestionForm.controls?.['idea']?.errors?.['required']">
                   Please enter suggestion Idea
@@ -304,7 +402,7 @@
               <mat-form-field class="flexItemCenter" floatLabel="always">
                 <mat-label>Remarks</mat-label>
                 <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" placeholder="Enter Remarks" formControlName="remarks"></textarea>
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="6" placeholder="Enter Remarks" formControlName="remarks"></textarea>
 
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['remarks']?.touched && addSuggestionForm.controls?.['remarks']?.errors?.['required']">
@@ -325,8 +423,8 @@
     <!-- Add Suggestion section ends -->
 
     <!-- View status section starts -->
-    <div class="viewStatus" *ngIf="!showAddSuggestion">
-      <p class="headerText">View Status</p>
+    <div class="viewStatus" *ngIf="!showAddSuggestion" id="scrollBar">
+      <div class="headerText"><p>View Suggestion:</p></div>
     </div>
     <!-- View status section ends -->
   </div>
