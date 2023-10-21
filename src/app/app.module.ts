@@ -15,10 +15,12 @@ import { NavMenuComponent } from './app-lists/suggestion/nav-menu/nav-menu.compo
 import { SuggestionComponent } from './app-lists/suggestion/suggestion.component';
 import { MatSidenavModule } from "@angular/material/sidenav";
 import { DashboardComponent } from './app-lists/suggestion/dashboard/dashboard.component';
+import { LoaderComponent } from './loader/loader.component';
+import { SnackbarComponent } from './snackbar/snackbar.component';
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
     // DashboardComponent,
     // AppListsComponent,
     // SuggestionComponent,

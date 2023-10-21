@@ -22,6 +22,9 @@ import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { LoaderComponent } from '../loader/loader.component';
+import { SnackbarComponent } from '../snackbar/snackbar.component';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -30,7 +33,9 @@ import { MatNativeDateModule } from '@angular/material/core';
     AppListsComponent,
     SuggestionComponent,
     ViewSuggestionComponent,
-    DashboardComponent
+    DashboardComponent,
+    LoaderComponent,
+    SnackbarComponent
   ],
   imports: [
     CommonModule,
@@ -49,7 +54,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatOptionModule,
     MatSelectModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSnackBarModule
   ],
   exports: [
     LoginComponent,

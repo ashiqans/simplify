@@ -3,7 +3,10 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as moment from 'moment';
+import { SuggestionService } from 'src/app/services/suggestion.service';
+import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
 
 export const MY_FORMATS = {
   parse: {
@@ -37,10 +40,24 @@ export class ViewSuggestionComponent {
   addSuggestionForm!: FormGroup;
   showAddSuggestion: boolean = false; 
   filterType: string = 'All';
+  showLoader: boolean = false;
+  department: any = [];
+  line: any = [];
+  zone: any = [];
+  suggestionList: any = [];
+  selectedSuggestionIndex: any;
 
-  constructor(private formBuilder: FormBuilder, private datePipe: DatePipe) {
+  constructor(private formBuilder: FormBuilder,
+    private datePipe: DatePipe,
+    private suggestionService: SuggestionService,
+    private snackBar: MatSnackBar) {
     this.suggestionFilterMain();
-   }
+  }
+  
+  ngOnInit(): void {
+    // this.openSnackBar('This is a test message for snackbar')
+    this.getSuggestionList();
+  }
 
   suggestionFilterMain() {
     this.filterForm = this.formBuilder.group({
@@ -55,10 +72,23 @@ export class ViewSuggestionComponent {
   }
 
   getSuggestionList() {
+    let payload = {
 
+    }
+    this.showLoader = true;
+    this.suggestionService.getSuggestionList(payload).subscribe(res => {
+      if (res?.Status == 1) {
+        this.suggestionList = res?.result;
+        this.openToaster('Suggestion List fetched successfully!', 3000, true)
+      }
+      this.showLoader = false;
+    }, error => {
+      this.openToaster('Suggestion List not fetched!', 3000, false)
+    })
   }
 
   createSuggestion() {
+    this.showLoader = true;
     this.showAddSuggestion = true;
     this.addSuggestionForm = this.formBuilder.group({
       empId: ['', Validators.required],
@@ -71,10 +101,40 @@ export class ViewSuggestionComponent {
       idea: ['', Validators.required],
       remarks: ['', Validators.required]
     })
+    this.addSuggestionForm.get('line')?.disable();
+    this.addSuggestionForm.get('zone')?.disable();
+    this.suggestionService.department().subscribe(res => {
+      if (res?.Status == 1) {
+        this.department = res?.result;
+      }
+      this.showLoader = false;
+    }, error => {
+
+    })
   }
 
   addSuggestion() {
+    this.showLoader = true;
+    let suggestionPayload = {
+      EmpID: this.addSuggestionForm.get('empId')?.value,
+      EmpName: this.addSuggestionForm.get('empName')?.value,
+      Department: this.addSuggestionForm.get('department')?.value,
+      Line: this.addSuggestionForm.get('line')?.value,
+      Zone: this.addSuggestionForm.get('zone')?.value,
+      Title: this.addSuggestionForm.get('title')?.value,
+      Issue: this.addSuggestionForm.get('issue')?.value,
+      Idea: this.addSuggestionForm.get('idea')?.value,
+      Remarks: this.addSuggestionForm.get('remarks')?.value
+    }
 
+    this.suggestionService.createSuggestion(suggestionPayload).subscribe(res => {
+      if (res?.Status == '1') {
+        this.openToaster('Suggestion created successfully!', 3000, true)
+      }
+      this.showLoader = false;
+    }, error => {
+        this.openToaster('Suggestion not created!', 3000, false);
+    })
   }
 
   cancelSuggestion() {
@@ -85,11 +145,12 @@ export class ViewSuggestionComponent {
   applyFilter() {
     // let from = moment(this.filterForm.get('fromDate')?.value);
     // console.log(from.format('DD-MM-YYYY'))
+    this.showLoader = true;
 
     let fromDate = this.filterForm.get('fromDate')?.value != '' ? moment(this.filterForm.get('fromDate')?.value).format('DD-MM-YYYY') : this.filterForm.get('fromDate')?.value;
     let toDate = this.filterForm.get('toDate')?.value != '' ? moment(this.filterForm.get('toDate')?.value).format('DD-MM-YYYY') : this.filterForm.get('toDate')?.value;
 
-    let mainFilterPayload = {
+    let mainFilterPayload: any = {
       EmpID: this.filterForm.get('empId')?.value,
       SuggestionID: this.filterForm.get('suggestionId')?.value,
       Title: this.filterForm.get('suggestionTitle')?.value,
@@ -99,7 +160,18 @@ export class ViewSuggestionComponent {
       ToDate: toDate
     }
 
-    console.log(mainFilterPayload)
+    this.suggestionService.filterSuggestion(mainFilterPayload).subscribe(res => {
+      if (res?.Status == 1) {
+        this.suggestionList = res?.result;
+        this.filterForm.reset();
+        mainFilterPayload = {}
+        this.openToaster('Suggestion List fetched successfully!', 3000, true);
+      }
+      this.showLoader = false;
+    }, error => {
+      this.showLoader = false;
+      this.openToaster('Suggestion List not fetched!', 3000, false);
+    })
   }
 
   cancelFilter() {
@@ -109,6 +181,56 @@ export class ViewSuggestionComponent {
 
   cardFilterChange(filterType: string) {
     this.filterType = filterType;
+  }
+
+  departmentChange(event: any) {
+    this.showLoader = true;
+    this.addSuggestionForm.get('department')?.patchValue(event?.value?.ID);
+    this.suggestionService.line(event?.value?.ID).subscribe(res => {
+      if (res?.Status == 1) {
+        this.addSuggestionForm.get('line')?.enable();
+        this.line = res?.result
+      }
+      this.showLoader = false;
+    })
+  }
+
+  lineChange(event: any) {
+    this.showLoader = true;
+    this.addSuggestionForm.get('line')?.patchValue(event?.value?.ID);
+    this.suggestionService.zone(event?.value?.ID).subscribe(res => {
+      if (res?.Status == 1) {
+        this.addSuggestionForm.get('zone')?.enable();
+        this.zone = res?.result
+      }
+      this.showLoader = false;
+    })
+  }
+
+  zoneChange(event: any) {
+    this.addSuggestionForm.get('zone')?.patchValue(event?.value?.ID);
+  }
+
+
+  openSnackBar(message: string) {
+    this.snackBar.openFromComponent(SnackbarComponent, {
+      data: message,
+      duration: 30000
+    });
+  }
+
+  openToaster(content: any, duration: any, type: boolean, action?: any) {
+    let sb = this.snackBar.open(content, action, {
+      duration: duration,
+      panelClass: [ type ? "success" : "error"]
+    });
+    sb.onAction().subscribe(() => {
+      sb.dismiss();
+    });
+  }
+
+  suggestionSelect(suggestion: any, index: any) {
+    this.selectedSuggestionIndex = index;
   }
 
 }

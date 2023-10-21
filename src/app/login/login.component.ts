@@ -14,6 +14,7 @@ export class LoginComponent {
   loginForm!: FormGroup;
   isUserInvalid = false;
   viewPassword: boolean = false;
+  showLoader: boolean = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -48,6 +49,7 @@ export class LoginComponent {
   }
 
   onSubmit() {
+    this.showLoader = true;
     let userObj = {
       email: this.loginForm.get('userName')?.value,
       password: this.loginForm.get('password')?.value,
@@ -62,6 +64,7 @@ export class LoginComponent {
         this.isUserInvalid = true;
         this.authService.isLoggedIn = false;
       }
+      this.showLoader = false;
     });
   }
 

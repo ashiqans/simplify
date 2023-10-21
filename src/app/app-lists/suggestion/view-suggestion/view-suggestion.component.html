@@ -1,8 +1,10 @@
+<app-loader *ngIf="showLoader"></app-loader>
 <div class="container">
   <!-- Filter Section S -->
-  <div class="filterSection" id="scrollBar">
-    <div class="filterCardContainer">
-      <div class="headerText"><p>Filter Section:</p></div>
+  <div class="filterSection" >
+    <div class="headerText"><p>Filter Section:</p></div>
+
+    <div class="filterCardContainer" id="scrollBar">
       <!-- Main filter section Starts -->
       <mat-card>
         <mat-card-content>
@@ -22,7 +24,7 @@
               </mat-form-field>
               <mat-form-field class="mainFilterField" floatLabel="always">
                 <mat-label>Suggestion ID</mat-label>
-                <input matInput type="text" placeholder="Enter your Name" formControlName="suggestionId" minlength="4"
+                <input matInput type="text" placeholder="Enter ID" formControlName="suggestionId" minlength="4"
                   maxlength="20">
                 <mat-error
                   *ngIf="filterForm.controls?.['suggestionId']?.touched && filterForm.controls?.['suggestionId']?.errors?.['minlength']">
@@ -31,7 +33,7 @@
               </mat-form-field>
               <mat-form-field class="mainFilterField" floatLabel="always">
                 <mat-label>Suggestion Title</mat-label>
-                <input matInput type="text" placeholder="Enter your Name" formControlName="suggestionTitle" minlength="4"
+                <input matInput type="text" placeholder="Enter Title" formControlName="suggestionTitle" minlength="4"
                   maxlength="20">
                 <mat-error
                   *ngIf="filterForm.controls?.['suggestionTitle']?.touched && filterForm.controls?.['suggestionTitle']?.errors?.['minlength']">
@@ -40,7 +42,7 @@
               </mat-form-field>
               <mat-form-field class="mainFilterField" floatLabel="always">
                 <mat-label>Status</mat-label>
-                <mat-select placeholder="Select your Department" formControlName="status">
+                <mat-select placeholder="Select your Status" formControlName="status">
                   <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
                     {{ food.viewValue }}
                   </mat-option> -->
@@ -81,7 +83,7 @@
               </mat-form-field>
 
             <div class="flexItem actionBtn">
-              <button mat-raised-button color="primary" (click)="applyFilter()">Apply</button>
+              <button mat-raised-button color="primary" (click)="applyFilter()" [disabled]="filterForm.pristine">Apply</button>
               <button mat-raised-button color="warn" (click)="cancelFilter()">Reset</button>
             </div>
           </form>
@@ -118,154 +120,51 @@
 
   <!-- Suggestion Section S -->
   <!-- <div class="listViewScrollContainer"> -->
-  <div class="suggestionListSection" id="scrollBar">
-    <div class="listCardContainer">
+  <div class="suggestionListSection" >
+    <div class="headerText"><p>Suggestion List:</p></div>
+
+    <div class="listCardContainer" id="scrollBar">
       <div class="suggestionCard">
-        <div class="headerText"><p>Suggestion List:</p></div>
-        <mat-card>
+        <mat-card *ngFor="let suggestion of suggestionList; let i = index;" [ngClass]="{'selected-card': selectedSuggestionIndex === i}" (click)="suggestionSelect(suggestion, i)">
           <mat-card-content>
             <div class="detailsGridContainer">
               <div class="detail1">
                 <div id="detail1">
                   <span id="iconLabel"><mat-icon>confirmation_number</mat-icon><mat-label>S ID:</mat-label>
-                    1017</span>
-                  <span id="iconLabel"><mat-icon>access_time</mat-icon> 274 days</span>
-                  <span id="iconLabel"><mat-icon>calendar_today</mat-icon> 24-June-2023</span>
+                    {{ suggestion?.ID }}</span>
+                  <span id="iconLabel"><mat-icon>access_time</mat-icon> {{ suggestion?.CreatedInDays }}</span>
+                  <span id="iconLabel"><mat-icon>calendar_today</mat-icon> {{ suggestion?.CreatedDate}}</span>
                 </div>
               </div>
               <div class="detail2">
                 <div class="profileImage">
                   <span><mat-icon> person_pin</mat-icon></span>
-                  <p id="nameLabel">Sachin Shindae</p>
+                  <p id="nameLabel">{{ suggestion?.EmpName}}</p>
                 </div>
 
                 <div id="detail2">
-                  <mat-chip class="listCardTitleChip">Suggestion:</mat-chip>
-                  <p>to provide a telephone</p>
-                  <p>Self implemented</p>
+                  <mat-chip class="listCardTitleChip"> {{ suggestion?.Title }}</mat-chip>
+                  <p>{{ suggestion?.Issue }}</p>
+                  <p>{{ suggestion?.Idea }}</p>
+                  <p>{{ suggestion?.Remarks }}</p>
                 </div>
               </div>
               <div class="detail3">
                 <div id="detail3">
-                  <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Plant:</mat-label> Unit - 1</span>
-                  <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Dept.</mat-label> PROD</span>
-                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Cat</mat-label> Prod</span>
+                  <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Dpartment:</mat-label><p [title]="suggestion?.Department"> {{ suggestion?.Department }} </p></span>
+                  <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Line:</mat-label> 
+                    <p [title]="suggestion?.Line">{{ suggestion?.Line }}</p></span>
+                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Zone:</mat-label> <p [title]="suggestion?.Zone">{{ suggestion?.Zone }}</p></span>
                 </div>
               </div>
-              <div class="detail4"><span> status: <mat-chip class="listCardChip">In Progress</mat-chip></span></div>
+              <div class="detail4"><span> status: <mat-chip class="listCardChip">{{ suggestion?.Status }}</mat-chip></span></div>
             </div>
           </mat-card-content>
         </mat-card>
-
-        <mat-card>
-          <mat-card-content>
-            <div class="detailsGridContainer">
-              <div class="detail1">
-                <div id="detail1">
-                  <span id="iconLabel"><mat-icon>confirmation_number</mat-icon><mat-label>S ID:</mat-label>
-                    1017</span>
-                  <span id="iconLabel"><mat-icon>access_time</mat-icon> 274 days</span>
-                  <span id="iconLabel"><mat-icon>calendar_today</mat-icon> 24-June-2023</span>
-                </div>
-              </div>
-              <div class="detail2">
-                <div class="profileImage">
-                  <span><mat-icon> person_pin</mat-icon></span>
-                  <p id="nameLabel">Sachin Shindae</p>
-                </div>
-
-                <div id="detail2">
-                  <mat-chip class="listCardTitleChip">Suggestion:</mat-chip>
-                  <p>to provide a telephone</p>
-                  <p>Self implemented</p>
-                </div>
-              </div>
-              <div class="detail3">
-                <div id="detail3">
-                  <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Plant:</mat-label> Unit - 1</span>
-                  <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Dept.</mat-label> PROD</span>
-                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Cat</mat-label> Prod</span>
-                </div>
-              </div>
-              <div class="detail4"><span> status: <mat-chip class="listCardChip">In Progress</mat-chip></span></div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-          <mat-card-content>
-            <div class="detailsGridContainer">
-              <div class="detail1">
-                <div id="detail1">
-                  <span id="iconLabel"><mat-icon>confirmation_number</mat-icon><mat-label>S ID:</mat-label>
-                    1017</span>
-                  <span id="iconLabel"><mat-icon>access_time</mat-icon> 274 days</span>
-                  <span id="iconLabel"><mat-icon>calendar_today</mat-icon> 24-June-2023</span>
-                </div>
-              </div>
-              <div class="detail2">
-                <div class="profileImage">
-                  <span><mat-icon> person_pin</mat-icon></span>
-                  <p id="nameLabel">Sachin Shindae</p>
-                </div>
-
-                <div id="detail2">
-                  <mat-chip class="listCardTitleChip">Suggestion:</mat-chip>
-                  <p>to provide a telephone</p>
-                  <p>Self implemented</p>
-                </div>
-              </div>
-              <div class="detail3">
-                <div id="detail3">
-                  <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Plant:</mat-label> Unit - 1</span>
-                  <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Dept.</mat-label> PROD</span>
-                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Cat</mat-label> Prod</span>
-                </div>
-              </div>
-              <div class="detail4"><span> status: <mat-chip class="listCardChip">In Progress</mat-chip></span></div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
-        <mat-card>
-          <mat-card-content>
-            <div class="detailsGridContainer">
-              <div class="detail1">
-                <div id="detail1">
-                  <span id="iconLabel"><mat-icon>confirmation_number</mat-icon><mat-label>S ID:</mat-label>
-                    1017</span>
-                  <span id="iconLabel"><mat-icon>access_time</mat-icon> 274 days</span>
-                  <span id="iconLabel"><mat-icon>calendar_today</mat-icon> 24-June-2023</span>
-                </div>
-              </div>
-              <div class="detail2">
-                <div class="profileImage">
-                  <span><mat-icon> person_pin</mat-icon></span>
-                  <p id="nameLabel">Sachin Shindae</p>
-                </div>
-
-                <div id="detail2">
-                  <mat-chip class="listCardTitleChip">Suggestion:</mat-chip>
-                  <p>to provide a telephone</p>
-                  <p>Self implemented</p>
-                </div>
-              </div>
-              <div class="detail3">
-                <div id="detail3">
-                  <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Plant:</mat-label> Unit - 1</span>
-                  <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Dept.</mat-label> PROD</span>
-                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Cat</mat-label> Prod</span>
-                </div>
-              </div>
-              <div class="detail4"><span> status: <mat-chip class="listCardChip">In Progress</mat-chip></span></div>
-            </div>
-          </mat-card-content>
-        </mat-card>
-
       </div>
       <div class="addSuggestionContainer">
         <button mat-raised-button color="primary" type="submit" (click)="createSuggestion()"
-          class="addSuggestionBtn"><mat-icon>add_circle</mat-icon> Add Suggestion </button>
+          class="addSuggestionBtn"><mat-icon>add_circle</mat-icon> Create Suggestion </button>
       </div>
     </div>
   </div>
@@ -276,8 +175,9 @@
   <div class="activeBoardSection" >
     <!-- <h1>Add suggestion & suggestion tracker here</h1> -->
     <!-- Add Suggestion section starts -->
-    <div class="addSuggestion" *ngIf="showAddSuggestion" id="scrollBar">
+    <div class="addSuggestion" *ngIf="showAddSuggestion">
       <div class="headerText"><p>Create Suggestion:</p></div>
+      <div class="createSuggestionContainer" id="scrollBar">
       <mat-card>
         <mat-card-content>
           <form [formGroup]="addSuggestionForm">
@@ -311,15 +211,11 @@
             <div class="flexItem">
               <mat-form-field class="flexItemLeft" floatLabel="always">
                 <mat-label>Employee Department</mat-label>
-                <mat-select placeholder="Select your Department" formControlName="department" ngDefaultControl required>
-                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                    {{ food.viewValue }}
-                  </mat-option> -->
-                  <mat-option value="1">Value 1</mat-option>
-                  <mat-option value="2">Value 2</mat-option>
-                  <mat-option value="3">Value 3</mat-option>
+                <mat-select placeholder="Select your Department" formControlName="department" ngDefaultControl required (selectionChange)="departmentChange($event)">
+                  <mat-option *ngFor="let dept of department" [value]="dept">
+                    {{ dept?.Department }}
+                  </mat-option>
                 </mat-select>
-
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['department']?.touched && addSuggestionForm.controls?.['department']?.errors?.['required']">
                   Please select your Department
@@ -328,32 +224,23 @@
 
               <mat-form-field class="flexItemRight" floatLabel="always">
                 <mat-label>Employee Line</mat-label>
-                <mat-select placeholder="Select your Line" formControlName="line" ngDefaultControl required>
-                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                    {{ food.viewValue }}
-                  </mat-option> -->
-                  <mat-option value="1">Value 1</mat-option>
-                  <mat-option value="2">Value 2</mat-option>
-                  <mat-option value="3">Value 3</mat-option>
+                <mat-select placeholder="Select your Line" formControlName="line" ngDefaultControl required (selectionChange)="lineChange($event)">
+                  <mat-option *ngFor="let li of line" [value]="li">
+                    {{ li?.Line }}
+                  </mat-option>
                 </mat-select>
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['line']?.touched && addSuggestionForm.controls?.['line']?.errors?.['required']">
                   Please enter your Line
                 </mat-error>
               </mat-form-field>
-            </div>
 
-            <!-- Row 3 -->
-            <div class="flexItem">
               <mat-form-field class="flexItemLeft" floatLabel="always">
                 <mat-label>Employee Zone</mat-label>
-                <mat-select placeholder="Select your Zone" formControlName="zone" ngDefaultControl required>
-                  <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
-                    {{ food.viewValue }}
-                  </mat-option> -->
-                  <mat-option value="1">Value 1</mat-option>
-                  <mat-option value="2">Value 2</mat-option>
-                  <mat-option value="3">Value 3</mat-option>
+                <mat-select placeholder="Select your Zone" formControlName="zone" ngDefaultControl (selectionChange)="zoneChange($event)">
+                  <mat-option *ngFor="let zo of zone" [value]="zo">
+                    {{ zo?.Zone }}
+                  </mat-option>
                 </mat-select>
 
                 <mat-error
@@ -361,11 +248,14 @@
                   Please select your Zone
                 </mat-error>
               </mat-form-field>
+            </div>
 
+            <!-- Row 3 -->
+            <div class="flexItem">
               <mat-form-field class="flexItemRight" floatLabel="always">
                 <mat-label>Suggestion Title</mat-label>
                 <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Suggestion Title" formControlName="title"></textarea>
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" placeholder="Enter Suggestion Title" formControlName="title"></textarea>
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['title']?.touched && addSuggestionForm.controls?.['title']?.errors?.['required']">
                   Please enter suggestion Title
@@ -378,18 +268,21 @@
               <mat-form-field class="flexItemLeft" floatLabel="always">
                 <mat-label>Issue</mat-label>
                 <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" placeholder="Enter Issue" formControlName="issue"></textarea>
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" placeholder="Enter Issue" formControlName="issue"></textarea>
 
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['issue']?.touched && addSuggestionForm.controls?.['issue']?.errors?.['required']">
                   Please enter Issue details
                 </mat-error>
               </mat-form-field>
+            </div>
 
+            <!-- Row 5 -->
+            <div class="flexItem">
               <mat-form-field class="flexItemRight" floatLabel="always">
                 <mat-label>Suggestion Idea</mat-label>
                 <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="4" placeholder="Enter Suggestion idea" formControlName="idea"></textarea>
+                  cdkAutosizeMinRows="1" cdkAutosizeMaxRows="5" placeholder="Enter Suggestion idea" formControlName="idea"></textarea>
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['idea']?.touched && addSuggestionForm.controls?.['idea']?.errors?.['required']">
                   Please enter suggestion Idea
@@ -397,7 +290,7 @@
               </mat-form-field>
             </div>
 
-            <!-- Row 5 -->
+            <!-- Row 6 -->
             <div class="flexItem">
               <mat-form-field class="flexItemCenter" floatLabel="always">
                 <mat-label>Remarks</mat-label>
@@ -419,6 +312,7 @@
           </form>
         </mat-card-content>
       </mat-card>
+    </div>
     </div>
     <!-- Add Suggestion section ends -->
 

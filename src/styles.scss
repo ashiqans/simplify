@@ -9,6 +9,9 @@
   --sub-color3: #F6F8FC;
   --sub-color4: #B2FF59;
   --border-color1: #b393d36b;
+  --grey: #444;
+  --success: #B2FF59;
+  --error: #FF6E40;
   --font-stack: 'Roboto', sans-serif;
 }
 
@@ -108,6 +111,11 @@ mat-sidenav[style] {
   --mdc-protected-button-container-color: var(--main-color) !important;
 }
 
+.mat-mdc-option.mdc-list-item {
+  font-size: 1em !important;
+  min-height: 40px !important;
+ }
+
 .listCardChip {
   --mdc-chip-container-height: 1.5em !important;
   background-color: var(--sub-color4) !important;
@@ -147,6 +155,7 @@ mat-sidenav[style] {
   }
 }
 
+// Filter section specific form field styles
 .filterSection {
   .mainFilterField {
     .mat-mdc-form-field-error-wrapper  {
@@ -183,6 +192,64 @@ mat-sidenav[style] {
       vertical-align: super !important;
     }  
   }
+}
+
+// Create Suggestion specific form field styles
+.addSuggestion {
+  .mat-mdc-card-content {
+    padding: 1em 0 !important;
+  }
+  .mat-mdc-form-field-error-wrapper  {
+    padding: 0 !important;
+    margin-top: -0.5em !important;
+    // margin-bottom: 0.5em !important;
+  }
+
+  .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    min-height: 32px !important;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
+  }
+
+  .flexItemLeft, .flexItemRight, .flexItemCenter, .mat-mdc-select {
+    font-size: 1em !important;
+  }
+
+  .mat-mdc-raised-button.mat-mdc-button-base {
+    height: 2em !important;
+  }
+
+  .mdc-button__label {
+    font-size: 0.7em !important;
+  }
+}
+
+.snackBar {
+  .mat-mdc-raised-button.mat-mdc-button-base {
+    height: 2em !important;
+  }
+
+  .mdc-button__label {
+    font-size: 0.7em !important;
+  }
+}
+
+.success {
+  div {
+    background-color: var(--success) !important;
+    color:var(--grey) !important;
+  }
+}
+
+.error {
+  div {
+    background-color: var(--error) !important;
+    color:var(--grey) !important;
+  }
+}
+
+.mat-form-field-disabled {
+  cursor: not-allowed !important;
 }
 
 // Material Elements Styles Overwrite Ends
