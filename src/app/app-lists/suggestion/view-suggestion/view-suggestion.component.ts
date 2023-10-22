@@ -5,8 +5,8 @@ import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import moment from 'moment';
-import { SuggestionService } from 'src/app/services/suggestion.service';
-import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import { SuggestionService } from '../../../services/suggestion.service';
+import { SnackbarComponent } from '../../../snackbar/snackbar.component';
 
 export const MY_FORMATS = {
   parse: {
