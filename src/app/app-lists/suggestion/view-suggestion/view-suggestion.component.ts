@@ -147,8 +147,8 @@ export class ViewSuggestionComponent {
     // console.log(from.format('DD-MM-YYYY'))
     this.showLoader = true;
 
-    let fromDate = this.filterForm.get('fromDate')?.value != '' ? moment(this.filterForm.get('fromDate')?.value).format('DD-MM-YYYY') : this.filterForm.get('fromDate')?.value;
-    let toDate = this.filterForm.get('toDate')?.value != '' ? moment(this.filterForm.get('toDate')?.value).format('DD-MM-YYYY') : this.filterForm.get('toDate')?.value;
+    let fromDate = this.filterForm.get('fromDate')?.value != '' ? moment(this.filterForm.get('fromDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('fromDate')?.value;
+    let toDate = this.filterForm.get('toDate')?.value != '' ? moment(this.filterForm.get('toDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('toDate')?.value;
 
     let mainFilterPayload: any = {
       EmpID: this.filterForm.get('empId')?.value,
@@ -162,10 +162,13 @@ export class ViewSuggestionComponent {
 
     this.suggestionService.filterSuggestion(mainFilterPayload).subscribe(res => {
       if (res?.Status == 1) {
-        this.suggestionList = res?.result;
-        this.filterForm.reset();
+        this.suggestionList = [...res?.result];
+        // this.filterForm.reset();
         mainFilterPayload = {}
         this.openToaster('Suggestion List fetched successfully!', 3000, true);
+      } else {
+        this.suggestionList = [];
+        this.openToaster('No records found!', 3000, false);
       }
       this.showLoader = false;
     }, error => {
@@ -176,6 +179,10 @@ export class ViewSuggestionComponent {
 
   cancelFilter() {
     this.filterForm.reset();
+    this.filterForm.patchValue({
+      FromDate: '',
+      ToDate: ''
+    })
     this.getSuggestionList();
   }
 
@@ -185,7 +192,7 @@ export class ViewSuggestionComponent {
 
   departmentChange(event: any) {
     this.showLoader = true;
-    this.addSuggestionForm.get('department')?.patchValue(event?.value?.ID);
+    // this.addSuggestionForm.get('department')?.patchValue(event?.value?.ID);
     this.suggestionService.line(event?.value?.ID).subscribe(res => {
       if (res?.Status == 1) {
         this.addSuggestionForm.get('line')?.enable();
@@ -197,7 +204,7 @@ export class ViewSuggestionComponent {
 
   lineChange(event: any) {
     this.showLoader = true;
-    this.addSuggestionForm.get('line')?.patchValue(event?.value?.ID);
+    // this.addSuggestionForm.get('line')?.patchValue(event?.value?.Value);
     this.suggestionService.zone(event?.value?.ID).subscribe(res => {
       if (res?.Status == 1) {
         this.addSuggestionForm.get('zone')?.enable();
@@ -208,7 +215,7 @@ export class ViewSuggestionComponent {
   }
 
   zoneChange(event: any) {
-    this.addSuggestionForm.get('zone')?.patchValue(event?.value?.ID);
+    // this.addSuggestionForm.get('zone')?.patchValue(event?.value?.Value);
   }
 
 
