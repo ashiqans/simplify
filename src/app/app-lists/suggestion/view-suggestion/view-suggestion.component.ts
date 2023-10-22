@@ -8,9 +8,9 @@ import {
   MAT_DATE_LOCALE,
 } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import * as moment from 'moment';
-import { SuggestionService } from 'src/app/services/suggestion.service';
-import { SnackbarComponent } from 'src/app/snackbar/snackbar.component';
+import moment from 'moment';
+import { SuggestionService } from '../../../services/suggestion.service';
+import { SnackbarComponent } from '../../../snackbar/snackbar.component';
 
 export const MY_FORMATS = {
   parse: {
