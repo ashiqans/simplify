@@ -7,6 +7,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import moment from 'moment';
 import { SuggestionService } from '../../../services/suggestion.service';
 import { SnackbarComponent } from '../../../snackbar/snackbar.component';
+import { interval as observableInterval } from "rxjs";
+import { takeWhile, scan, tap } from "rxjs/operators";
 
 export const MY_FORMATS = {
   parse: {
@@ -118,9 +120,9 @@ export class ViewSuggestionComponent {
     let suggestionPayload = {
       EmpID: this.addSuggestionForm.get('empId')?.value,
       EmpName: this.addSuggestionForm.get('empName')?.value,
-      Department: this.addSuggestionForm.get('department')?.value,
-      Line: this.addSuggestionForm.get('line')?.value,
-      Zone: this.addSuggestionForm.get('zone')?.value,
+      Department: this.addSuggestionForm.get('department')?.value?.Department,
+      Line: this.addSuggestionForm.get('line')?.value?.Line,
+      Zone: this.addSuggestionForm.get('zone')?.value?.Zone,
       Title: this.addSuggestionForm.get('title')?.value,
       Issue: this.addSuggestionForm.get('issue')?.value,
       Idea: this.addSuggestionForm.get('idea')?.value,
@@ -129,7 +131,10 @@ export class ViewSuggestionComponent {
 
     this.suggestionService.createSuggestion(suggestionPayload).subscribe(res => {
       if (res?.Status == '1') {
-        this.openToaster('Suggestion created successfully!', 3000, true)
+        this.getSuggestionList();
+        this.openToaster('Suggestion created successfully!', 3000, true);
+        this.addSuggestionForm.reset();
+        this.showAddSuggestion = false;
       }
       this.showLoader = false;
     }, error => {
@@ -238,6 +243,16 @@ export class ViewSuggestionComponent {
 
   suggestionSelect(suggestion: any, index: any) {
     this.selectedSuggestionIndex = index;
+  }
+
+  scrollToTop(el: any) {
+    const duration = 600;
+    const interval = 5;
+    const move = el.scrollTop * interval / duration;
+    observableInterval(interval).pipe(
+      scan((acc, curr) => acc - move, el.scrollTop),
+      tap(position => el.scrollTop = position),
+      takeWhile(val => val > 0)).subscribe();
   }
 
  }

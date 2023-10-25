@@ -123,7 +123,7 @@
   <div class="suggestionListSection" >
     <div class="headerText"><p>Suggestion List:</p></div>
 
-    <div class="listCardContainer" id="scrollBar">
+    <div class="listCardContainer" id="scrollBar" #listView>
       <div class="suggestionCard">
         <mat-card *ngFor="let suggestion of suggestionList; let i = index;" [ngClass]="{'selected-card': selectedSuggestionIndex === i}" (click)="suggestionSelect(suggestion, i)">
           <mat-card-content>
@@ -305,7 +305,7 @@
             </div>
 
             <div class="flexItem actionBtn">
-              <button mat-raised-button color="primary" (click)="addSuggestion()"
+              <button mat-raised-button color="primary" (click)="addSuggestion(); scrollToTop(listView);"
                 [disabled]="!addSuggestionForm.valid">Submit</button>
               <button mat-raised-button color="warn" (click)="cancelSuggestion()">Cancel</button>
             </div>
@@ -317,8 +317,59 @@
     <!-- Add Suggestion section ends -->
 
     <!-- View status section starts -->
-    <div class="viewStatus" *ngIf="!showAddSuggestion" id="scrollBar">
+    <div class="viewStatus" *ngIf="!showAddSuggestion">
       <div class="headerText"><p>View Suggestion:</p></div>
+      <mat-card>
+        <mat-card-content>
+          <div class="containerTimeLine" id="scrollBar">
+
+            <div class="timeline-block timeline-block-right">
+              <div class="marker active"><mat-icon>check</mat-icon></div>
+              <div class="timeline-content">
+                  <h3>First Year</h3>
+                  <span>Some work experience</span>
+                  
+              </div>
+            </div>
+        
+            <div class="timeline-block timeline-block-left">
+              <div class="marker active"><mat-icon>check</mat-icon></div>
+              <div class="timeline-content">
+                  <h3>Seconed Year</h3>
+                  <span>Some work experience</span><span>Some work experience</span><span>Some work experience</span><span>Some work experience</span><span>Some work experience</span><span>Some work experience</span><span>Some work experience</span>
+                  
+              </div>
+            </div>
+        
+            <div class="timeline-block timeline-block-right active">
+              <div class="marker active"><mat-icon>check</mat-icon></div>
+              <div class="timeline-content">
+                  <h3>Third Year</h3> 
+                  <span>Some work experience</span>
+                  
+              </div>
+            </div>
+        
+            <div class="timeline-block timeline-block-left">
+              <div class="marker"><mat-icon>check</mat-icon></div>
+              <div class="timeline-content">
+                  <h3>Fourth Year</h3>
+                  <span>Some work experience</span>
+                  
+              </div>
+            </div>
+        
+            <div class="timeline-block timeline-block-right">
+              <div class="marker"><i class="fa fa-check" aria-hidden="true"></i></div>
+              <div class="timeline-content">
+                  <h3>Fifth Year</h3>
+                  <span>Some work experience</span>
+                
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
     </div>
     <!-- View status section ends -->
   </div>
