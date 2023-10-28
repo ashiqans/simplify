@@ -224,6 +224,67 @@ mat-sidenav[style] {
   }
 }
 
+// View Status specific form field styles
+.containerTimeLine {
+  .mat-mdc-card-content {
+    padding: 1em 0 !important;
+  }
+
+  .mat-mdc-form-field {
+    padding: 0 0.5em 0 0 !important;
+    font-size: 1em !important;
+  }
+  .flexItemVS {
+    .mat-mdc-form-field-error-wrapper  {
+      padding: 0 !important;
+      margin-top: -0.5em !important;
+      // margin-bottom: 0.5em !important;
+    }
+
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+      min-height: 32px !important;
+      padding-top: 4px !important;
+      padding-bottom: 4px !important;
+    }
+
+    .mdc-notched-outline {
+      height: 32px !important;
+    }
+  }
+
+  .flexItemVS .flexItemLeft, .flexItemRight, .flexItemCenter, .mat-mdc-select {
+    font-size: 1em !important;
+  }
+  
+
+  .mat-mdc-raised-button.mat-mdc-button-base {
+    height: 2em !important;
+  }
+
+  .mdc-button__label {
+    font-size: 0.7em !important;
+  }
+
+  .mat-label {
+    font-size: 0.9em !important;
+  }
+
+  .mat-mdc-form-field-has-icon-suffix .mat-mdc-text-field-wrapper {
+    height: 32px !important;
+  }
+  .mat-mdc-icon-button {
+    padding: 0 !important;
+    svg {
+      vertical-align: super !important;
+    }  
+  }
+
+  .flexItemVS {
+    
+  }
+
+}
+
 .snackBar {
   .mat-mdc-raised-button.mat-mdc-button-base {
     height: 2em !important;
@@ -277,3 +338,10 @@ mat-sidenav[style] {
 }
 
 // Scrollbar style ends
+
+// github deploy setup & commands: 
+/*
+npm install -g angular-cli-ghpages
+ng build --base-href https://ashiqans.github.io/simplify/       
+angular-cli-ghpages -d dist/simplify/ --no-silent   
+**/

@@ -6,6 +6,8 @@
   // width: 90vw;
   // overflow-y: scroll;
   overflow-x: scroll;
+  overflow-y: hidden;
+  margin-top: 1%;
 }
 
 .headerText {
@@ -22,7 +24,7 @@
 
 .filterSection {
   // flex-grow: 2;
-  flex: 0 0 21%;
+  flex: 0 0 22%; // 21%
   border-right: 2px solid var(--border-color1);
 
   .filterCardContainer {
@@ -111,7 +113,8 @@
 
 .suggestionListSection {
   // flex-grow: 2;
-  flex: 0 0 27%;
+  // flex: 0 0 27%;
+  flex: 0 0 30%;
   // padding: 0.5em;
   border-right: 2px solid var(--border-color1);
 
@@ -272,10 +275,11 @@
 .activeBoardSection {
   // flex: 0 0 48%;
   padding: 0 0.5em;
+  flex: 1;
 }
 
 .addSuggestion {
-  max-width: 90% !important;
+  // max-width: 90% !important;
 
   .createSuggestionContainer {
     height: 94vh;
@@ -294,6 +298,7 @@
   .flexItem {
     display: flex;
     flex-direction: row;
+    flex-wrap: wrap !important;
     // justify-content: space-around;
 
     .flexItemLeft, .flexItemRight{
@@ -355,7 +360,7 @@
 // }
 
 .viewStatus {
-  display: none;
+  // display: none;
   .mat-mdc-card {
     margin-top: 0.5em;
     margin-right: 0.5em;
@@ -376,7 +381,7 @@ h1 span {
   font-weight: 600;
 }
 
-.containerTimeLine {
+.containerOverflow {
   // width: 80%;
   // padding: 50px 0;
   // margin: 50px auto;
@@ -384,6 +389,7 @@ h1 span {
   // overflow: hidden;
 
   height: 94vh;
+  // height: auto;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -396,7 +402,7 @@ h1 span {
   margin-left: 1.4em;
   width: 2px;
   // height: 100%;
-  height: 94vh;
+  height: 94%;
   background: var(--border-color1);
   z-index: 1
 }
@@ -445,7 +451,7 @@ h1 span {
 .marker.active{
  width: 40px;
  height: 37px;
- background: var(--sub-color4);
+ background: var(--main-color);
  left: 0px;
 
  mat-icon {
@@ -455,9 +461,14 @@ h1 span {
   padding-left: 0.3em;
  }
 }
+
+.marker.partialActive {
+  background-color: var(--sub-color1) !important;
+}
 .timeline-content {
   width: 95%;
-  padding: 0 15px;
+  // padding: 0 15px;
+  padding: 0.5em 1em 0 0;
   color: #666
 }
 i.fa.fa-check{
@@ -502,7 +513,7 @@ display:block !important;
   }
   .timeline-block {
      width: 100%;
-     margin-bottom: 30px;
+    //  margin-bottom: 30px;
   }
   .timeline-block-right {
      float: none;
@@ -512,6 +523,55 @@ display:block !important;
      float: none;
      direction: ltr;
   }
+
+  .mat-accordion {
+    // position: absolute !important;
+    margin-bottom: 1em;
+  }
+
+  // .mat-expansion-panel-header {
+  //   margin-left: 3em !important;
+  // }
+
+  .flexItemVS {
+    display: flex;
+    flex-direction: row;
+    padding: 0.5em 0 0 0;
+    flex-wrap: wrap !important;
+
+    button {
+      margin-right: 2em;
+      margin-bottom: 1em;
+    }
+
+    .flexItemRight {
+      mat-toolbar {
+        padding: 0 !important;
+        height: 24px !important;
+        background-color: #fff !important;
+
+        .mat-mdc-input-element {
+          font-size: 0.6em !important;
+          font-weight: 300 !important;
+        }
+      }
+      mat-icon {
+        color: var(--main-color) !important;
+      }
+    }
+  }
+
+  .labelText {
+    justify-content: space-between !important;
+  }
+
+  .mat-expansion-panel-header {
+    height: 3em !important;
+  }
+  .mat-expansion-panel-header.mat-expanded {
+    background-color: var(--sub-color2) !important;
+    height: 3em !important;
+}
 
 
 // Timeline style ends

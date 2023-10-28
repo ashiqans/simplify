@@ -25,6 +25,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { LoaderComponent } from '../loader/loader.component';
 import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatExpansionModule,
+    MatToolbarModule
   ],
   exports: [
     LoginComponent,

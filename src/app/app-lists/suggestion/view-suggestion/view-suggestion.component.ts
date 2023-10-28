@@ -48,6 +48,7 @@ export class ViewSuggestionComponent {
   zone: any = [];
   suggestionList: any = [];
   selectedSuggestionIndex: any;
+  panelOpenState = false;
 
   constructor(private formBuilder: FormBuilder,
     private datePipe: DatePipe,
@@ -243,6 +244,10 @@ export class ViewSuggestionComponent {
 
   suggestionSelect(suggestion: any, index: any) {
     this.selectedSuggestionIndex = index;
+  }
+
+  uploadFiles() {
+    
   }
 
   scrollToTop(el: any) {
