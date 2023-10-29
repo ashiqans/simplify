@@ -157,7 +157,10 @@
                   <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Zone:</mat-label> <p [title]="suggestion?.Zone">{{ suggestion?.Zone }}</p></span>
                 </div>
               </div>
-              <div class="detail4"><span> status: <mat-chip class="listCardChip">{{ suggestion?.Status }}</mat-chip></span></div>
+              <div class="detail4">
+                <span id="iconLabel"><mat-icon>work</mat-icon><mat-label>Emp. ID:</mat-label>{{ suggestion?.EmpID }}</span>
+                <span> status: <mat-chip class="listCardChip">{{ suggestion?.Status }}</mat-chip></span>
+              </div>
             </div>
           </mat-card-content>
         </mat-card>
@@ -320,14 +323,57 @@
     <div class="viewStatus" *ngIf="!showAddSuggestion">
       <div class="headerText"><p>View Suggestion:</p></div>
 
+      <div class="viewSuggestionDetails">
+        <mat-card>
+          <mat-card-content>
+            <div class="detailsGridContainer">
+              <div class="detail1">
+                <div id="detail1">
+                  <span id="iconLabel"><mat-icon>confirmation_number</mat-icon><mat-label>S ID:</mat-label>
+                    {{ selectedSuggestion?.ID }}</span>
+                  <span id="iconLabel"><mat-icon>access_time</mat-icon> {{ selectedSuggestion?.CreatedInDays }}</span>
+                  <span id="iconLabel"><mat-icon>calendar_today</mat-icon> {{ selectedSuggestion?.CreatedDate}}</span>
+                </div>
+              </div>
+              <div class="detail2">
+                <div class="profileImage">
+                  <span><mat-icon> person_pin</mat-icon></span>
+                  <p id="nameLabel">{{ selectedSuggestion?.EmpName}}</p>
+                </div>
+
+                <div id="detail2">
+                  <mat-chip class="listCardTitleChip"> {{ selectedSuggestion?.Title }}</mat-chip>
+                  <p>{{ selectedSuggestion?.Issue }}</p>
+                  <p>{{ selectedSuggestion?.Idea }}</p>
+                  <p>{{ selectedSuggestion?.Remarks }}</p>
+                </div>
+              </div>
+              <div class="detail3">
+                <div id="detail3">
+                  <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Dpartment:</mat-label><p [title]="selectedSuggestion?.Department"> {{ selectedSuggestion?.Department }} </p></span>
+                  <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Line:</mat-label> 
+                    <p [title]="selectedSuggestion?.Line">{{ selectedSuggestion?.Line }}</p></span>
+                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Zone:</mat-label> <p [title]="selectedSuggestion?.Zone">{{ selectedSuggestion?.Zone }}</p></span>
+                </div>
+              </div>
+              <div class="detail4">
+                <span id="iconLabel"><mat-icon>work</mat-icon><mat-label>Emp. ID:</mat-label>{{ selectedSuggestion?.EmpID }}</span>
+                <span> status: <mat-chip class="listCardChip">{{ selectedSuggestion?.Status }}</mat-chip></span>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
       <div class="containerOverflow" id="scrollBar">
       <mat-card>
         <mat-card-content>
             <div class="containerTimeLine">
+              <form [formGroup]="viewSuggestionForm">
             <!-- *Stage 1  -->
             <div class="timeline-block timeline-block-right">
               <div class="marker active"><mat-icon>check</mat-icon></div>
-              <mat-accordion class="timeline-content">
+              <mat-accordion class="timeline-content" formGroupName="sc">
                 <mat-expansion-panel (opened)="panelOpenState = true"
                                      (closed)="panelOpenState = false">
                   <mat-expansion-panel-header>
@@ -346,7 +392,7 @@
                       <mat-form-field  floatLabel="always">
                         <mat-label>Rejection reason: (Remarks)</mat-label>
                         <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Remarks"></textarea>
+                          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Remarks" formControlName="rejectionRemarks"></textarea>
   
                         <!-- <mat-error
                           *ngIf="addSuggestionForm.controls?.['remarks']?.touched && addSuggestionForm.controls?.['remarks']?.errors?.['required']">
@@ -366,7 +412,7 @@
             <!-- *Stage 2  -->
             <div class="timeline-block timeline-block-right">
               <div class="marker active"><mat-icon>check</mat-icon></div>
-              <mat-accordion class="timeline-content">
+              <mat-accordion class="timeline-content" formGroupName="dl">
                 <mat-expansion-panel (opened)="panelOpenState = true"
                                      (closed)="panelOpenState = false">
                   <mat-expansion-panel-header>
@@ -380,7 +426,7 @@
                     <mat-form-field class="flexItemLeft" floatLabel="always">
                       <mat-label>Edit Suggestion</mat-label>
                       <input matInput type="text" placeholder="Enter your Employee ID" minlength="4"
-                        maxlength="20">
+                        maxlength="20" formControlName="editSuggestion">
                       <!-- <mat-error
                         *ngIf="addSuggestionForm.controls?.['department']?.touched && addSuggestionForm.controls?.['department']?.errors?.['required']">
                         Please select your Department
@@ -389,17 +435,18 @@
                     <mat-form-field class="flexItemRight" floatLabel="always">
                       <mat-label>Before photo upload</mat-label>
                       <mat-toolbar>
-                        <input matInput placeholder="Upload image"/>
+                        <input matInput placeholder="Upload image" formControlName="beforeImgUpload"/>
                         <mat-icon>upload</mat-icon>
                       </mat-toolbar>
+                      <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'dl')"/>
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemRight" floatLabel="always">
                       <mat-label>Category</mat-label>
-                      <mat-select placeholder="Select your Catogory" ngDefaultControl required (selectionChange)="lineChange($event)">
-                        <mat-option *ngFor="let li of line" [value]="li">
-                          {{ li?.Line }}
+                      <mat-select placeholder="Select your Catogory" ngDefaultControl formControlName="category">
+                        <mat-option *ngFor="let c of categoryList" [value]="c?.value">
+                          {{ c?.value }}
                         </mat-option>
                       </mat-select>
                       <!-- <mat-error
@@ -410,9 +457,9 @@
       
                     <mat-form-field class="flexItemLeft" floatLabel="always">
                       <mat-label>Implementation</mat-label>
-                      <mat-select placeholder="Select your implementation" ngDefaultControl (selectionChange)="zoneChange($event)">
-                        <mat-option *ngFor="let zo of zone" [value]="zo">
-                          {{ zo?.Zone }}
+                      <mat-select placeholder="Select your implementation" ngDefaultControl  formControlName="implementation">
+                        <mat-option *ngFor="let im of implementationList" [value]="im?.value">
+                          {{ im?.value }}
                         </mat-option>
                       </mat-select>
       
@@ -437,7 +484,7 @@
             <!-- *Stage 3  -->
             <div class="timeline-block timeline-block-right">
               <div class="marker active"><mat-icon>check</mat-icon></div>
-              <mat-accordion class="timeline-content">
+              <mat-accordion class="timeline-content" formGroupName="im">
                 <mat-expansion-panel (opened)="panelOpenState = true"
                                      (closed)="panelOpenState = false">
                   <mat-expansion-panel-header>
@@ -456,7 +503,7 @@
                       <mat-form-field  floatLabel="always">
                         <mat-label>Rejection reason: (Remarks)</mat-label>
                         <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Remarks"></textarea>
+                          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Remarks" formControlName="rejectionRemarks"></textarea>
   
                         <!-- <mat-error
                           *ngIf="addSuggestionForm.controls?.['remarks']?.touched && addSuggestionForm.controls?.['remarks']?.errors?.['required']">
@@ -467,7 +514,7 @@
                     <div class="flexItemVS">
                       <mat-form-field  floatLabel="always">
                         <mat-label>Target Date</mat-label>
-                        <input matInput [matDatepicker]="picker2" placeholder="DD-MM-YYYY">
+                        <input matInput [matDatepicker]="picker2" placeholder="DD-MM-YYYY" formControlName="targetDate">
                         <!-- <mat-hint>DD-MM-YYYY</mat-hint> -->
                         <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2 color="primary"></mat-datepicker>
@@ -485,7 +532,7 @@
             <!-- *Stage 4  -->
             <div class="timeline-block timeline-block-right">
               <div class="marker active"><mat-icon>check</mat-icon></div>
-              <mat-accordion class="timeline-content">
+              <mat-accordion class="timeline-content" formGroupName="pi">
                 <mat-expansion-panel (opened)="panelOpenState = true"
                                      (closed)="panelOpenState = false">
                   <mat-expansion-panel-header>
@@ -499,7 +546,7 @@
                     <mat-form-field class="flexItemLeft" floatLabel="always">
                       <mat-label>Description</mat-label>
                       <input matInput type="text" placeholder="Enter description" minlength="4"
-                        maxlength="20">
+                        maxlength="20" formControlName="description">
                       <!-- <mat-error
                         *ngIf="addSuggestionForm.controls?.['department']?.touched && addSuggestionForm.controls?.['department']?.errors?.['required']">
                         Please select your Department
@@ -508,9 +555,10 @@
                     <mat-form-field class="flexItemRight" floatLabel="always">
                       <mat-label>After photo upload</mat-label>
                       <mat-toolbar>
-                        <input matInput placeholder="Upload image"/>
+                        <input matInput placeholder="Upload image" formControlName="afterImgUpload"/>
                         <mat-icon>upload</mat-icon>
                       </mat-toolbar>
+                      <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'pi')"/>
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS labelText">
@@ -519,7 +567,7 @@
                     <mat-form-field class="flexItemLeft" floatLabel="always">
                       <mat-label>Cost savings</mat-label>
                       <input matInput type="text" placeholder="Enter cost savings" minlength="4"
-                        maxlength="20">
+                        maxlength="20" formControlName="costSavings">
                       <!-- <mat-error
                         *ngIf="addSuggestionForm.controls?.['department']?.touched && addSuggestionForm.controls?.['department']?.errors?.['required']">
                         Please select your Department
@@ -542,7 +590,7 @@
             <!-- *Stage 5  -->
             <div class="timeline-block timeline-block-right">
               <div class="marker active"><mat-icon>check</mat-icon></div>
-              <mat-accordion class="timeline-content">
+              <mat-accordion class="timeline-content" formGroupName="fi">
                 <mat-expansion-panel (opened)="panelOpenState = true"
                                      (closed)="panelOpenState = false">
                   <mat-expansion-panel-header>
@@ -554,7 +602,7 @@
                     <mat-form-field class="flexItemLeft" floatLabel="always">
                       <mat-label>Actual Cost savings</mat-label>
                       <input matInput type="text" placeholder="Enter cost savings" minlength="4"
-                        maxlength="20">
+                        maxlength="20" formControlName="costSavings">
                       <!-- <mat-error
                         *ngIf="addSuggestionForm.controls?.['department']?.touched && addSuggestionForm.controls?.['department']?.errors?.['required']">
                         Please select your Department
@@ -574,7 +622,7 @@
             <!-- *Stage 6  -->
             <div class="timeline-block timeline-block-right">
               <div class="marker active"><mat-icon>check</mat-icon></div>
-              <mat-accordion class="timeline-content">
+              <mat-accordion class="timeline-content" formGroupName= "ce">
                 <mat-expansion-panel (opened)="panelOpenState = true"
                                      (closed)="panelOpenState = false">
                   <mat-expansion-panel-header>
@@ -586,9 +634,9 @@
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemRight" floatLabel="always">
                       <mat-label>Grade</mat-label>
-                      <mat-select placeholder="Select your Grade" ngDefaultControl required (selectionChange)="lineChange($event)">
-                        <mat-option *ngFor="let li of line" [value]="li">
-                          {{ li?.Line }}
+                      <mat-select placeholder="Select your Grade" ngDefaultControl formControlName="grade">
+                        <mat-option *ngFor="let g of gradeList" [value]="g?.id">
+                          {{ g?.value }}
                         </mat-option>
                       </mat-select>
                       <!-- <mat-error
@@ -600,7 +648,7 @@
                     <mat-form-field class="flexItemLeft" floatLabel="always">
                       <mat-label>Comment</mat-label>
                       <input matInput type="text" placeholder="Enter comment" minlength="4"
-                        maxlength="20">
+                        maxlength="20" formControlName="comment">
                       <!-- <mat-error
                         *ngIf="addSuggestionForm.controls?.['department']?.touched && addSuggestionForm.controls?.['department']?.errors?.['required']">
                         Please select your Department
@@ -620,7 +668,8 @@
             <!-- *Stage 7  -->
             <div class="timeline-block timeline-block-right">
               <div class="marker active partialActive"><mat-icon>check</mat-icon></div>
-              <mat-accordion class="timeline-content">
+              <!-- <div> -->
+              <mat-accordion class="timeline-content" formGroupName= "hr">
                 <mat-expansion-panel (opened)="panelOpenState = true"
                                      (closed)="panelOpenState = false">
                   <mat-expansion-panel-header>
@@ -632,9 +681,9 @@
                   <div class="flexItemVS labelText">
                     <mat-form-field class="flexItemRight" floatLabel="always">
                       <mat-label>Grade</mat-label>
-                      <mat-select placeholder="Select your Grade" ngDefaultControl required (selectionChange)="lineChange($event)">
-                        <mat-option *ngFor="let li of line" [value]="li">
-                          {{ li?.Line }}
+                      <mat-select placeholder="Select your Grade" ngDefaultControl formControlName="grade">
+                        <mat-option *ngFor="let g of gradeList" [value]="g?.id">
+                          {{ g?.value }}
                         </mat-option>
                       </mat-select>
                       <!-- <mat-error
@@ -646,19 +695,17 @@
                     <button mat-raised-button color="primary">Payment Credited</button>
                   </div>
                   <div class="flexItemVS labelText">
-                    <mat-form-field class="flexItemLeft" floatLabel="always">
+                    <mat-form-field class="flexItemRight" floatLabel="always">
                     <mat-label>Photo upload</mat-label>
                       <mat-toolbar>
-                        <input matInput  />
-                  
-                        <button
-                          mat-flat-button
-                          color="primary"
-            
-                        >
-                          Upload
-                        </button>
+                        <input matInput placeholder="Upload image" formControlName="imgUpload"/>
+                        <mat-icon>upload</mat-icon>
                       </mat-toolbar>
+                      <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'hr')"/>
+                      <!-- <mat-label>Photo Upload</mat-label>
+                      <input matInput cdkFocusInitial class="z-0" placeholder="Upload image"/>
+                      <mat-icon matSuffix class="mr-2">upload</mat-icon>
+                      <mat-hint class="mat-form-field-hint-end">JPEG / JPG / PNG</mat-hint> -->
                     </mat-form-field>
                     <button mat-raised-button color="primary">Submit</button>
                   </div>
@@ -667,9 +714,10 @@
                   </div>
                 </mat-expansion-panel>
               </mat-accordion>
-              
+              <!-- </div> -->
             </div>
             <!-- Stage 7* -->
+          </form>
         
             <!-- <div class="timeline-block timeline-block-left">
               <div class="marker active"><mat-icon>check</mat-icon></div>

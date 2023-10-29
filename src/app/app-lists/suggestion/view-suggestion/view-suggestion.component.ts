@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -40,6 +40,7 @@ export const MY_FORMATS = {
 export class ViewSuggestionComponent {
   filterForm!: FormGroup;
   addSuggestionForm!: FormGroup;
+  viewSuggestionForm!: FormGroup;
   showAddSuggestion: boolean = false; 
   filterType: string = 'All';
   showLoader: boolean = false;
@@ -49,17 +50,38 @@ export class ViewSuggestionComponent {
   suggestionList: any = [];
   selectedSuggestionIndex: any;
   panelOpenState = false;
+  implementationList: any = [{id: 'S', value: 'Self'},{id: 'ME', value: 'ME'},{id: 'M', value: 'Maintenance'}];
+  categoryList: any = [{id: 'P', value: 'Productivity'},{id: 'C', value: 'Cost'},{id: 'Q', value: 'Quality'},{id: 'D', value: 'Delivery'},{id: 'S', value: 'Safety'}];
+  gradeList: any = [{ id: 'A+', value: 'A+' }, { id: 'A', value: 'A' }, { id: 'B', value: 'B' }, { id: 'C', value: 'C' }, { id: 'D', value: 'D' }];
+  // hrFormControl: any;
+  viewSuggestionControls: any = [];
+  selectedSuggestion: any;
 
   constructor(private formBuilder: FormBuilder,
     private datePipe: DatePipe,
     private suggestionService: SuggestionService,
     private snackBar: MatSnackBar) {
     this.suggestionFilterMain();
+    this.viewSuggestionTimeline();
   }
   
   ngOnInit(): void {
     // this.openSnackBar('This is a test message for snackbar')
     this.getSuggestionList();
+    console.log(this.viewSuggestionForm)
+    // this.hrFormControl = this.viewSuggestionForm.controls['hr'];
+    this.viewSuggestionControls = [
+      this.viewSuggestionForm.controls['sc'],
+      this.viewSuggestionForm.controls['dl'],
+      this.viewSuggestionForm.controls['im'],
+      this.viewSuggestionForm.controls['pi'],
+      this.viewSuggestionForm.controls['fi'],
+      this.viewSuggestionForm.controls['ce'],
+      this.viewSuggestionForm.controls['hr']
+    ]
+    // this.hrFormControl.controls.approvedDate.setValue('29-10-2023')
+    // this.viewSuggestionControls[0].controls.approvedDate.setValidators([Validators.required]);
+    // console.log(this.viewSuggestionForm)
   }
 
   suggestionFilterMain() {
@@ -74,6 +96,66 @@ export class ViewSuggestionComponent {
     })
   }
 
+  viewSuggestionTimeline() {
+    this.viewSuggestionForm = this.formBuilder.group({
+      sc: this.formBuilder.group({
+        acceptRejectDate: '',
+        accept: '',
+        reject: '',
+        rejectionRemarks: '',
+        assignedEvaluator: ''
+      }),
+      dl: this.formBuilder.group({
+        approvedDate: '',
+        editSuggestion: '',
+        beforeImgUpload: '',
+        category: '',
+        implementation: '',
+        submit: '',
+        assignedEvaluator: ''
+      }),
+      im: this.formBuilder.group({
+        acceptRejectDate: '',
+        accept: '',
+        reject: '',
+        rejectionRemarks: '',
+        targetDate: '',
+        assignedEvaluator: ''
+      }),
+      pi: this.formBuilder.group({
+        approvedDate: '',
+        description: '',
+        afterImgUpload: '',
+        costSavings: '',
+        benefits: '',
+        submit: '',
+        submitEvaluator: '',
+        assignedEvaluator: ''
+      }),
+      fi: this.formBuilder.group({
+        approvedDate: '',
+        costSavings: '',
+        submit: '',
+        submitEvaluator: ''
+      }),
+      ce: this.formBuilder.group({
+        approvedDate: '',
+        grade: '',
+        comment: '',
+        submit: '',
+        submitEvaluator: ''
+      }),
+      hr: this.formBuilder.group({
+        approvedDate: '',
+        grade: '',
+        paymentCredited: '',
+        imgUpload: '',
+        submit: '',
+        winnersBoard: ''
+      })
+    })
+  }
+
   getSuggestionList() {
     let payload = {
 
@@ -82,7 +164,9 @@ export class ViewSuggestionComponent {
     this.suggestionService.getSuggestionList(payload).subscribe(res => {
       if (res?.Status == 1) {
         this.suggestionList = res?.result;
-        this.openToaster('Suggestion List fetched successfully!', 3000, true)
+        this.openToaster('Suggestion List fetched successfully!', 3000, true);
+        this.selectedSuggestionIndex = 0;
+        this.selectedSuggestion = this.suggestionList[0];
       }
       this.showLoader = false;
     }, error => {
@@ -244,10 +328,21 @@ export class ViewSuggestionComponent {
 
   suggestionSelect(suggestion: any, index: any) {
     this.selectedSuggestionIndex = index;
+    this.selectedSuggestion = suggestion;
+    console.log(this.selectedSuggestion)
   }
 
-  uploadFiles() {
-    
+  uploadFiles(event: any, type: any) {
+    let file = event?.target?.files;
+    console.log(file[0]);
+    console.log(file[0]?.name);
+    if (type == 'dl') {
+      this.viewSuggestionControls[1].controls.beforeImgUpload.setValue(file[0]?.name);
+    } else if (type == 'pi') {
+      this.viewSuggestionControls[3].controls.afterImgUpload.setValue(file[0]?.name);
+    } else if (type == 'hr') {
+      this.viewSuggestionControls[6].controls.imgUpload.setValue(file[0]?.name);
+    }
   }
 
   scrollToTop(el: any) {
