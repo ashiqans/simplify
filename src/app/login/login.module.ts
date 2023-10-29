@@ -18,6 +18,7 @@ import { AppListsComponent } from '../app-lists/app-lists.component';
 import { ViewSuggestionComponent } from '../app-lists/suggestion/view-suggestion/view-suggestion.component';
 import { SuggestionComponent } from '../app-lists/suggestion/suggestion.component';
 import { DashboardComponent } from '../app-lists/suggestion/dashboard/dashboard.component';
+import { NgChartsModule } from 'ng2-charts';
 import { MatOptionModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -46,6 +47,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatCardModule,
     MatFormFieldModule,
     ReactiveFormsModule,
+    NgChartsModule,
     MatIconModule,
     MatTooltipModule,
     MatListModule,

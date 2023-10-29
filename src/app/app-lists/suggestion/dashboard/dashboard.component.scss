@@ -1,0 +1,47 @@
+// Chart styles start
+.chart1, .chart2, .chart3, .chart4 {
+  flex: 1;
+  padding: 1em;
+
+  canvas {
+    // height: 30% !important;
+    // width: 100% !important;
+    margin: auto;
+  }
+}
+
+.chartContainer {
+  height: 94vh;
+  margin-top: 1em;
+  overflow: scroll;
+
+  #row1, #row2 {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  #row2 {
+    margin-bottom: 3em;
+  }
+}
+// chart style ends
+
+// filter style starts
+.filterHeader {
+  margin: 1em;
+
+  .filterSection {
+    button {
+      margin-right: 1em;
+      height: 30px;
+    }
+
+    .mdc-button__label {
+      font-size: 1em !important;
+    }
+    .mat-date-range-input {
+      font-size: 0.8em !important;
+    }
+  }
+}
+// filter style ends

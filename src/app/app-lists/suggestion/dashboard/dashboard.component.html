@@ -1,1 +1,91 @@
-<p>dashboard works!</p>
+<div class="filterHeader" style="display: none;">
+<mat-card>
+  <mat-card-content>
+    <div class="filterSection">
+      <!-- <h2>Filter:</h2>  -->
+      <button mat-stroked-button color="primary">1M</button>
+      <button mat-stroked-button color="primary">6M</button>
+      <button mat-stroked-button color="primary">1Y</button>
+      <mat-form-field class="mainFilterField dateRange" floatLabel="always">
+        <mat-label>Select a Date Range</mat-label>
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="DD-MM-YYYY">
+          <input matEndDate placeholder="DD-MM-YYYY">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+    </div>
+  </mat-card-content>
+</mat-card>
+</div>
+
+<div class="chartContainer" id="scrollBar" style="display: none;">
+  <div id="row1">
+    <!-- Pie chart -->
+    <div class="chart4">
+      <mat-card>
+        <mat-card-content>
+          <canvas baseChart
+            [type]="'pie'"
+            [datasets]="pieChartDatasets3"
+            [labels]="pieChartLabels3"
+            [options]="pieChartOptions3"
+            [plugins]="pieChartPlugins3"
+            [legend]="pieChartLegend3">
+          </canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- pie chart -->
+    <div class="chart2">
+      <mat-card>
+        <mat-card-content>
+          <canvas baseChart
+            [type]="'pie'"
+            [datasets]="pieChartDatasets1"
+            [labels]="pieChartLabels1"
+            [options]="pieChartOptions1"
+            [plugins]="pieChartPlugins1"
+            [legend]="pieChartLegend1">
+          </canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div id="row2">
+    <!-- Pie chart -->
+    <div class="chart3">
+      <mat-card>
+        <mat-card-content>
+          <canvas baseChart
+            [type]="'pie'"
+            [datasets]="pieChartDatasets2"
+            [labels]="pieChartLabels2"
+            [options]="pieChartOptions2"
+            [plugins]="pieChartPlugins2"
+            [legend]="pieChartLegend2">
+          </canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- Bar chart -->
+    <div class="chart1">
+      <mat-card>
+        <mat-card-content>
+          <!-- style="margin-top: 3em;" -->
+          <canvas baseChart style="min-height: 300px"
+                [data]="barChartData"
+                [options]="barChartOptions"
+                [plugins]="barChartPlugins"
+                [legend]="barChartLegend"
+                [type]="'bar'">
+          </canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
