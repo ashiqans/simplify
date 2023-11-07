@@ -175,7 +175,7 @@
   <!-- Suggestion Section E -->
 
   <!-- active board Section S -->
-  <div class="activeBoardSection" >
+  <div class="activeBoardSection" *ngIf="suggestionList.length > 0">
     <!-- <h1>Add suggestion & suggestion tracker here</h1> -->
     <!-- Add Suggestion section starts -->
     <div class="addSuggestion" *ngIf="showAddSuggestion">
@@ -320,7 +320,7 @@
     <!-- Add Suggestion section ends -->
 
     <!-- View status section starts -->
-    <div class="viewStatus" *ngIf="!showAddSuggestion">
+    <div class="viewStatus" *ngIf="selectedSuggestion && !showAddSuggestion">
       <div class="headerText"><p>View Suggestion:</p></div>
 
       <div class="viewSuggestionDetails">
@@ -371,7 +371,7 @@
             <div class="containerTimeLine">
               <form [formGroup]="viewSuggestionForm">
             <!-- *Stage 1  -->
-            <div class="timeline-block timeline-block-right">
+            <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[0]?.s1s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="sc">
                 <mat-expansion-panel (opened)="panelOpenState = true"
@@ -384,24 +384,25 @@
                   </mat-expansion-panel-header>
 
                   <div class="flexItemVS">
-                    <mat-label class="flexItemVsLabel">Approved / Rejected Date: 28-10-2023</mat-label>
+                    <mat-label class="flexItemVsLabel top">{{ selectedSuggestion?.s1?.S1ApprovalStatus }} Date: {{ selectedSuggestion?.s1?.S1ApprovalDate }}</mat-label>
+
+                    <mat-form-field class="flexItemField top"  floatLabel="always">
+                      <mat-label>Rejection reason: (Remarks)</mat-label>
+                      <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Remarks" formControlName="rejectionRemarks"></textarea>
+
+                      <!-- <mat-error
+                        *ngIf="addSuggestionForm.controls?.['remarks']?.touched && addSuggestionForm.controls?.['remarks']?.errors?.['required']">
+                        Please enter Remark
+                      </mat-error> -->
+                  </mat-form-field>
                   </div>
-                    <div class="flexItemVS actionBtn">
-                      <button mat-raised-button color="primary">Accept</button>
-                      <button mat-raised-button color="warn">Reject</button>
-                      <mat-form-field  floatLabel="always">
-                        <mat-label>Rejection reason: (Remarks)</mat-label>
-                        <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                          cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Remarks" formControlName="rejectionRemarks"></textarea>
-  
-                        <!-- <mat-error
-                          *ngIf="addSuggestionForm.controls?.['remarks']?.touched && addSuggestionForm.controls?.['remarks']?.errors?.['required']">
-                          Please enter Remark
-                        </mat-error> -->
-                    </mat-form-field>
-                    </div>
                   <div class="flexItemVS">
-                    <mat-label class="flexItemVsLabel">Assigned to Evaluator: Name</mat-label>
+                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s1?.S1Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s1?.S1Evaluator }}</mat-label>
+                  </div>
+                  <div class="flexItemVS actionBtnVS">
+                    <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s1?.S1ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disabled" (click)="approveStage('S1')">Approve</button>
+                    <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s1?.S1ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disable" (click)="rejectStage('S1')">Reject</button>
                   </div>
                 </mat-expansion-panel>
               </mat-accordion>
@@ -410,7 +411,7 @@
             <!-- Stage 1* -->
 
             <!-- *Stage 2  -->
-            <div class="timeline-block timeline-block-right">
+            <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[1]?.s2s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="dl">
                 <mat-expansion-panel (opened)="panelOpenState = true"
@@ -473,7 +474,7 @@
                     <mat-label class="flexItemVsLabel">Assigned to Evaluator: Name</mat-label>
                   </div>
                   <div class="flexItemVS actionBtn">
-                    <button mat-raised-button color="primary">Submit</button>
+                    <button mat-raised-button color="primary" (click)="approveStage('S2')">Submit</button>
                   </div>
                 </mat-expansion-panel>
               </mat-accordion>
@@ -482,7 +483,7 @@
             <!-- Stage 2* -->
 
             <!-- *Stage 3  -->
-            <div class="timeline-block timeline-block-right">
+            <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[2]?.s3s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="im">
                 <mat-expansion-panel (opened)="panelOpenState = true"
@@ -530,7 +531,7 @@
             <!-- Stage 3* -->
 
             <!-- *Stage 4  -->
-            <div class="timeline-block timeline-block-right">
+            <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[3]?.s4s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="pi">
                 <mat-expansion-panel (opened)="panelOpenState = true"
@@ -588,7 +589,7 @@
             <!-- Stage 4* -->
 
             <!-- *Stage 5  -->
-            <div class="timeline-block timeline-block-right">
+            <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[4]?.s5s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="fi">
                 <mat-expansion-panel (opened)="panelOpenState = true"
@@ -620,7 +621,7 @@
             <!-- Stage 5* -->
 
             <!-- *Stage 6  -->
-            <div class="timeline-block timeline-block-right">
+            <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[5]?.s6s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName= "ce">
                 <mat-expansion-panel (opened)="panelOpenState = true"
@@ -666,7 +667,7 @@
             <!-- Stage 6* -->
 
             <!-- *Stage 7  -->
-            <div class="timeline-block timeline-block-right">
+            <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[6]?.s7s == 'Show'">
               <div class="marker active partialActive"><mat-icon>check</mat-icon></div>
               <!-- <div> -->
               <mat-accordion class="timeline-content" formGroupName= "hr">

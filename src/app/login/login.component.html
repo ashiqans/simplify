@@ -18,16 +18,16 @@
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
           <p class="headerText">Log in to continue</p>
           <mat-form-field class="full-width-input" floatLabel="always">
-            <mat-label>User ID</mat-label>
-            <input matInput placeholder="Enter your User ID" formControlName="userName" required minlength="6"
+            <mat-label>Employee ID</mat-label>
+            <input matInput placeholder="Enter your Employee ID" formControlName="empId" required minlength="3"
               maxlength="20">
             <mat-error
-              *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['required']">
-              Please enter your User ID
+              *ngIf="loginForm.controls?.['empId']?.touched && loginForm.controls?.['empId']?.errors?.['required']">
+              Please enter your Employee ID
             </mat-error>
             <mat-error
-              *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
-              Please enter minimum 6 and maximum 14 characters
+              *ngIf="loginForm.controls?.['empId']?.touched && loginForm.controls?.['empId']?.errors?.['minlength']">
+              Please enter minimum 3 and maximum 14 characters
             </mat-error>
           </mat-form-field>
           <mat-form-field class="full-width-input" floatLabel="always">
@@ -45,7 +45,7 @@
             </mat-error>
           </mat-form-field>
           <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Log in</button>
-          <mat-error *ngIf="isUserInvalid">Invalid User details. Please try again!</mat-error>
+          <mat-error *ngIf="isUserInvalid">{{loginResMsg}}</mat-error>
         </form>
 
         <hr class="hrText" data-content="OR">

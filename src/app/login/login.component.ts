@@ -15,6 +15,7 @@ export class LoginComponent {
   isUserInvalid = false;
   viewPassword: boolean = false;
   showLoader: boolean = false;
+  loginResMsg: string = '';
 
   constructor(
     private formBuilder: FormBuilder,
@@ -24,7 +25,7 @@ export class LoginComponent {
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      userName: ['', Validators.required],
+      empId: ['', Validators.required],
       password: ['', Validators.required],
     });
 
@@ -39,30 +40,24 @@ export class LoginComponent {
       "Idea": "khg",
       "Remarks": "hhh"
     }
-    this.authService.test1(testObj).subscribe(res => {
-      console.log(res);
-    })
-
-    this.authService.test2().subscribe(res => {
-      console.log(res)
-    })
   }
 
   onSubmit() {
     this.showLoader = true;
     let userObj = {
-      email: this.loginForm.get('userName')?.value,
+      EmpID: this.loginForm.get('empId')?.value,
       password: this.loginForm.get('password')?.value,
     };
     this.authService.login(userObj).subscribe((res: any) => {
-      if (res?.jwtToken && res?.status == 1) {
+      if (res?.status == 1) {
         this.authService.isLoggedIn = true;
         this.loginForm.reset();
         this.isUserInvalid = false;
-        this.router.navigate(['user/viewuser']);
+        // this.router.navigate(['user/viewuser']);
       } else {
         this.isUserInvalid = true;
         this.authService.isLoggedIn = false;
+        this.loginResMsg = res?.RespMsg;
       }
       this.showLoader = false;
     });

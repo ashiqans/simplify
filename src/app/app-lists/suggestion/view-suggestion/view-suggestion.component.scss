@@ -350,13 +350,13 @@
 .viewSuggestionDetails {
   padding-right: 0.2em;
   .mat-mdc-card-content {
-    padding: 1em !important;
+    padding: 0.5em !important;
   }
 
   .mat-icon {
     font-size: 1.3em !important;
-    height: 14px !important;
-    width: 14px !important;
+    height: 18px !important;
+    width: 18px !important;
     color: var(--main-color);
     margin-right: 0.2em;
   }
@@ -370,7 +370,7 @@
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      max-width: 8ch;
+      // max-width: 8ch;
     }
   }
 
@@ -432,7 +432,7 @@
 
     span {
       margin: 0.2em 0;
-      letter-spacing: 0;
+      // letter-spacing: 0;
     }
 
     .mat-icon {
@@ -454,7 +454,7 @@
       'subFooter subFooter subFooter subFooter subFooter subFooter'
       'footer footer footer footer footer footer';
     gap: 0.5em;
-    font-size: 0.8em;
+    font-size: 0.9em;
     // background-color: #2196F3;
     // padding: 10px;
   }
@@ -678,6 +678,25 @@ display:block !important;
       }
     }
   }
+  
+  .actionBtnVS {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .containerTimeLine {
+    .flexItemVsLabel {
+      // flex: 30%;
+    }
+
+    .flexItemField {
+      // flex: 70%;
+    }
+    .top {
+      padding-top: 1em !important;
+    }
+  }
+  
 
   .labelText {
     justify-content: space-between !important;

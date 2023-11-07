@@ -28,12 +28,12 @@ export class AuthenticationService {
   }
 
   login(userObj: any) {
-    return this.http.post(`${this.baseURL}/api/login`, userObj)
+    return this.http.post(`${this.baseURL}/Login`, userObj)
       .pipe(map((user: any) => {
-        let jwtToken = user?.jwtToken;
-        sessionStorage.setItem('authToken', jwtToken);
+        // let jwtToken = user?.jwtToken;
+        // sessionStorage.setItem('authToken', jwtToken);
         sessionStorage.setItem('isLoggedIn', 'true');
-        this.currentUserSubject.next(jwtToken);
+        // this.currentUserSubject.next(jwtToken);
         return user;
       }));
   }

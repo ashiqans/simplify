@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 
 export interface User {
@@ -45,6 +45,40 @@ export class SuggestionService {
   zone(id: number) {
     return this.http.get<any>(`${this.baseURL}/MstZone?LineID=${id}`);
   }
+
+  fileUpload(file: File): Observable<any> {
+    let formParams = new FormData();
+    formParams.append('file', file);
+    return this.http.post(`${this.baseURL}/UploadImage`, formParams);
+  }
+
+  getSuggestionDetail(sugId: any, loginId: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/SuggestionDetail?SuggestionID=${sugId}&LoginID=${loginId}`, sugId);
+  }
+
+  updateStageOne(payload: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/UpdateStage1`, payload);
+  }  
+
+  updateStageTwo(payload: any): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
+    return this.http.post(`${this.baseURL}/UpdateStage2`, payload, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+  }
+
+  updateStageFive(payload: any): Observable<any> {
+    const headers = new HttpHeaders();
+    headers.append('Content-Type', 'multipart/form-data');
+    headers.append('Accept', 'application/json');
+    return this.http.post(`${this.baseURL}/UpdateStage5`, payload);
+  }
+
+
 
   setAuthorBook(books: []) {
     this.authorBook.next(books);
