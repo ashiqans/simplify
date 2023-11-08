@@ -46,9 +46,9 @@ export class SuggestionService {
     return this.http.get<any>(`${this.baseURL}/MstZone?LineID=${id}`);
   }
 
-  fileUpload(file: File): Observable<any> {
+  fileUpload(file: File, name: string): Observable<any> {
     let formParams = new FormData();
-    formParams.append('file', file);
+    formParams.append('file', file, name);
     return this.http.post(`${this.baseURL}/UploadImage`, formParams);
   }
 
@@ -56,8 +56,8 @@ export class SuggestionService {
     return this.http.post(`${this.baseURL}/SuggestionDetail?SuggestionID=${sugId}&LoginID=${loginId}`, sugId);
   }
 
-  updateStageOne(payload: any): Observable<any> {
-    return this.http.post(`${this.baseURL}/UpdateStage1`, payload);
+  updateStage(stage: number, payload: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/UpdateStage${stage}`, payload);
   }  
 
   updateStageTwo(payload: any): Observable<any> {
