@@ -58,27 +58,11 @@ export class SuggestionService {
 
   updateStage(stage: number, payload: any): Observable<any> {
     return this.http.post(`${this.baseURL}/UpdateStage${stage}`, payload);
-  }  
-
-  updateStageTwo(payload: any): Observable<any> {
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-    headers.append('Accept', 'application/json');
-    return this.http.post(`${this.baseURL}/UpdateStage2`, payload, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    });
   }
 
-  updateStageFive(payload: any): Observable<any> {
-    const headers = new HttpHeaders();
-    headers.append('Content-Type', 'multipart/form-data');
-    headers.append('Accept', 'application/json');
-    return this.http.post(`${this.baseURL}/UpdateStage5`, payload);
+  getImage(fileName: string) {
+    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
   }
-
-
 
   setAuthorBook(books: []) {
     this.authorBook.next(books);

@@ -41,10 +41,26 @@
             </mat-error>
             <mat-error
               *ngIf="loginForm.controls?.['password']?.touched && loginForm.controls?.['password']?.errors?.['minlength']">
-              Please enter minimum 6 and maximum 14 characters
+              Please enter minimum 6 and maximum 20 characters
             </mat-error>
           </mat-form-field>
-          <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid">Log in</button>
+        
+          <mat-form-field class="full-width-input" floatLabel="always" *ngIf="loginForm.controls?.['confirmPassword']?.status != 'DISABLED'">
+            <mat-label>Confirm Password</mat-label>
+            <input matInput type='password' placeholder="Enter your Password"
+              formControlName="confirmPassword" required minlength="6" maxlength="20" (change)="comparePassword()">
+            <!-- <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon> -->
+            <mat-error
+              *ngIf="loginForm.controls?.['confirmPassword']?.touched && loginForm.controls?.['confirmPassword']?.errors?.['required']">
+              Please enter your password
+            </mat-error>
+            <mat-error
+              *ngIf="loginForm.controls?.['confirmPassword']?.touched && loginForm.controls?.['confirmPassword']?.errors?.['minlength']">
+              Please enter minimum 6 and maximum 20 characters
+            </mat-error>
+          </mat-form-field>
+          <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid || notMatch"> 
+            {{ loginForm.controls['confirmPassword'].status != 'DISABLED' ? 'Update Password' :  'Log in' }}</button>
           <mat-error *ngIf="isUserInvalid">{{loginResMsg}}</mat-error>
         </form>
 

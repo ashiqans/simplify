@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -9,6 +9,7 @@ import { SuggestionService } from '../../../services/suggestion.service';
 import { SnackbarComponent } from '../../../snackbar/snackbar.component';
 import { interval as observableInterval } from "rxjs";
 import { takeWhile, scan, tap } from "rxjs/operators";
+import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) {}
@@ -42,6 +43,7 @@ export const MY_FORMATS = {
 })
   
 export class ViewSuggestionComponent {
+  @ViewChild('imageViewerDialog') imageViewerDialog!: TemplateRef<any>;
   filterForm!: FormGroup;
   addSuggestionForm!: FormGroup;
   viewSuggestionForm!: FormGroup;
@@ -74,11 +76,18 @@ export class ViewSuggestionComponent {
     {s6s: 'Show', s6c: 'Disable'},
     {s7s: 'Show', s7c: 'Disable'}
   ]
+  imageType: any = {
+    name: '',
+    src: ''
+  }
+  indexExpanded: any;
 
   constructor(private formBuilder: FormBuilder,
     private datePipe: DatePipe,
     private suggestionService: SuggestionService,
-    private snackBar: MatSnackBar) {
+    private snackBar: MatSnackBar,
+    public dialog: MatDialog
+  ) {
     this.suggestionFilterMain();
     this.viewSuggestionTimeline();
   }
@@ -191,8 +200,10 @@ export class ViewSuggestionComponent {
         this.selectedSuggestionIndex = 0;
         // this.selectedSuggestion = this.suggestionList[0];
         this.getSuggestionDetail(this.suggestionList[0]?.ID)
+      } else if (res?.Status == 0) {
+        this.showLoader = false;
+        this.openToaster('No Suggestion to show. Kindly Create!', 3000, true);
       }
-      // this.showLoader = false;
     }, error => {
       this.openToaster('Suggestion List not fetched!', 3000, false)
     })
@@ -302,6 +313,37 @@ export class ViewSuggestionComponent {
 
   cardFilterChange(filterType: string) {
     this.filterType = filterType;
+    let payload = {
+      EmpID: '',
+      Status: '',
+      FromDate: '',
+      ToDate: ''
+    }
+
+    if (filterType == 'Pen') {
+      payload.Status = 'Pending';
+      payload.EmpID = this.loginId;
+    }
+    if (filterType == 'My') {
+      payload.EmpID = this.loginId;
+    }
+
+    this.showLoader = true;
+    this.suggestionService.getSuggestionList(payload).subscribe(res => {
+      if (res?.Status == 1) {
+        this.suggestionList = res?.result;
+        this.openToaster('Suggestion List fetched successfully!', 3000, true);
+        this.selectedSuggestionIndex = 0;
+        this.getSuggestionDetail(this.suggestionList[0]?.ID)
+      } else if (res?.Status == 0) {
+        this.showLoader = false;
+        this.suggestionList = []
+        this.openToaster('No Suggestion to show. Kindly Create!', 3000, true);
+      }
+    }, error => {
+      this.openToaster('Suggestion List not fetched!', 3000, false)
+      this.suggestionList = []
+    })
   }
 
   departmentChange(event: any) {
@@ -343,7 +385,9 @@ export class ViewSuggestionComponent {
   openToaster(content: any, duration: any, type: boolean, action?: any) {
     let sb = this.snackBar.open(content, action, {
       duration: duration,
-      panelClass: [ type ? "success" : "error"]
+      // panelClass: [type ? "success" : "error"],
+      horizontalPosition: 'start',
+      verticalPosition: 'bottom'
     });
     sb.onAction().subscribe(() => {
       sb.dismiss();
@@ -361,7 +405,7 @@ export class ViewSuggestionComponent {
     sugId = 64// temp
     this.suggestionId = sugId;
     this.loginId = 1019;
-    this.suggestionService.getSuggestionDetail(sugId, this.loginId).subscribe(res => {
+    this.suggestionService.getSuggestionDetail(this.suggestionId, this.loginId).subscribe(res => {
       if (res?.Status == 1) {
         this.selectedSuggestion = res?.result;
         this.showLoader = false;
@@ -496,7 +540,35 @@ export class ViewSuggestionComponent {
   }
 
   rejectStage(stage: string) {
-
+    if (stage == 'S1') {
+      let payload = {
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
+        ApprovalStatus: 'Rejected',
+        RejectReason: ''
+      }
+      this.suggestionService.updateStage(1, payload).subscribe(res => {
+        if (res?.Status == 1) {
+          this.selectedSuggestion.s1.S1Evaluator = res?.result?.Evaluator;
+          this.toggleStager(res?.result);
+        }
+      })
+    } else if (stage == 'S3') {
+      const targetDate = moment(this.viewSuggestionForm.controls['im'].get('targetDate')?.value).format('YYYY-MM-DD')
+      let payload = {
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
+        ApprovalStatus: "Rejected",
+        RejectReason: this.viewSuggestionForm.controls['im'].get('rejectionRemarks')?.value,
+        TargetDate: targetDate
+      }
+      this.suggestionService.updateStage(3, payload).subscribe(res => {
+        if (res?.Status == 1) {
+          this.selectedSuggestion.s3.S3Evaluator = res?.result?.Evaluator;
+          this.toggleStager(res?.result);
+        }
+      })
+    }
   }
 
   toggleStager(value: any) {
@@ -509,7 +581,7 @@ export class ViewSuggestionComponent {
       {s6s: value?.S6Status, s6c: value?.S6Control},
       {s7s: value?.S7Status, s7c: value?.S7Control}
     ]
-    this.viewSuggestionForm.controls['sc'].disable();
+
     // Stage 1
     this.viewSuggestionForm?.get('sc.rejectionRemarks')?.setValue(value?.s1?.S1ApprovalRemarks);
     this.selectedSuggestion.s1.S1Evaluator = value?.s1?.S1Evaluator;
@@ -548,6 +620,9 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm?.get('hr.paymentCredited')?.setValue(value?.s7?.S7PaymentCredited);
     this.viewSuggestionForm?.get('hr.imgUpload')?.setValue(value?.s7?.S7EmpPhotoName);
     this.detailTree[6]?.s7c == 'Disable' ? this.viewSuggestionForm.controls['hr'].disable() : this.viewSuggestionForm.controls['hr'].enable();
+    
+    // Mat expansional panel open
+    this.indexExpanded = this.detailTree[0]?.s1c == 'Enable' ? 1 : this.detailTree[1]?.s2c == 'Enable' ? 2 : this.detailTree[2]?.s3c == 'Enable' ? 3 : this.detailTree[3]?.s4c == 'Enable' ? 4 : this.detailTree[4]?.s5c == 'Enable' ? 5 : this.detailTree[5]?.s6c == 'Enable' ? 6 : 7;
   }
 
   uploadFiles(event: any, type: any) {
@@ -563,6 +638,27 @@ export class ViewSuggestionComponent {
       this.fileDetail = file;
       this.viewSuggestionControls[6].controls.imgUpload.setValue(file?.name);
     }
+  }
+
+  openImageViewer(type: any) {
+    if (type == 'dl') {
+      this.imageType = {
+        name: this.viewSuggestionForm?.get('dl.beforeImgUpload')?.value,
+        src: `${this.suggestionService.baseURL}/images/${this.viewSuggestionForm?.get('dl.beforeImgUpload')?.value}`
+      };
+    } else if (type == 'pi') {
+      this.imageType = {
+        name: this.viewSuggestionForm?.get('pi.afterImgUpload')?.value,
+        src: `${this.suggestionService.baseURL}/images/${this.viewSuggestionForm?.get('pi.afterImgUpload')?.value}`
+      };
+    } else if (type == 'hr') {
+      this.imageType = {
+        name: this.viewSuggestionForm?.get('hr.imgUpload')?.value,
+        src: `${this.suggestionService.baseURL}/images/${this.viewSuggestionForm?.get('hr.imgUpload')?.value}`
+      };
+    }  
+    let dialogRef = this.dialog.open(this.imageViewerDialog);
+    dialogRef.afterClosed().subscribe(result => {})
   }
   
   scrollToTop(el: any) {

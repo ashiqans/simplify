@@ -28,6 +28,7 @@ import { SnackbarComponent } from '../snackbar/snackbar.component';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialogModule } from '@angular/material/dialog'
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     MatNativeDateModule,
     MatSnackBarModule,
     MatExpansionModule,
-    MatToolbarModule
+    MatToolbarModule,
+    MatDialogModule
   ],
   exports: [
     LoginComponent,

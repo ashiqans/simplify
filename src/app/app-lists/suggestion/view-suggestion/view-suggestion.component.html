@@ -15,7 +15,7 @@
                   maxlength="10">
                 <mat-error
                   *ngIf="filterForm.controls?.['empId']?.touched && filterForm.controls?.['empId']?.errors?.['minlength']">
-                  Employee ID minimum length is 4
+                  Employee ID minimum length is 2
                 </mat-error>
                 <!-- <mat-error
                   *ngIf="loginForm.controls?.['userName']?.touched && loginForm.controls?.['userName']?.errors?.['minlength']">
@@ -28,7 +28,7 @@
                   maxlength="20">
                 <mat-error
                   *ngIf="filterForm.controls?.['suggestionId']?.touched && filterForm.controls?.['suggestionId']?.errors?.['minlength']">
-                  Suggestion ID minimum length is 4
+                  Suggestion ID minimum length is 2
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="mainFilterField" floatLabel="always">
@@ -37,7 +37,7 @@
                   maxlength="50">
                 <mat-error
                   *ngIf="filterForm.controls?.['suggestionTitle']?.touched && filterForm.controls?.['suggestionTitle']?.errors?.['minlength']">
-                  Suggestion title minimum length is 4
+                  Suggestion title minimum length is 2
                 </mat-error>
               </mat-form-field>
               <mat-form-field class="mainFilterField" floatLabel="always">
@@ -95,19 +95,19 @@
         <mat-card-content>
           <div class="filterCard">
             <div class="cardButton" (click)="cardFilterChange('All')" [ngClass]="filterType == 'All' ? 'active' : ''">
-              <span id="noSpan">777</span>
+              <span id="noSpan">{{ filterType == 'All' ? suggestionList?.length : '-' }}</span>
               <span id="textSpan">All Suggestions</span>
             </div>
 
             <div class="cardButton" (click)="cardFilterChange('My')" [ngClass]="filterType == 'My' ? 'active' : ''">
-              <span id="noSpan">222</span>
+              <span id="noSpan"> {{ filterType == 'My' ? suggestionList?.length : '-' }}</span>
               <span id="textSpan">My Suggestions</span>
             </div>
           </div>
 
           <div class="filterCard">
           <div class="cardButton" (click)="cardFilterChange('Pen')" [ngClass]="filterType == 'Pen' ? 'active' : ''">
-            <span id="noSpan">111</span>
+            <span id="noSpan">{{ filterType == 'Pen' ? suggestionList?.length : '-' }}</span>
             <span id="textSpan">My Pending Suggestions</span>
           </div>
           </div>
@@ -164,6 +164,11 @@
             </div>
           </mat-card-content>
         </mat-card>
+        <mat-card class="noListCard" *ngIf="suggestionList?.length == 0">
+          <mat-card-content>
+            <h3>No Suggestion Found!</h3>
+          </mat-card-content>
+        </mat-card>
       </div>
       <div class="addSuggestionContainer">
         <button mat-raised-button color="primary" type="submit" (click)="createSuggestion()"
@@ -175,7 +180,7 @@
   <!-- Suggestion Section E -->
 
   <!-- active board Section S -->
-  <div class="activeBoardSection" *ngIf="suggestionList.length > 0">
+  <div class="activeBoardSection" *ngIf="showAddSuggestion || suggestionList.length > 0">
     <!-- <h1>Add suggestion & suggestion tracker here</h1> -->
     <!-- Add Suggestion section starts -->
     <div class="addSuggestion" *ngIf="showAddSuggestion">
@@ -374,8 +379,7 @@
             <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[0]?.s1s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="sc">
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
+                <mat-expansion-panel [expanded]="indexExpanded == 1">
                   <mat-expansion-panel-header>
                     <mat-panel-title> Suggestion Created </mat-panel-title>
                     <!-- <mat-panel-description>
@@ -401,7 +405,7 @@
                   </div>
                   <div class="flexItemVS actionBtnVS">
                     <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s1?.S1ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disabled || viewSuggestionForm.controls['sc'].invalid" (click)="approveStage('S1')">Approve</button>
-                    <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s1?.S1ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disable" (click)="rejectStage('S1')">Reject</button>
+                    <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s1?.S1ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disable || viewSuggestionForm.controls['sc'].invalid" (click)="rejectStage('S1')">Reject</button>
                   </div>
                 </mat-expansion-panel>
               </mat-accordion>
@@ -413,8 +417,7 @@
             <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[1]?.s2s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="dl">
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
+                <mat-expansion-panel [expanded]="indexExpanded == 2">
                   <mat-expansion-panel-header>
                     <mat-panel-title> Department Line Header - Approval Status </mat-panel-title>
                   </mat-expansion-panel-header>
@@ -437,6 +440,7 @@
                       <mat-toolbar>
                         <input matInput placeholder="Upload image" formControlName="beforeImgUpload"/>
                         <mat-icon>upload</mat-icon>
+                        <mat-icon (click)="openImageViewer('dl')">visibility</mat-icon>
                       </mat-toolbar>
                       <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'dl')"/>
                       <mat-error *ngIf="viewSuggestionForm?.get('dl.beforeImgUpload')?.touched && viewSuggestionForm?.get('dl.beforeImgUpload')?.errors?.['required']">Please select Before Photo Uplaod</mat-error>
@@ -479,13 +483,9 @@
             <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[2]?.s3s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="im">
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
+                <mat-expansion-panel [expanded]="indexExpanded == 3">
                   <mat-expansion-panel-header>
                     <mat-panel-title> Implementation team - Pending status </mat-panel-title>
-                    <!-- <mat-panel-description>
-                      Currently I am {{panelOpenState ? 'open' : 'closed'}}
-                    </mat-panel-description> -->
                   </mat-expansion-panel-header>
 
                   <div class="flexItemVS">
@@ -513,7 +513,7 @@
                     </div>
                     <div class="flexItemVS actionBtn">
                       <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s3?.S3ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disabled || viewSuggestionForm.controls['im'].invalid" (click)="approveStage('S3')">Approve</button>
-                      <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s3?.S3ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disable" (click)="rejectStage('S3')">Reject</button>
+                      <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s3?.S3ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disable || viewSuggestionForm.controls['im'].invalid" (click)="rejectStage('S3')">Reject</button>
                     </div>
                 </mat-expansion-panel>
               </mat-accordion>
@@ -525,8 +525,7 @@
             <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[3]?.s4s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="pi">
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
+                <mat-expansion-panel [expanded]="indexExpanded == 4">
                   <mat-expansion-panel-header>
                     <mat-panel-title> Pending Implementation </mat-panel-title>
                   </mat-expansion-panel-header>
@@ -546,6 +545,7 @@
                       <mat-toolbar>
                         <input matInput placeholder="Upload image" formControlName="afterImgUpload"/>
                         <mat-icon>upload</mat-icon>
+                        <mat-icon (click)="openImageViewer('pi')">visibility</mat-icon>
                       </mat-toolbar>
                       <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'pi')"/>
                       <mat-error *ngIf="viewSuggestionForm?.get('pi.afterImgUpload')?.touched && viewSuggestionForm?.get('pi.afterImgUpload')?.errors?.['required']">Please upload After Photo</mat-error>
@@ -579,8 +579,7 @@
             <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[4]?.s5s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName="fi">
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
+                <mat-expansion-panel [expanded]="indexExpanded == 5">
                   <mat-expansion-panel-header>
                     <mat-panel-title> Finance Validation </mat-panel-title>
                   </mat-expansion-panel-header>
@@ -610,8 +609,7 @@
             <div class="timeline-block timeline-block-right" *ngIf="this.detailTree[5]?.s6s == 'Show'">
               <div class="marker active"><mat-icon>check</mat-icon></div>
               <mat-accordion class="timeline-content" formGroupName= "ce">
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
+                <mat-expansion-panel [expanded]="indexExpanded == 6">
                   <mat-expansion-panel-header>
                     <mat-panel-title> Category Evaluator </mat-panel-title>
                   </mat-expansion-panel-header>
@@ -654,8 +652,7 @@
               <!--partialActive-->
               <!-- <div> -->
               <mat-accordion class="timeline-content" formGroupName= "hr">
-                <mat-expansion-panel (opened)="panelOpenState = true"
-                                     (closed)="panelOpenState = false">
+                <mat-expansion-panel [expanded]="indexExpanded == 7">
                   <mat-expansion-panel-header>
                     <mat-panel-title> HR Evaluator </mat-panel-title>
                   </mat-expansion-panel-header>
@@ -681,7 +678,7 @@
                       <mat-toolbar>
                         <input matInput placeholder="Upload image" formControlName="imgUpload"/>
                         <mat-icon>upload</mat-icon>
-                        <mat-icon>visibility</mat-icon>
+                        <mat-icon (click)="openImageViewer('hr')">visibility</mat-icon>
                       </mat-toolbar>
                       <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'hr')"/>
                       <mat-error *ngIf="viewSuggestionForm?.get('hr.imgUpload')?.touched && viewSuggestionForm?.get('hr.imgUpload')?.errors?.['required']">Please upload Photo</mat-error>
@@ -714,7 +711,15 @@
       </div>
 
       <!-- Image modal starts-->
-      
+      <ng-template #imageViewerDialog>
+        <div class="dialogHeader">
+          <h2>{{ imageType?.name}}</h2>
+          <mat-icon mat-button matDialogClose="yes">close</mat-icon>  
+        </div>
+        <div class="dialogContent">
+          <img *ngIf="imageType?.name" [src]="imageType?.src" [alt]="imageType?.name" width="700">
+        </div>
+      </ng-template>
       <!-- Image modal ends -->
     </div>
     <!-- View status section ends -->
