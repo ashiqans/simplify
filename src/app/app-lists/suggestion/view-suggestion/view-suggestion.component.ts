@@ -140,15 +140,15 @@ export class ViewSuggestionComponent {
         acceptRejectDate: '',
         accept: '',
         reject: '',
-        rejectionRemarks: '',
-        targetDate: '',
+        rejectionRemarks: ['', Validators.required],
+        targetDate: ['', Validators.required],
         assignedEvaluator: ''
       }),
       pi: this.formBuilder.group({
         approvedDate: '',
-        description: '',
-        afterImgUpload: '',
-        costSavings: '',
+        description: ['', Validators.required],
+        afterImgUpload: ['', Validators.required],
+        costSavings: ['', Validators.required],
         benefits: '',
         submit: '',
         submitEvaluator: '',
@@ -156,22 +156,22 @@ export class ViewSuggestionComponent {
       }),
       fi: this.formBuilder.group({
         approvedDate: '',
-        costSavings: '',
+        costSavings: ['', Validators.required],
         submit: '',
         submitEvaluator: ''
       }),
       ce: this.formBuilder.group({
         approvedDate: '',
-        grade: '',
-        comment: '',
+        grade: ['', Validators.required],
+        comment: ['', Validators.required],
         submit: '',
         submitEvaluator: ''
       }),
       hr: this.formBuilder.group({
         approvedDate: '',
         grade: '',
-        paymentCredited: '',
-        imgUpload: '',
+        paymentCredited: '', // ['', Validators.required],
+        imgUpload: ['', Validators.required],
         submit: '',
         winnersBoard: ''
       })
@@ -358,8 +358,9 @@ export class ViewSuggestionComponent {
 
   getSuggestionDetail(sugId: any) {
     this.showLoader = true;
-    sugId = 38// temp
+    sugId = 64// temp
     this.suggestionId = sugId;
+    this.loginId = 1019;
     this.suggestionService.getSuggestionDetail(sugId, this.loginId).subscribe(res => {
       if (res?.Status == 1) {
         this.selectedSuggestion = res?.result;
@@ -373,8 +374,8 @@ export class ViewSuggestionComponent {
   approveStage(stage: string) {
     if (stage == 'S1') {
       let payload = {
-        SugID: 66, //this.suggestionId,
-        LoginID: 1019, //this.loginId,
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
         ApprovalStatus: 'Approved',
         RejectReason: ''
       } 
@@ -389,8 +390,8 @@ export class ViewSuggestionComponent {
       const fileExtension = this.fileDetail?.type?.split('/')[1];
       const fileName = `${this.suggestionId}_before.${fileExtension}`;
       let payload = {
-        SugID: 66, //this.suggestionId,
-        LoginID: 1019, //this.loginId,
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
         Category: this.viewSuggestionForm.controls['dl'].get('category')?.value,
         Implementation: this.viewSuggestionForm.controls['dl'].get('implementation')?.value,
         SuggestionTitle: this.viewSuggestionForm.controls['dl'].get('editSuggestion')?.value,
@@ -410,26 +411,82 @@ export class ViewSuggestionComponent {
         }
       });
     } else if (stage == 'S3') {
-      const fileExtension = this.fileDetail?.type?.split('/')[1];
-      const fileName = `${this.suggestionId}_before.${fileExtension}`;
+      const targetDate = moment(this.viewSuggestionForm.controls['im'].get('targetDate')?.value).format('YYYY-MM-DD')
       let payload = {
-        SugID: 66, //this.suggestionId,
-        LoginID: 1019, //this.loginId,
-        Category: this.viewSuggestionForm.controls['dl'].get('category')?.value,
-        Implementation: this.viewSuggestionForm.controls['dl'].get('implementation')?.value,
-        BeforePhotoFileName: fileName
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
+        ApprovalStatus: "Approved",
+        RejectReason: this.viewSuggestionForm.controls['im'].get('rejectionRemarks')?.value,
+        TargetDate: targetDate
+      }
+      this.suggestionService.updateStage(3, payload).subscribe(res => {
+            if (res?.Status == 1) {
+              this.selectedSuggestion.s3.S3Evaluator = res?.result?.Evaluator;
+              this.toggleStager(res?.result);
+            }
+      })
+    } else if (stage == 'S4') {
+      const fileExtension = this.fileDetail?.type?.split('/')[1];
+      const fileName = `${this.suggestionId}_after.${fileExtension}`;
+      let payload = {
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
+        Description: this.viewSuggestionForm.controls['pi'].get('description')?.value,
+        CostSavings: this.viewSuggestionForm.controls['pi'].get('costSavings')?.value,
+        AfterPhotoFileName: fileName
       }
       this.suggestionService.fileUpload(this.fileDetail, fileName).subscribe(fileResp => {
         if (fileResp.Status == 1) {
-          this.suggestionService.updateStage(2, payload).subscribe(res => {
+          this.suggestionService.updateStage(4, payload).subscribe(res => {
             if (res?.Status == 1) {
-              this.viewSuggestionForm.controls['dl'].reset();
-              this.viewSuggestionForm.controls['dl'].markAsUntouched();
-              this.selectedSuggestion.s2.S2Evaluator = res?.result?.Evaluator;
+              this.selectedSuggestion.s4.S4Evaluator = res?.result?.Evaluator;
               this.toggleStager(res?.result);
-              console.log(res)
             }
-          })
+          }) 
+        }
+      });
+    } else if (stage == 'S5') {
+      let payload = {
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
+        ActualCostSavings: this.viewSuggestionForm.controls['fi'].get('costSavings')?.value,
+      }
+      this.suggestionService.updateStage(5, payload).subscribe(res => {
+            if (res?.Status == 1) {
+              this.selectedSuggestion.s5.S5Evaluator = res?.result?.Evaluator;
+              this.toggleStager(res?.result);
+            }
+      })
+    } else if (stage == 'S6') {
+      let payload = {
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
+        Grade: this.viewSuggestionForm.controls['ce'].get('grade')?.value,
+        Comment: this.viewSuggestionForm.controls['ce'].get('comment')?.value
+      }
+      this.suggestionService.updateStage(6, payload).subscribe(res => {
+            if (res?.Status == 1) {
+              this.selectedSuggestion.s6.S6Evaluator = res?.result?.Evaluator;
+              this.toggleStager(res?.result);
+            }
+      })
+    } else if (stage == 'S7') {
+      const fileExtension = this.fileDetail?.type?.split('/')[1];
+      const fileName = `${this.suggestionId}_employee.${fileExtension}`;
+      let payload = {
+        SugID: this.suggestionId,
+        LoginID: this.loginId,
+        EmpPhotoName: fileName
+      }
+      this.suggestionService.fileUpload(this.fileDetail, fileName).subscribe(fileResp => {
+        if (fileResp.Status == 1) {
+          this.suggestionService.updateStage(7, payload).subscribe(res => {
+            if (res?.Status == 1) {
+              this.selectedSuggestion.s7.S7Evaluator = res?.result?.Evaluator;
+              this.toggleStager(res?.result);
+              console.log(res) 
+            }
+          }) 
         }
       });
     } else {
@@ -455,28 +512,41 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm.controls['sc'].disable();
     // Stage 1
     this.viewSuggestionForm?.get('sc.rejectionRemarks')?.setValue(value?.s1?.S1ApprovalRemarks);
-    // this.detailTree[0]?.s1c == 'Disable' ? this.viewSuggestionForm.controls['sc'].disable() : this.viewSuggestionForm.controls['sc'].enable();
+    this.selectedSuggestion.s1.S1Evaluator = value?.s1?.S1Evaluator;
+    this.detailTree[0]?.s1c == 'Disable' ? this.viewSuggestionForm.controls['sc'].disable() : this.viewSuggestionForm.controls['sc'].enable();
 
     // Stage 2
     this.viewSuggestionForm?.get('dl.editSuggestion')?.setValue(value?.s2?.S2SuggestionTitle);
     this.viewSuggestionForm?.get('dl.implementation')?.setValue(value?.s2?.S2Implementation);
     this.viewSuggestionForm?.get('dl.category')?.setValue(value?.s2?.S2Category);
     this.viewSuggestionForm?.get('dl.beforeImgUpload')?.setValue(value?.s2?.S2BeforePhotoName);
-    // this.detailTree[1]?.s2c == 'Disable' ? this.viewSuggestionForm.controls['dl'].disable() : this.viewSuggestionForm.controls['dl'].enable();
+    this.selectedSuggestion.s2.S2Evaluator = value?.s2?.S2Evaluator;
+    this.detailTree[1]?.s2c == 'Disable' ? this.viewSuggestionForm.controls['dl'].disable() : this.viewSuggestionForm.controls['dl'].enable();
 
     // Stage 3
+    let targetDate = moment(value?.s3?.S3TargetDate).format('YYYY-MM-DD')
+    this.viewSuggestionForm?.get('im.targetDate')?.setValue(targetDate);
+    this.viewSuggestionForm?.get('im.rejectionRemarks')?.setValue(value?.s3?.S3ApprovalRemarks);
     this.detailTree[2]?.s3c == 'Disable' ? this.viewSuggestionForm.controls['im'].disable() : this.viewSuggestionForm.controls['im'].enable();
 
     // Stage 4
+    this.viewSuggestionForm?.get('pi.description')?.setValue(value?.s4?.S4Description);
+    this.viewSuggestionForm?.get('pi.costSavings')?.setValue(value?.s4?.S4CostSavings);
+    this.viewSuggestionForm?.get('pi.afterImgUpload')?.setValue(value?.s4?.S4AfterPhotoName);
     this.detailTree[3]?.s4c == 'Disable' ? this.viewSuggestionForm.controls['pi'].disable() : this.viewSuggestionForm.controls['pi'].enable();
 
     // Stage 5
+    this.viewSuggestionForm?.get('fi.costSavings')?.setValue(value?.s5?.S5ActualCostSavings);
     this.detailTree[4]?.s5c == 'Disable' ? this.viewSuggestionForm.controls['fi'].disable() : this.viewSuggestionForm.controls['fi'].enable();
 
     // Stage 6
+    this.viewSuggestionForm?.get('ce.grade')?.setValue(value?.s6?.S6Grade);
+    this.viewSuggestionForm?.get('ce.comment')?.setValue(value?.s6?.S6Comment);
     this.detailTree[5]?.s6c == 'Disable' ? this.viewSuggestionForm.controls['ce'].disable() : this.viewSuggestionForm.controls['ce'].enable();
 
     // Stage 7
+    this.viewSuggestionForm?.get('hr.paymentCredited')?.setValue(value?.s7?.S7PaymentCredited);
+    this.viewSuggestionForm?.get('hr.imgUpload')?.setValue(value?.s7?.S7EmpPhotoName);
     this.detailTree[6]?.s7c == 'Disable' ? this.viewSuggestionForm.controls['hr'].disable() : this.viewSuggestionForm.controls['hr'].enable();
   }
 
@@ -484,13 +554,14 @@ export class ViewSuggestionComponent {
     let file = event?.target?.files[0];
     if (type == 'dl') {
       this.fileDetail = file;
-      this.viewSuggestionControls[1].controls.beforeImgUpload.setValue(file.name);
+      this.viewSuggestionControls[1].controls.beforeImgUpload.setValue(file?.name);
       // this.suggestionService.fileUpload(this.fileS2).subscribe(fileResp => {});
-      // this.updateStageFive();
     } else if (type == 'pi') {
-      this.viewSuggestionControls[3].controls.afterImgUpload.setValue(file[0]?.name);
+      this.fileDetail = file;
+      this.viewSuggestionControls[3].controls.afterImgUpload.setValue(file?.name);
     } else if (type == 'hr') {
-      this.viewSuggestionControls[6].controls.imgUpload.setValue(file[0]?.name);
+      this.fileDetail = file;
+      this.viewSuggestionControls[6].controls.imgUpload.setValue(file?.name);
     }
   }
   
@@ -503,22 +574,5 @@ export class ViewSuggestionComponent {
       tap(position => el.scrollTop = position),
       takeWhile(val => val > 0)).subscribe();
   }
-
-  // updateStageTwo() {
-  //   console.log(this.viewSuggestionControls)
-  //   console.log(this.viewSuggestionControls[1].get('beforeImgUpload').value);
-  //   const payload = new FormData();
-  //   payload.append('LoginID',  '1037');
-  //   payload.append('SugID',  '38');
-  //   payload.append('Image',  this.viewSuggestionControls[1].get('beforeImgUpload').value);
-  //   payload.append('S2Implementation',  'hgfhgfh');
-  //   payload.append('S2Category',  'jgjhjg');
-  //   console.log(payload.get('file'));
-  //   console.log(payload)
-  //   this.suggestionService.updateStageTwo(payload).subscribe(res => {
-  //     console.log(res)
-  //     console.log(payload)
-  //   })
-  // }
 
  }

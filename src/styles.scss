@@ -290,6 +290,11 @@ mat-sidenav[style] {
 
 }
 
+// to remove ripple effect for datepicker icon
+.mat-mdc-icon-button .mat-mdc-button-ripple, .mat-mdc-icon-button .mat-mdc-button-persistent-ripple, .mat-mdc-icon-button .mat-mdc-button-persistent-ripple::after {
+  display: none !important;
+}
+
 .snackBar {
   .mat-mdc-raised-button.mat-mdc-button-base {
     height: 2em !important;

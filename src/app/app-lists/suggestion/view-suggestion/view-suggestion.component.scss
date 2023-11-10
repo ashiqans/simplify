@@ -654,7 +654,8 @@ display:block !important;
     flex-direction: row;
     padding: 0.5em 0 0 0;
     flex-wrap: wrap !important;
-    justify-content: space-between;
+    // justify-content: space-between;
+    justify-content: flex-start;
 
     button {
       margin-right: 2em;
@@ -675,6 +676,9 @@ display:block !important;
       mat-icon {
         color: var(--main-color) !important;
         cursor: pointer !important;
+        font-size: 1em;
+        padding: 0.2em;
+        margin-top: 0.2em;
       }
     }
   }
@@ -692,18 +696,26 @@ display:block !important;
     .flexItemField {
       // flex: 70%;
     }
-    .top {
+    .pt {
       padding-top: 1em !important;
     }
 
-    .bottom {
+    .pb {
       padding-bottom: 1em !important;
+    }
+
+    .ml {
+      margin-left: 1em !important;
+    }
+
+    .mr {
+      margin-right: 1em !important;
     }
   }
   
 
   .labelText {
-    justify-content: space-between !important;
+    // justify-content: space-between !important;
   }
 
   .mat-expansion-panel-header {
@@ -719,6 +731,9 @@ display:block !important;
   position: absolute;
   top: 0;
   left: 0;
+  width: 90%;
+  height: 110%;
+  cursor: pointer;
 }
 
 
