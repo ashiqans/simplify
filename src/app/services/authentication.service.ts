@@ -38,6 +38,14 @@ export class AuthenticationService {
       }));
   }
 
+  updatePassword(userObj: any) {
+    return this.http.post(`${this.baseURL}/UpdatePassword`, userObj)
+      .pipe(map((user: any) => {
+        sessionStorage.setItem('isLoggedIn', 'true');
+        return user;
+      }));
+  }
+
   logout() {
     // remove user from local storage to log user out
     sessionStorage.removeItem('authToken');

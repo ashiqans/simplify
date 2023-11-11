@@ -30,12 +30,14 @@ export class LoginComponent {
     this.loginForm = this.formBuilder.group({
       empId: ['', Validators.required],
       password: ['', Validators.required],
-      confirmPassword: ''
+      confirmPassword: '',
+      oldPassword: ''
     },
     // { validators: passwordMatchingValidatior }
       // [CustomValidators.MatchValidator('password', 'confirmPassword')]
     );
     this.loginForm.get('confirmPassword')?.disable();
+    this.loginForm.get('oldPassword')?.disable();
 
     
   }
@@ -52,16 +54,18 @@ export class LoginComponent {
         this.loginForm.reset();
         this.isUserInvalid = false;
         // this.router.navigate(['user/viewuser']);
-      } else if (res?.Status == 2) {
+      } else if (res?.Status == 3) {
         this.loginForm.get('empId')?.disable();
         this.loginForm.get('password')?.reset();
         this.loginForm.get('confirmPassword')?.enable();
+        this.loginForm.get('oldPassword')?.enable();
+        this.loginForm.get('oldPassword')?.setValidators(Validators.required);
         this.loginForm.get('confirmPassword')?.setValidators(Validators.required);        
       } else {
         this.isUserInvalid = true;
         this.authService.isLoggedIn = false;
-        this.loginResMsg = res?.RespMsg;
       }
+      this.loginResMsg = res?.RespMsg;
       this.showLoader = false;
     });
   }
@@ -70,11 +74,13 @@ export class LoginComponent {
     this.showLoader = true;
     let userObj = {
       EmpID: this.loginForm.get('empId')?.value,
-      password: this.loginForm.get('password')?.value,
+      oldpassword: this.loginForm.get('oldPassword')?.value,
+      newpassword: this.loginForm.get('confirmPassword')?.value,
     };
-    this.authService.login(userObj).subscribe((res: any) => {
+    this.authService.updatePassword(userObj).subscribe((res: any) => {
       if (res?.Status == 1) {
         this.authService.isLoggedIn = true;
+        localStorage.setItem('empId', userObj.EmpID);
         this.loginForm.reset();
         this.isUserInvalid = false;
         this.router.navigate(['suggestion/viewSuggestion']);

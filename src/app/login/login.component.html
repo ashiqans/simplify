@@ -30,6 +30,15 @@
               Please enter minimum 3 and maximum 14 characters
             </mat-error>
           </mat-form-field>
+          <mat-form-field class="full-width-input" floatLabel="always" *ngIf="loginForm.controls?.['oldPassword']?.status != 'DISABLED'">
+            <mat-label>old Password</mat-label>
+            <input matInput type='password' placeholder="Enter your Old Password"
+              formControlName="oldPassword" required minlength="6" maxlength="20">
+            <mat-error
+              *ngIf="loginForm.controls?.['oldPassword']?.touched && loginForm.controls?.['oldPassword']?.errors?.['required']">
+              Please enter your old password
+            </mat-error>
+          </mat-form-field>
           <mat-form-field class="full-width-input" floatLabel="always">
             <mat-label>Password</mat-label>
             <input matInput [type]="viewPassword ? 'text' : 'password'" placeholder="Enter your Password"
@@ -61,7 +70,7 @@
           <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" *ngIf="loginForm.controls['confirmPassword'].status == 'DISABLED'"> 
             Log in</button>
             <button mat-raised-button color="primary" [disabled]="confirmPassword.hasError('mismatch')" *ngIf="loginForm.controls['confirmPassword'].status != 'DISABLED'" (click)="updatePassword()">Update Password</button>
-          <mat-error *ngIf="isUserInvalid">{{loginResMsg}}</mat-error>
+          <mat-error>{{loginResMsg}}</mat-error> <!--*ngIf="isUserInvalid"-->
         </form>
 
         <hr class="hrText" data-content="OR">

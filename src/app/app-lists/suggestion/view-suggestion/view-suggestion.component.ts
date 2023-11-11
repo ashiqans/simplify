@@ -90,6 +90,7 @@ export class ViewSuggestionComponent {
   ) {
     this.suggestionFilterMain();
     this.viewSuggestionTimeline();
+    this.loginId = localStorage.getItem('empId');
   }
   
   ngOnInit(): void {
@@ -402,9 +403,9 @@ export class ViewSuggestionComponent {
 
   getSuggestionDetail(sugId: any) {
     this.showLoader = true;
-    sugId = 64// temp
+    // sugId = 64// temp
     this.suggestionId = sugId;
-    this.loginId = 1019;
+    // this.loginId = 1019;
     this.suggestionService.getSuggestionDetail(this.suggestionId, this.loginId).subscribe(res => {
       if (res?.Status == 1) {
         this.selectedSuggestion = res?.result;
