@@ -323,6 +323,13 @@ mat-sidenav[style] {
   cursor: not-allowed !important;
 }
 
+.mdc-dialog__container {
+  .h2 {
+    margin: 0 !important;
+    padding: 0.5em !important;
+  }
+}
+
 // Material Elements Styles Overwrite Ends
 
 // Scrollbar style starts

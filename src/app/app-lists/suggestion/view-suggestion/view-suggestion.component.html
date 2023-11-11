@@ -73,7 +73,7 @@
               </mat-form-field>
               <mat-form-field class="mainFilterField dateRange" floatLabel="always">
                 <mat-label>Select a Date Range</mat-label>
-                <mat-date-range-input [rangePicker]="picker">
+                <mat-date-range-input [rangePicker]="picker" [max]="maxDate">
                   <input matStartDate formControlName="fromDate" placeholder="DD-MM-YYYY" readonly (click)="picker.open()">
                   <input matEndDate formControlName="toDate" placeholder="DD-MM-YYYY" readonly (click)="picker.open()">
                 </mat-date-range-input>
@@ -370,6 +370,8 @@
         </mat-card>
       </div>
 
+      <mat-error class="loginErrorMessage" *ngIf="loginId == 0">Please login to Approve or Reject Suggestion!</mat-error>
+
       <div class="containerOverflow" id="scrollBar">
       <mat-card>
         <mat-card-content>
@@ -388,10 +390,10 @@
                   </mat-expansion-panel-header>
 
                   <div class="flexItemVS">
-                    <mat-label class="flexItemVsLabel pt mr">{{ selectedSuggestion?.s1?.S1ApprovalStatus }} Date: {{ selectedSuggestion?.s1?.S1ApprovalDate }}</mat-label>
+                    <mat-label class="flexItemVsLabel pt mr" *ngIf="selectedSuggestion?.s1?.S1CompletedStatus == 'Completed'">{{ selectedSuggestion?.s1?.S1ApprovalStatus }} Date: {{ selectedSuggestion?.s1?.S1ApprovalDate }}</mat-label>
                   
                     <mat-form-field class="flexItemField pt"  floatLabel="always">
-                      <mat-label>Rejection reason: (Remarks)</mat-label>
+                      <mat-label>Remarks:</mat-label>
                       <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Enter Remarks" formControlName="rejectionRemarks"></textarea>
 
                       <mat-error
@@ -403,9 +405,9 @@
                   <div class="flexItemVS">
                     <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s1?.S1Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s1?.S1Evaluator }}</mat-label>
                   </div>
-                  <div class="flexItemVS actionBtnVS">
-                    <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s1?.S1ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disabled || viewSuggestionForm.controls['sc'].invalid" (click)="approveStage('S1')">Approve</button>
-                    <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s1?.S1ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disable || viewSuggestionForm.controls['sc'].invalid" (click)="rejectStage('S1')">Reject</button>
+                  <div class="flexItemVS actionBtnVS"  *ngIf="selectedSuggestion?.s1?.S1CompletedStatus != 'Completed'">
+                    <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s1?.S1CompletedStatus == 'NotCompleted' || selectedSuggestion?.s1?.S1ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disabled || viewSuggestionForm.controls['sc'].invalid" (click)="approveStage('S1')">Approve</button>
+                    <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s1?.S1CompletedStatus == 'NotCompleted' || selectedSuggestion?.s1?.S1ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disabled || viewSuggestionForm.controls['sc'].invalid" (click)="rejectStage('S1')">Reject</button>
                   </div>
                 </mat-expansion-panel>
               </mat-accordion>
@@ -423,7 +425,7 @@
                   </mat-expansion-panel-header>
 
                   <div class="flexItemVS pb">
-                    <mat-label class="flexItemVsLabel">Approved Date: {{ selectedSuggestion?.s2?.S2ApprovalDate }}</mat-label>
+                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s2?.S2CompletedStatus == 'Completed'">Approved Date: {{ selectedSuggestion?.s2?.S2ApprovalDate }}</mat-label>
                   </div>
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemLeft mr" floatLabel="always">
@@ -440,11 +442,12 @@
                       <mat-toolbar>
                         <input matInput placeholder="Upload image" formControlName="beforeImgUpload"/>
                         <mat-icon>upload</mat-icon>
-                        <mat-icon (click)="openImageViewer('dl')">visibility</mat-icon>
+                        <!-- <mat-icon (click)="openImageViewer('dl')">visibility</mat-icon> -->
                       </mat-toolbar>
                       <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'dl')"/>
                       <mat-error *ngIf="viewSuggestionForm?.get('dl.beforeImgUpload')?.touched && viewSuggestionForm?.get('dl.beforeImgUpload')?.errors?.['required']">Please select Before Photo Uplaod</mat-error>
                     </mat-form-field>
+                    <mat-icon class="imageViewButton" [ngClass]="viewSuggestionForm?.get('dl.beforeImgUpload')?.value == '' ? 'disable' : ''"  (click)="openImageViewer('dl')" matTooltip="View File">visibility</mat-icon>
                   </div>
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemRight mr" floatLabel="always">
@@ -470,7 +473,7 @@
                   <div class="flexItemVS">
                     <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s2?.S2Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s2?.S2Evaluator }}</mat-label>
                   </div>
-                  <div class="flexItemVS actionBtn">
+                  <div class="flexItemVS actionBtn"  *ngIf="selectedSuggestion?.s2?.S2CompletedStatus != 'Completed'">
                     <button mat-raised-button color="primary" (click)="approveStage('S2')" [disabled]="viewSuggestionForm.controls['dl'].disabled || viewSuggestionForm.controls['dl'].invalid">Submit</button>
                   </div>
                 </mat-expansion-panel>
@@ -489,12 +492,12 @@
                   </mat-expansion-panel-header>
 
                   <div class="flexItemVS">
-                    <mat-label class="flexItemVsLabel pb">{{ selectedSuggestion?.s3?.S3ApprovalStatus }} Date: {{ selectedSuggestion?.s3?.S3ApprovalDate }}</mat-label>
+                    <mat-label class="flexItemVsLabel pb" *ngIf="selectedSuggestion?.s3?.S3CompletedStatus == 'Completed'">{{ selectedSuggestion?.s3?.S3ApprovalStatus }} Date: {{ selectedSuggestion?.s3?.S3ApprovalDate }}</mat-label>
                   </div>
                     <div class="flexItemVS mr">
                       <mat-form-field  floatLabel="always">
                         <mat-label>Target Date</mat-label>
-                        <input matInput [matDatepicker]="picker2" placeholder="DD-MM-YYYY" formControlName="targetDate" readonly (click)="picker2.open()">
+                        <input matInput [matDatepicker]="picker2" placeholder="DD-MM-YYYY" formControlName="targetDate" readonly (click)="picker2.open()" [min]="minDate">
                         <!-- <mat-hint>DD-MM-YYYY</mat-hint> -->
                         <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
                         <mat-datepicker #picker2 color="primary"></mat-datepicker>
@@ -511,9 +514,9 @@
                     <div class="flexItemVS">
                       <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s3?.S3Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s3?.S3Evaluator }}</mat-label>
                     </div>
-                    <div class="flexItemVS actionBtn">
-                      <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s3?.S3ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disabled || viewSuggestionForm.controls['im'].invalid" (click)="approveStage('S3')">Approve</button>
-                      <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s3?.S3ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disable || viewSuggestionForm.controls['im'].invalid" (click)="rejectStage('S3')">Reject</button>
+                    <div class="flexItemVS actionBtn" *ngIf="selectedSuggestion?.s3?.S3CompletedStatus != 'Completed'">
+                      <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s3?.S3CompletedStatus == 'NotCompleted' || selectedSuggestion?.s3?.S3ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disabled || viewSuggestionForm.controls['im'].invalid" (click)="approveStage('S3')">Approve</button>
+                      <button mat-raised-button color="warn" *ngIf="selectedSuggestion?.s3?.S3CompletedStatus == 'NotCompleted' || selectedSuggestion?.s3?.S3ApprovalStatus != 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disabled || viewSuggestionForm.controls['im'].invalid" (click)="rejectStage('S3')">Reject</button>
                     </div>
                 </mat-expansion-panel>
               </mat-accordion>
@@ -531,7 +534,7 @@
                   </mat-expansion-panel-header>
 
                   <div class="flexItemVS">
-                    <mat-label class="flexItemVsLabel pb">Approved Date: {{ selectedSuggestion?.s4?.S4ApprovalDate }}</mat-label>
+                    <mat-label class="flexItemVsLabel pb" *ngIf="selectedSuggestion?.s4?.S4CompletedStatus == 'Completed'">Approved Date: {{ selectedSuggestion?.s4?.S4ApprovalDate }}</mat-label>
                   </div>
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemLeft mr" floatLabel="always">
@@ -545,16 +548,19 @@
                       <mat-toolbar>
                         <input matInput placeholder="Upload image" formControlName="afterImgUpload"/>
                         <mat-icon>upload</mat-icon>
-                        <mat-icon (click)="openImageViewer('pi')">visibility</mat-icon>
+                        <!-- <mat-icon (click)="openImageViewer('pi')">visibility</mat-icon> -->
                       </mat-toolbar>
                       <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'pi')"/>
                       <mat-error *ngIf="viewSuggestionForm?.get('pi.afterImgUpload')?.touched && viewSuggestionForm?.get('pi.afterImgUpload')?.errors?.['required']">Please upload After Photo</mat-error>
                     </mat-form-field>
+                    
+                      <mat-icon class="imageViewButton" [ngClass]="viewSuggestionForm?.get('pi.afterImgUpload')?.value == '' ? 'disable' : ''"  (click)="openImageViewer('pi')" matTooltip="View File">visibility</mat-icon>
+                    
                   </div>
                   <div class="flexItemVS labelText">
                     <mat-label class="flexItemVsLabel mr">Benefits: {{ selectedSuggestion?.s4?.S4Benefits }}</mat-label>
       
-                    <mat-form-field class="flexItemLeft" floatLabel="always">
+                    <mat-form-field class="flexItemLeft" floatLabel="always" *ngIf="selectedSuggestion?.s4?.S4Benefits == 'Cost'">
                       <mat-label>Cost savings</mat-label>
                       <input matInput type="text" placeholder="Enter cost savings" minlength="2"
                         maxlength="50" formControlName="costSavings">
@@ -562,12 +568,12 @@
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS labelText">
-                    <mat-label class="flexItemVsLabel mr" *ngIf="selectedSuggestion?.s4?.S4Evaluator != ''">Submitted to Evaluator: {{ selectedSuggestion?.s4?.S4Evaluator }}</mat-label>
-                    <mat-label class="flexItemVsLabel">Assigned to Evaluator: Name</mat-label>
+                    <mat-label class="flexItemVsLabel mr" *ngIf="selectedSuggestion?.s4?.S4Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s4?.S4Evaluator }}</mat-label>
+                    <!-- <mat-label class="flexItemVsLabel">Assigned to Evaluator: Name</mat-label> -->
                   </div>
                   <div class="flexItemVS actionBtn">
-                    
-                    <button mat-raised-button color="primary" (click)="approveStage('S4')" [disabled]="viewSuggestionForm.controls['pi'].disabled || viewSuggestionForm.controls['pi'].invalid">Submit</button>
+                    <button mat-raised-button color="primary" (click)="approveStage('S4')" [disabled]="viewSuggestionForm.controls['pi'].disabled || viewSuggestionForm.controls['pi'].invalid" *ngIf="selectedSuggestion?.s4?.S4CompletedStatus != 'Completed'">Submit</button>
+
                   </div>
                 </mat-expansion-panel>
               </mat-accordion>
@@ -584,7 +590,7 @@
                     <mat-panel-title> Finance Validation </mat-panel-title>
                   </mat-expansion-panel-header>
                   <div class="flexItemVS labelText">
-                    <mat-label class="flexItemVsLabel pt mr">Approved Date: {{ selectedSuggestion?.s5?.S5ApprovalDate }}</mat-label>
+                    <mat-label class="flexItemVsLabel pt mr" *ngIf="selectedSuggestion?.s5?.S5CompletedStatus == 'Completed'">Approved Date: {{ selectedSuggestion?.s5?.S5ApprovalDate }}</mat-label>
       
                     <mat-form-field class="flexItemLeft pt" floatLabel="always">
                       <mat-label>Actual Cost savings</mat-label>
@@ -596,7 +602,7 @@
                   <div class="flexItemVS labelText">
                     <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s5?.S5Evaluator != ''">Submit to Evaluator: {{ selectedSuggestion?.s5?.S5Evaluator }}</mat-label>
                   </div>
-                  <div class="flexItemVS">
+                  <div class="flexItemVS"  *ngIf="selectedSuggestion?.s5?.S5CompletedStatus != 'Completed'">
                     <button mat-raised-button color="primary" (click)="approveStage('S5')" [disabled]="viewSuggestionForm.controls['fi'].disabled || viewSuggestionForm.controls['fi'].invalid">Submit</button>
                   </div>
                 </mat-expansion-panel>
@@ -614,7 +620,7 @@
                     <mat-panel-title> Category Evaluator </mat-panel-title>
                   </mat-expansion-panel-header>
                   <div class="flexItemVS labelText">
-                    <mat-label class="flexItemVsLabel pt pb">Approved Date: {{ selectedSuggestion?.s6?.S6ApprovalDate }}</mat-label>
+                    <mat-label class="flexItemVsLabel pt pb" *ngIf="selectedSuggestion?.s6?.S6CompletedStatus == 'Completed'">Approved Date: {{ selectedSuggestion?.s6?.S6ApprovalDate }}</mat-label>
                   </div>
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemRight mr" floatLabel="always">
@@ -637,7 +643,7 @@
                   <div class="flexItemVS labelText">
                     <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s6?.S6Evaluator != ''">Submit to Evaluator: {{ selectedSuggestion?.s6?.S6Evaluator }}</mat-label>
                   </div>
-                  <div class="flexItemVS labelText">
+                  <div class="flexItemVS labelText"  *ngIf="selectedSuggestion?.s6?.S6CompletedStatus != 'Completed'">
                     <button mat-raised-button color="primary" (click)="approveStage('S6')" [disabled]="viewSuggestionForm.controls['ce'].disabled || viewSuggestionForm.controls['ce'].invalid">Submit</button>
                   </div>
                 </mat-expansion-panel>
@@ -657,7 +663,7 @@
                     <mat-panel-title> HR Evaluator </mat-panel-title>
                   </mat-expansion-panel-header>
                   <div class="flexItemVS labelText">
-                    <mat-label class="flexItemVsLabel pb">Approved Date: {{ selectedSuggestion?.s7?.S7ApprovalDate }}</mat-label>
+                    <mat-label class="flexItemVsLabel pb" *ngIf="selectedSuggestion?.s7?.S7CompletedStatus == 'Completed'">Approved Date: {{ selectedSuggestion?.s7?.S7ApprovalDate }}</mat-label>
                   </div>
                   <!-- <div class="flexItemVS labelText">
                     <mat-form-field class="flexItemRight mr" floatLabel="always">
@@ -678,17 +684,19 @@
                       <mat-toolbar>
                         <input matInput placeholder="Upload image" formControlName="imgUpload"/>
                         <mat-icon>upload</mat-icon>
-                        <mat-icon (click)="openImageViewer('hr')">visibility</mat-icon>
+                        <!-- <mat-icon (click)="openImageViewer('hr')">visibility</mat-icon> -->
                       </mat-toolbar>
                       <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'hr')"/>
                       <mat-error *ngIf="viewSuggestionForm?.get('hr.imgUpload')?.touched && viewSuggestionForm?.get('hr.imgUpload')?.errors?.['required']">Please upload Photo</mat-error>
                     </mat-form-field>
+                    <mat-icon class="imageViewButton" [ngClass]="viewSuggestionForm?.get('hr.imgUpload')?.value == '' ? 'disable' : ''"  (click)="openImageViewer('hr')" matTooltip="View File">visibility</mat-icon>
                   </div>
                   <!-- <div class="flexItemVS">
                     <mat-label class="flexItemVsLabel">Added to winner's board: Name</mat-label>
                   </div> -->
                   <div class="flexItemVS">
-                    <button mat-raised-button color="primary" (click)="approveStage('S7')" [disabled]="viewSuggestionForm.controls['hr'].disabled || viewSuggestionForm.controls['hr'].invalid">Submit</button>
+                    <button mat-raised-button color="primary" (click)="approveStage('S7')" [disabled]="viewSuggestionForm.controls['hr'].disabled || viewSuggestionForm.controls['hr'].invalid" *ngIf="selectedSuggestion?.s7?.S7CompletedStatus != 'Completed'">Submit</button>
+                    
                   </div>
                 </mat-expansion-panel>
               </mat-accordion>

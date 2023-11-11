@@ -27,6 +27,7 @@ export class LoginComponent {
   ) { }
 
   ngOnInit(): void {
+    sessionStorage.clear()
     this.loginForm = this.formBuilder.group({
       empId: ['', Validators.required],
       password: ['', Validators.required],
@@ -49,11 +50,12 @@ export class LoginComponent {
       password: this.loginForm.get('password')?.value,
     };
     this.authService.login(userObj).subscribe((res: any) => {
+      sessionStorage.setItem('empId', userObj.EmpID);
       if (res?.Status == 1) {
         this.authService.isLoggedIn = true;
         this.loginForm.reset();
         this.isUserInvalid = false;
-        // this.router.navigate(['user/viewuser']);
+        this.router.navigate(['suggestion/viewSuggestion']);
       } else if (res?.Status == 3) {
         this.loginForm.get('empId')?.disable();
         this.loginForm.get('password')?.reset();
@@ -80,7 +82,7 @@ export class LoginComponent {
     this.authService.updatePassword(userObj).subscribe((res: any) => {
       if (res?.Status == 1) {
         this.authService.isLoggedIn = true;
-        localStorage.setItem('empId', userObj.EmpID);
+        sessionStorage.setItem('empId', userObj.EmpID);
         this.loginForm.reset();
         this.isUserInvalid = false;
         this.router.navigate(['suggestion/viewSuggestion']);

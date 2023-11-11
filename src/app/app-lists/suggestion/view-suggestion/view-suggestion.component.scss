@@ -493,6 +493,12 @@
   .mat-mdc-card-content {
     padding-right: 0;
   }
+
+  .loginErrorMessage {
+    text-align: center;
+    padding-top: 1em;
+    font-size: 1.3em;
+  }
 }
 
 h1 {
@@ -686,7 +692,7 @@ display:block !important;
         color: var(--main-color) !important;
         cursor: pointer !important;
         font-size: 1em;
-        padding: 0.2em;
+        // padding: 0.2em;
         margin-top: 0.2em;
       }
     }
@@ -745,13 +751,19 @@ display:block !important;
   cursor: pointer;
 }
 
+.imageViewButton {
+  padding: 0.1em;
+  color: var(--main-color);
+  cursor: pointer;
+}
+
 .dialogHeader {
   display: flex;
   justify-content: space-between;
 
   .h2 {
     margin: 0 !important;
-    padding: 0.5em;
+    padding: 0.5em !important;
   }
 
   mat-icon {

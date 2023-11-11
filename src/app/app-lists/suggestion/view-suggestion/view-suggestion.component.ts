@@ -81,6 +81,8 @@ export class ViewSuggestionComponent {
     src: ''
   }
   indexExpanded: any;
+  minDate: Date = new Date()
+  maxDate: Date = new Date()
 
   constructor(private formBuilder: FormBuilder,
     private datePipe: DatePipe,
@@ -90,7 +92,7 @@ export class ViewSuggestionComponent {
   ) {
     this.suggestionFilterMain();
     this.viewSuggestionTimeline();
-    this.loginId = localStorage.getItem('empId');
+    this.loginId = sessionStorage.getItem('empId') ? sessionStorage.getItem('empId') : 0;
   }
   
   ngOnInit(): void {
@@ -158,7 +160,7 @@ export class ViewSuggestionComponent {
         approvedDate: '',
         description: ['', Validators.required],
         afterImgUpload: ['', Validators.required],
-        costSavings: ['', Validators.required],
+        costSavings: [''],
         benefits: '',
         submit: '',
         submitEvaluator: '',
@@ -397,8 +399,7 @@ export class ViewSuggestionComponent {
 
   suggestionSelect(suggestion: any, index: any) {
     this.selectedSuggestionIndex = index;
-    // this.selectedSuggestion = suggestion;
-    this.getSuggestionDetail(suggestion?.ID);
+    if(this.suggestionId != suggestion?.ID) this.getSuggestionDetail(suggestion?.ID);
   }
 
   getSuggestionDetail(sugId: any) {
@@ -422,13 +423,17 @@ export class ViewSuggestionComponent {
         SugID: this.suggestionId,
         LoginID: this.loginId,
         ApprovalStatus: 'Approved',
-        RejectReason: ''
+        RejectReason: this.viewSuggestionForm.controls['sc'].get('rejectionRemarks')?.value
       } 
       this.suggestionService.updateStage(1, payload).subscribe(res => {
         if (res?.Status == 1) {
           this.selectedSuggestion.s1.S1Evaluator = res?.result?.Evaluator;
-          this.toggleStager(res?.result);
+          this.getSuggestionDetail(this.suggestionId);
+          // this.toggleStager(res?.result);
+          this.openToaster(res?.RespMsg, 5000, true);
           console.log(res) 
+        } else if(res?.Status == 0) {
+          this.openToaster(res?.result, 5000, true);
         }
       })
     } else if (stage == 'S2') {
@@ -449,8 +454,12 @@ export class ViewSuggestionComponent {
               // this.viewSuggestionForm.controls['dl'].reset();
               // this.viewSuggestionForm.controls['dl'].markAsUntouched();
               this.selectedSuggestion.s2.S2Evaluator = res?.result?.Evaluator;
-              this.toggleStager(res?.result);
+              this.getSuggestionDetail(this.suggestionId);
+              // this.toggleStager(res?.result);
+              this.openToaster(res?.RespMsg, 5000, true);
               console.log(res) 
+            } else if(res?.Status == 0) {
+              this.openToaster(res?.result, 5000, true);
             }
           }) 
         }
@@ -467,7 +476,11 @@ export class ViewSuggestionComponent {
       this.suggestionService.updateStage(3, payload).subscribe(res => {
             if (res?.Status == 1) {
               this.selectedSuggestion.s3.S3Evaluator = res?.result?.Evaluator;
-              this.toggleStager(res?.result);
+              this.getSuggestionDetail(this.suggestionId);
+              // this.toggleStager(res?.result);
+              this.openToaster(res?.RespMsg, 5000, true);
+            } else if(res?.Status == 0) {
+              this.openToaster(res?.result, 5000, true);
             }
       })
     } else if (stage == 'S4') {
@@ -485,7 +498,11 @@ export class ViewSuggestionComponent {
           this.suggestionService.updateStage(4, payload).subscribe(res => {
             if (res?.Status == 1) {
               this.selectedSuggestion.s4.S4Evaluator = res?.result?.Evaluator;
-              this.toggleStager(res?.result);
+              this.getSuggestionDetail(this.suggestionId);
+              // this.toggleStager(res?.result);
+              this.openToaster(res?.RespMsg, 5000, true);
+            } else if(res?.Status == 0) {
+              this.openToaster(res?.result, 5000, true);
             }
           }) 
         }
@@ -499,7 +516,11 @@ export class ViewSuggestionComponent {
       this.suggestionService.updateStage(5, payload).subscribe(res => {
             if (res?.Status == 1) {
               this.selectedSuggestion.s5.S5Evaluator = res?.result?.Evaluator;
-              this.toggleStager(res?.result);
+              this.getSuggestionDetail(this.suggestionId);
+              // this.toggleStager(res?.result);
+              this.openToaster(res?.RespMsg, 5000, true);
+            } else if(res?.Status == 0) {
+              this.openToaster(res?.result, 5000, true);
             }
       })
     } else if (stage == 'S6') {
@@ -512,7 +533,11 @@ export class ViewSuggestionComponent {
       this.suggestionService.updateStage(6, payload).subscribe(res => {
             if (res?.Status == 1) {
               this.selectedSuggestion.s6.S6Evaluator = res?.result?.Evaluator;
-              this.toggleStager(res?.result);
+              this.getSuggestionDetail(this.suggestionId);
+              // this.toggleStager(res?.result);
+              this.openToaster(res?.RespMsg, 5000, true);
+            } else if(res?.Status == 0) {
+              this.openToaster(res?.result, 5000, true);
             }
       })
     } else if (stage == 'S7') {
@@ -528,8 +553,10 @@ export class ViewSuggestionComponent {
           this.suggestionService.updateStage(7, payload).subscribe(res => {
             if (res?.Status == 1) {
               this.selectedSuggestion.s7.S7Evaluator = res?.result?.Evaluator;
-              this.toggleStager(res?.result);
-              console.log(res) 
+              this.getSuggestionDetail(this.suggestionId);
+              this.openToaster(res?.RespMsg, 5000, true);
+            } else if(res?.Status == 0) {
+              this.openToaster(res?.result, 5000, true);
             }
           }) 
         }
@@ -546,12 +573,16 @@ export class ViewSuggestionComponent {
         SugID: this.suggestionId,
         LoginID: this.loginId,
         ApprovalStatus: 'Rejected',
-        RejectReason: ''
+        RejectReason: this.viewSuggestionForm.controls['sc'].get('rejectionRemarks')?.value
       }
       this.suggestionService.updateStage(1, payload).subscribe(res => {
         if (res?.Status == 1) {
           this.selectedSuggestion.s1.S1Evaluator = res?.result?.Evaluator;
-          this.toggleStager(res?.result);
+          this.getSuggestionDetail(this.suggestionId);
+          // this.toggleStager(res?.result);
+          this.openToaster(res?.RespMsg, 5000, true);
+        } else if(res?.Status == 0) {
+          this.openToaster(res?.result, 5000, true);
         }
       })
     } else if (stage == 'S3') {
@@ -566,7 +597,9 @@ export class ViewSuggestionComponent {
       this.suggestionService.updateStage(3, payload).subscribe(res => {
         if (res?.Status == 1) {
           this.selectedSuggestion.s3.S3Evaluator = res?.result?.Evaluator;
-          this.toggleStager(res?.result);
+          this.getSuggestionDetail(this.suggestionId);
+          // this.toggleStager(res?.result);
+          this.openToaster(res?.RespMsg, 5000, true);
         }
       })
     }
@@ -601,11 +634,17 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm?.get('im.targetDate')?.setValue(targetDate);
     this.viewSuggestionForm?.get('im.rejectionRemarks')?.setValue(value?.s3?.S3ApprovalRemarks);
     this.detailTree[2]?.s3c == 'Disable' ? this.viewSuggestionForm.controls['im'].disable() : this.viewSuggestionForm.controls['im'].enable();
+    // this.viewSuggestionForm?.get('im.targetDate')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('im.rejectionRemarks')?.markAsUntouched();
 
     // Stage 4
     this.viewSuggestionForm?.get('pi.description')?.setValue(value?.s4?.S4Description);
     this.viewSuggestionForm?.get('pi.costSavings')?.setValue(value?.s4?.S4CostSavings);
     this.viewSuggestionForm?.get('pi.afterImgUpload')?.setValue(value?.s4?.S4AfterPhotoName);
+    if (this.selectedSuggestion?.s4?.S4Benefits == 'Cost') {
+      this.viewSuggestionForm?.get('pi.costSavings')?.setValidators(Validators.required)
+      // this.viewSuggestionForm?.get('pi.costSavings')?.updateValueAndValidity();
+    }
     this.detailTree[3]?.s4c == 'Disable' ? this.viewSuggestionForm.controls['pi'].disable() : this.viewSuggestionForm.controls['pi'].enable();
 
     // Stage 5
@@ -621,6 +660,8 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm?.get('hr.paymentCredited')?.setValue(value?.s7?.S7PaymentCredited);
     this.viewSuggestionForm?.get('hr.imgUpload')?.setValue(value?.s7?.S7EmpPhotoName);
     this.detailTree[6]?.s7c == 'Disable' ? this.viewSuggestionForm.controls['hr'].disable() : this.viewSuggestionForm.controls['hr'].enable();
+
+    this.viewSuggestionForm.markAsUntouched();
     
     // Mat expansional panel open
     this.indexExpanded = this.detailTree[0]?.s1c == 'Enable' ? 1 : this.detailTree[1]?.s2c == 'Enable' ? 2 : this.detailTree[2]?.s3c == 'Enable' ? 3 : this.detailTree[3]?.s4c == 'Enable' ? 4 : this.detailTree[4]?.s5c == 'Enable' ? 5 : this.detailTree[5]?.s6c == 'Enable' ? 6 : 7;
@@ -628,6 +669,11 @@ export class ViewSuggestionComponent {
 
   uploadFiles(event: any, type: any) {
     let file = event?.target?.files[0];
+    const fileSize = Math.round(file?.size / 1024);
+    if (fileSize > 5000) {
+      this.openToaster('Please upload file size in less than 5MB', 10000, true);
+      return; 
+    }
     if (type == 'dl') {
       this.fileDetail = file;
       this.viewSuggestionControls[1].controls.beforeImgUpload.setValue(file?.name);
@@ -647,19 +693,47 @@ export class ViewSuggestionComponent {
         name: this.viewSuggestionForm?.get('dl.beforeImgUpload')?.value,
         src: `${this.suggestionService.baseURL}/images/${this.viewSuggestionForm?.get('dl.beforeImgUpload')?.value}`
       };
+      if (this.imageType?.name != '') {
+        this.showLoader = true;
+        setTimeout(() => {
+          this.showLoader = false;
+          let dialogRef = this.dialog.open(this.imageViewerDialog);
+          dialogRef.afterClosed().subscribe(result => {})
+        }, 3000);
+      } else {
+        this.openToaster('No file to display', 3000, true);
+      }
     } else if (type == 'pi') {
       this.imageType = {
         name: this.viewSuggestionForm?.get('pi.afterImgUpload')?.value,
         src: `${this.suggestionService.baseURL}/images/${this.viewSuggestionForm?.get('pi.afterImgUpload')?.value}`
       };
+      if (this.imageType?.name != '') {
+        this.showLoader = true;
+        setTimeout(() => {
+          this.showLoader = false;
+          let dialogRef = this.dialog.open(this.imageViewerDialog);
+          dialogRef.afterClosed().subscribe(result => {})
+        }, 3000);
+      } else {
+        this.openToaster('No file to display', 3000, true);
+      }
     } else if (type == 'hr') {
       this.imageType = {
         name: this.viewSuggestionForm?.get('hr.imgUpload')?.value,
         src: `${this.suggestionService.baseURL}/images/${this.viewSuggestionForm?.get('hr.imgUpload')?.value}`
       };
-    }  
-    let dialogRef = this.dialog.open(this.imageViewerDialog);
-    dialogRef.afterClosed().subscribe(result => {})
+      if (this.imageType?.name != '') {
+        this.showLoader = true;
+        setTimeout(() => {
+          this.showLoader = false;
+          let dialogRef = this.dialog.open(this.imageViewerDialog);
+          dialogRef.afterClosed().subscribe(result => {})
+        }, 3000);
+      } else {
+        this.openToaster('No file to display', 3000, true);
+      }
+    }
   }
   
   scrollToTop(el: any) {

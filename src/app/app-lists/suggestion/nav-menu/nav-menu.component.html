@@ -14,10 +14,17 @@
     </a>
   </mat-list>
 
-  <mat-list class="nav logIn">
-    <a mat-list-item class="hover" routerLink="">
+  <mat-list class="nav logIn" *ngIf="loginId == 0">
+    <a mat-list-item class="hover" routerLink="" (click)="logIn()">
       <mat-icon mat-list-icon [matTooltip]="!isExpanded ? 'Log In' : 'null'" matTooltipPosition="right">person</mat-icon>
       <p matLine *ngIf="isExpanded">Log In</p>
+    </a>
+  </mat-list>
+
+  <mat-list class="nav logIn" *ngIf="loginId != 0">
+    <a mat-list-item class="hover" routerLink="" (click)="logOut()">
+      <mat-icon mat-list-icon [matTooltip]="!isExpanded ? 'Log Out' : 'null'" matTooltipPosition="right">assignment_return</mat-icon>
+      <p matLine *ngIf="isExpanded">Log Out</p>
     </a>
   </mat-list>
 </section>
