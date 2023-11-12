@@ -32,8 +32,9 @@
           </mat-form-field>
           <mat-form-field class="full-width-input" floatLabel="always" *ngIf="loginForm.controls?.['oldPassword']?.status != 'DISABLED'">
             <mat-label>old Password</mat-label>
-            <input matInput type='password' placeholder="Enter your Old Password"
+            <input matInput [type]= "viewPasswordType?.old ? 'text' : 'password'" placeholder="Enter your Old Password"
               formControlName="oldPassword" required minlength="6" maxlength="20">
+              <mat-icon matSuffix class="eyeIcon" (click)="togglePasswordVisibility('O')">{{ viewPasswordType?.old ? 'visibility_off' : 'visibility' }}</mat-icon>
             <mat-error
               *ngIf="loginForm.controls?.['oldPassword']?.touched && loginForm.controls?.['oldPassword']?.errors?.['required']">
               Please enter your old password
@@ -41,9 +42,9 @@
           </mat-form-field>
           <mat-form-field class="full-width-input" floatLabel="always">
             <mat-label>Password</mat-label>
-            <input matInput type='password' placeholder="Enter your Password"
+            <input matInput [type]= "viewPasswordType?.current ? 'text' : 'password'" placeholder="Enter your Password"
               formControlName="password" required minlength="6" maxlength="20" (change)="onPasswordChange()">
-            <!-- <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon> -->
+            <mat-icon matSuffix class="eyeIcon" (click)="togglePasswordVisibility('C')"> {{ viewPasswordType?.current ? 'visibility_off' : 'visibility' }}</mat-icon>
             <mat-error
               *ngIf="loginForm.controls?.['password']?.touched && loginForm.controls?.['password']?.errors?.['required']">
               Please enter your password
@@ -56,9 +57,9 @@
         
           <mat-form-field class="full-width-input" floatLabel="always" *ngIf="loginForm.controls?.['confirmPassword']?.status != 'DISABLED'">
             <mat-label>Confirm Password</mat-label>
-            <input matInput type='password' placeholder="Enter your Password"
+            <input matInput [type]= "viewPasswordType?.new ? 'text' : 'password'" placeholder="Enter your Password"
               formControlName="confirmPassword" required minlength="6" maxlength="20" (change)="onPasswordChange()">
-            <!-- <mat-icon matSuffix (click)="togglePasswordVisibility()">visibility</mat-icon> -->
+            <mat-icon matSuffix class="eyeIcon" (click)="togglePasswordVisibility('N')">{{ viewPasswordType?.new ? 'visibility_off' : 'visibility' }}</mat-icon>
             <mat-error
               *ngIf="loginForm.controls?.['confirmPassword']?.touched && loginForm.controls?.['confirmPassword']?.errors?.['required']">
               Please enter your password

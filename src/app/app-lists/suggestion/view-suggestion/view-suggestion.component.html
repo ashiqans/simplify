@@ -91,7 +91,7 @@
       </mat-card>
       <!-- Main filter section Ends -->
       <!-- Secondary filter starts -->
-      <mat-card>
+      <mat-card *ngIf="loginId != 0">
         <mat-card-content>
           <div class="filterCard">
             <div class="cardButton" (click)="cardFilterChange('All')" [ngClass]="filterType == 'All' ? 'active' : ''">
@@ -720,13 +720,15 @@
 
       <!-- Image modal starts-->
       <ng-template #imageViewerDialog>
-        <div class="dialogHeader">
-          <h2>{{ imageType?.name}}</h2>
-          <mat-icon mat-button matDialogClose="yes">close</mat-icon>  
-        </div>
-        <div class="dialogContent">
-          <img *ngIf="imageType?.name" [src]="imageType?.src" [alt]="imageType?.name" width="700">
-        </div>
+        <!-- <div class="logOutDialog"> -->
+              <div class="dialogHeader">
+                <h1 mat-dialog-title>{{ imageType?.name}}</h1>
+                <mat-icon mat-button matDialogClose="yes">close</mat-icon>  
+              </div>
+              <div class="dialogContent">
+                <img *ngIf="imageType?.name" [src]="imageType?.src" [alt]="imageType?.name" width="700">
+              </div>
+        <!-- </div> -->
       </ng-template>
       <!-- Image modal ends -->
     </div>

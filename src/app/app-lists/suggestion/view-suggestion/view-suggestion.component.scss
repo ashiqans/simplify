@@ -761,12 +761,17 @@ display:block !important;
   display: flex;
   justify-content: space-between;
 
-  .h2 {
-    margin: 0 !important;
-    padding: 0.5em !important;
+  h1 {
+    margin-bottom: 0 !important;
   }
 
+  // .h2 {
+  //   margin: 0 !important;
+  //   padding: 0.5em !important;
+  // }
+
   mat-icon {
+    margin-top: 0.4em;
     padding: 0.5em;
     cursor: pointer;
   }

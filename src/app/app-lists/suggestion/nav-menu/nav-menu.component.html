@@ -1,3 +1,4 @@
+<app-loader *ngIf="showLoader"></app-loader>
 <section [class.sidenav]="isExpanded">
   <div class="toggle">
     <h1 *ngIf="isExpanded">logo</h1>
@@ -15,16 +16,37 @@
   </mat-list>
 
   <mat-list class="nav logIn" *ngIf="loginId == 0">
-    <a mat-list-item class="hover" routerLink="" (click)="logIn()">
+    <a mat-list-item class="hover" (click)="logIn()">
       <mat-icon mat-list-icon [matTooltip]="!isExpanded ? 'Log In' : 'null'" matTooltipPosition="right">person</mat-icon>
       <p matLine *ngIf="isExpanded">Log In</p>
     </a>
   </mat-list>
 
   <mat-list class="nav logIn" *ngIf="loginId != 0">
-    <a mat-list-item class="hover" routerLink="" (click)="logOut()">
+    <a mat-list-item class="hover" (click)="openLogOutDialog()">
       <mat-icon mat-list-icon [matTooltip]="!isExpanded ? 'Log Out' : 'null'" matTooltipPosition="right">assignment_return</mat-icon>
       <p matLine *ngIf="isExpanded">Log Out</p>
     </a>
   </mat-list>
 </section>
+
+<!-- logOut modal starts-->
+<ng-template #logDialog>
+  <div class="dialogHeader">
+    <h1 mat-dialog-title>Log out</h1>
+    <mat-icon mat-button matDialogClose="yes">close</mat-icon>
+  </div>
+  <div mat-dialog-content>
+    <ul class="details">
+      <li>Employee Name: {{ userDetails?.EmpName }}</li>
+      <li>Employee ID: {{ userDetails?.EmpID }}</li>
+      <li>Department: {{ userDetails?.Department }}</li>
+    </ul>
+    <p>Are you sure that you want to log out?</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" cdkFocusInitial mat-dialog-close="close">No</button>
+    <button mat-raised-button color="warn" (click)="logOut()" mat-dialog-close="close">Yes</button>
+  </div>
+</ng-template>
+<!-- logOut modal ends -->

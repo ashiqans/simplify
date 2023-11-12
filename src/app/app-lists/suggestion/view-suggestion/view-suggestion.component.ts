@@ -418,7 +418,8 @@ export class ViewSuggestionComponent {
   }
 
   approveStage(stage: string) {
-    if (stage == 'S1') {
+    this.showLoader = true;
+    if (stage == 'S1' && this.viewSuggestionForm.controls['sc'].status == 'VALID') {
       let payload = {
         SugID: this.suggestionId,
         LoginID: this.loginId,
@@ -435,8 +436,9 @@ export class ViewSuggestionComponent {
         } else if(res?.Status == 0) {
           this.openToaster(res?.result, 5000, true);
         }
+        this.showLoader = false;
       })
-    } else if (stage == 'S2') {
+    } else if (stage == 'S2' && this.viewSuggestionForm.controls['dl'].status == 'VALID') {
       const fileExtension = this.fileDetail?.type?.split('/')[1];
       const fileName = `${this.suggestionId}_before.${fileExtension}`;
       let payload = {
@@ -461,10 +463,11 @@ export class ViewSuggestionComponent {
             } else if(res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
+            this.showLoader = false;
           }) 
         }
       });
-    } else if (stage == 'S3') {
+    } else if (stage == 'S3' && this.viewSuggestionForm.controls['im'].status == 'VALID') {
       const targetDate = moment(this.viewSuggestionForm.controls['im'].get('targetDate')?.value).format('YYYY-MM-DD')
       let payload = {
         SugID: this.suggestionId,
@@ -482,8 +485,9 @@ export class ViewSuggestionComponent {
             } else if(res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
+            this.showLoader = false;
       })
-    } else if (stage == 'S4') {
+    } else if (stage == 'S4' && this.viewSuggestionForm.controls['pi'].status == 'VALID') {
       const fileExtension = this.fileDetail?.type?.split('/')[1];
       const fileName = `${this.suggestionId}_after.${fileExtension}`;
       let payload = {
@@ -504,10 +508,11 @@ export class ViewSuggestionComponent {
             } else if(res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
+            this.showLoader = false;
           }) 
         }
       });
-    } else if (stage == 'S5') {
+    } else if (stage == 'S5' && this.viewSuggestionForm.controls['fi'].status == 'VALID') {
       let payload = {
         SugID: this.suggestionId,
         LoginID: this.loginId,
@@ -522,8 +527,9 @@ export class ViewSuggestionComponent {
             } else if(res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
+            this.showLoader = false;
       })
-    } else if (stage == 'S6') {
+    } else if (stage == 'S6' && this.viewSuggestionForm.controls['ce'].status == 'VALID') {
       let payload = {
         SugID: this.suggestionId,
         LoginID: this.loginId,
@@ -539,8 +545,9 @@ export class ViewSuggestionComponent {
             } else if(res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
+            this.showLoader = false;
       })
-    } else if (stage == 'S7') {
+    } else if (stage == 'S7' && this.viewSuggestionForm.controls['hr'].status == 'VALID') {
       const fileExtension = this.fileDetail?.type?.split('/')[1];
       const fileName = `${this.suggestionId}_employee.${fileExtension}`;
       let payload = {
@@ -558,17 +565,20 @@ export class ViewSuggestionComponent {
             } else if(res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
+            this.showLoader = false;
           }) 
         }
       });
     } else {
-      
+      this.openToaster('Please enter proper values and then proceed!', 5000, true);
+      this.showLoader = false;
     }
     
   }
 
   rejectStage(stage: string) {
-    if (stage == 'S1') {
+    this.showLoader = true;
+    if (stage == 'S1' && this.viewSuggestionForm.controls['sc'].status == 'VALID') {
       let payload = {
         SugID: this.suggestionId,
         LoginID: this.loginId,
@@ -584,8 +594,9 @@ export class ViewSuggestionComponent {
         } else if(res?.Status == 0) {
           this.openToaster(res?.result, 5000, true);
         }
+        this.showLoader = false;
       })
-    } else if (stage == 'S3') {
+    } else if (stage == 'S3' && this.viewSuggestionForm.controls['im'].status == 'VALID') {
       const targetDate = moment(this.viewSuggestionForm.controls['im'].get('targetDate')?.value).format('YYYY-MM-DD')
       let payload = {
         SugID: this.suggestionId,
@@ -601,6 +612,7 @@ export class ViewSuggestionComponent {
           // this.toggleStager(res?.result);
           this.openToaster(res?.RespMsg, 5000, true);
         }
+        this.showLoader = false;
       })
     }
   }
@@ -620,8 +632,16 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm?.get('sc.rejectionRemarks')?.setValue(value?.s1?.S1ApprovalRemarks);
     this.selectedSuggestion.s1.S1Evaluator = value?.s1?.S1Evaluator;
     this.detailTree[0]?.s1c == 'Disable' ? this.viewSuggestionForm.controls['sc'].disable() : this.viewSuggestionForm.controls['sc'].enable();
+    // console.log(this.viewSuggestionForm?.get('sc.rejectionRemarks'))
+    // this.viewSuggestionForm?.get('sc.rejectionRemarks')?.markAsDirty();
+    // this.viewSuggestionForm?.get('sc.rejectionRemarks')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('sc.rejectionRemarks')?.updateValueAndValidity()
 
     // Stage 2
+    // this.viewSuggestionForm?.get('dl.editSuggestion')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('dl.implementation')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('dl.category')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('dl.beforeImgUpload')?.markAsUntouched();
     this.viewSuggestionForm?.get('dl.editSuggestion')?.setValue(value?.s2?.S2SuggestionTitle);
     this.viewSuggestionForm?.get('dl.implementation')?.setValue(value?.s2?.S2Implementation);
     this.viewSuggestionForm?.get('dl.category')?.setValue(value?.s2?.S2Category);
@@ -643,25 +663,34 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm?.get('pi.afterImgUpload')?.setValue(value?.s4?.S4AfterPhotoName);
     if (this.selectedSuggestion?.s4?.S4Benefits == 'Cost') {
       this.viewSuggestionForm?.get('pi.costSavings')?.setValidators(Validators.required)
-      // this.viewSuggestionForm?.get('pi.costSavings')?.updateValueAndValidity();
     }
     this.detailTree[3]?.s4c == 'Disable' ? this.viewSuggestionForm.controls['pi'].disable() : this.viewSuggestionForm.controls['pi'].enable();
+    // this.viewSuggestionForm?.get('pi.description')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('pi.costSavings')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('pi.afterImgUpload')?.markAsUntouched();
 
     // Stage 5
     this.viewSuggestionForm?.get('fi.costSavings')?.setValue(value?.s5?.S5ActualCostSavings);
     this.detailTree[4]?.s5c == 'Disable' ? this.viewSuggestionForm.controls['fi'].disable() : this.viewSuggestionForm.controls['fi'].enable();
+    // this.viewSuggestionForm?.get('fi.costSavings')?.markAsUntouched();
 
     // Stage 6
     this.viewSuggestionForm?.get('ce.grade')?.setValue(value?.s6?.S6Grade);
     this.viewSuggestionForm?.get('ce.comment')?.setValue(value?.s6?.S6Comment);
     this.detailTree[5]?.s6c == 'Disable' ? this.viewSuggestionForm.controls['ce'].disable() : this.viewSuggestionForm.controls['ce'].enable();
+    // this.viewSuggestionForm?.get('ce.grade')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('ce.comment')?.markAsUntouched();
 
     // Stage 7
     this.viewSuggestionForm?.get('hr.paymentCredited')?.setValue(value?.s7?.S7PaymentCredited);
     this.viewSuggestionForm?.get('hr.imgUpload')?.setValue(value?.s7?.S7EmpPhotoName);
     this.detailTree[6]?.s7c == 'Disable' ? this.viewSuggestionForm.controls['hr'].disable() : this.viewSuggestionForm.controls['hr'].enable();
+    // this.viewSuggestionForm?.get('hr.paymentCredited')?.markAsUntouched();
+    // this.viewSuggestionForm?.get('hr.imgUpload')?.markAsUntouched();
 
-    this.viewSuggestionForm.markAsUntouched();
+    // this.viewSuggestionForm.markAsPristine();
+    // this.viewSuggestionForm.markAsUntouched();
+    // this.viewSuggestionForm.reset(this.viewSuggestionForm.value);
     
     // Mat expansional panel open
     this.indexExpanded = this.detailTree[0]?.s1c == 'Enable' ? 1 : this.detailTree[1]?.s2c == 'Enable' ? 2 : this.detailTree[2]?.s3c == 'Enable' ? 3 : this.detailTree[3]?.s4c == 'Enable' ? 4 : this.detailTree[4]?.s5c == 'Enable' ? 5 : this.detailTree[5]?.s6c == 'Enable' ? 6 : 7;
@@ -670,7 +699,7 @@ export class ViewSuggestionComponent {
   uploadFiles(event: any, type: any) {
     let file = event?.target?.files[0];
     const fileSize = Math.round(file?.size / 1024);
-    if (fileSize > 5000) {
+    if (fileSize >= 5000) {
       this.openToaster('Please upload file size in less than 5MB', 10000, true);
       return; 
     }

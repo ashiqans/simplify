@@ -247,6 +247,10 @@ mat-sidenav[style] {
       padding-bottom: 4px !important;
     }
 
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix .mdc-text-field--invalid {
+      color: #553c9a !important;
+    }
+
     .mdc-notched-outline {
       height: 32px !important;
     }

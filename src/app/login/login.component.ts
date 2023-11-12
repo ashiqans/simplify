@@ -19,6 +19,9 @@ export class LoginComponent {
   showLoader: boolean = false;
   loginResMsg: string = '';
   notMatch: boolean = false;
+  viewPasswordType = {
+    old: false, current: false, new: false
+  }
 
   constructor(
     private formBuilder: FormBuilder,
@@ -50,6 +53,7 @@ export class LoginComponent {
       password: this.loginForm.get('password')?.value,
     };
     this.authService.login(userObj).subscribe((res: any) => {
+      sessionStorage.setItem('LogInDetails', JSON.stringify(res?.result));
       sessionStorage.setItem('empId', userObj.EmpID);
       if (res?.Status == 1) {
         this.authService.isLoggedIn = true;
@@ -90,8 +94,15 @@ export class LoginComponent {
      })
   }
 
-  togglePasswordVisibility() {
-    this.viewPassword = !this.viewPassword;
+  togglePasswordVisibility(type: string) {
+    if (type == 'C') {
+      this.viewPasswordType['current'] = !this.viewPasswordType['current']
+    } else if (type == 'O') {
+      this.viewPasswordType['old'] = !this.viewPasswordType['old']
+    } else if (type == 'N') {
+      this.viewPasswordType['new'] = !this.viewPasswordType['new']
+    } else {}
+      // this.viewPassword = !this.viewPassword;
   }
 
   get passwordMatchError() {

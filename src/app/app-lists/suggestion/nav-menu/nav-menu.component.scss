@@ -69,3 +69,39 @@
   bottom: 0 !important;
   width: -webkit-fill-available !important;
 }
+
+// .logOutDialog {
+//   width: 400px;
+//   height: 400px;
+
+.dialogHeader {
+  display: flex;
+  justify-content: space-between;
+  height: 3em;
+
+  .h2 {
+    margin: 0 !important;
+    padding: 0.5em !important;
+  }
+  
+  .details {
+    display: flex !important;
+    flex-direction: column !important;
+    
+    li {
+      list-style: none;
+      font-weight: 500;
+    }
+  }
+
+  mat-icon {
+    margin-top: 0.4em;
+    padding: 0.5em;
+    cursor: pointer;
+  } 
+}
+
+.mat-mdc-dialog-actions {
+  justify-content: end;
+}
+// }
