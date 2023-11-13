@@ -29,6 +29,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatDialogModule } from '@angular/material/dialog'
+import { NumberDirective } from '../directives/NumberOnly.directive';
+import { IndianCurrencyDirective } from '../directives/indian-currency.directive';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,9 @@ import { MatDialogModule } from '@angular/material/dialog'
     ViewSuggestionComponent,
     DashboardComponent,
     LoaderComponent,
-    SnackbarComponent
+    SnackbarComponent,
+    NumberDirective,
+    IndianCurrencyDirective
   ],
   imports: [
     CommonModule,

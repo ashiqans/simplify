@@ -64,6 +64,22 @@ export class SuggestionService {
     return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
   }
 
+  getChart1(fileName: string) {
+    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  }
+
+  getChart2(fileName: string) {
+    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  }
+
+  getChart3(fileName: string) {
+    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  }
+
+  getChart4(fileName: string) {
+    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  }
+
   setAuthorBook(books: []) {
     this.authorBook.next(books);
   }

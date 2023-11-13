@@ -12,7 +12,7 @@
               <mat-form-field class="mainFilterField" floatLabel="always">
                 <mat-label>Employee ID</mat-label>
                 <input matInput type="text" placeholder="Enter your Employee ID" formControlName="empId" minlength="2"
-                  maxlength="10">
+                  maxlength="10" numbersOnly>
                 <mat-error
                   *ngIf="filterForm.controls?.['empId']?.touched && filterForm.controls?.['empId']?.errors?.['minlength']">
                   Employee ID minimum length is 2
@@ -25,7 +25,7 @@
               <mat-form-field class="mainFilterField" floatLabel="always">
                 <mat-label>Suggestion ID</mat-label>
                 <input matInput type="text" placeholder="Enter ID" formControlName="suggestionId" minlength="2"
-                  maxlength="20">
+                  maxlength="20" numbersOnly>
                 <mat-error
                   *ngIf="filterForm.controls?.['suggestionId']?.touched && filterForm.controls?.['suggestionId']?.errors?.['minlength']">
                   Suggestion ID minimum length is 2
@@ -194,7 +194,7 @@
               <mat-form-field class="flexItemLeft" floatLabel="always">
                 <mat-label>Employee ID</mat-label>
                 <input matInput type="text" placeholder="Enter your Employee ID" formControlName="empId" required minlength="2"
-                  maxlength="10">
+                  maxlength="10" numbersOnly>
                 <mat-error
                   *ngIf="addSuggestionForm.controls?.['empId']?.touched && addSuggestionForm.controls?.['empId']?.errors?.['required']">
                   Please enter your Employee ID

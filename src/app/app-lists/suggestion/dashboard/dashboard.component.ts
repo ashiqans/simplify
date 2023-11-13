@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
+import moment from 'moment';
+import { SuggestionService } from 'src/app/services/suggestion.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,6 +10,13 @@ import { ChartConfiguration, ChartOptions } from 'chart.js';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent {
+  maxDate: Date = new Date();
+  showLoader: boolean = false;
+  filterValue: any;
+  startDate: any;
+  endDate: any;
+  appliedFilterValue: string = '1 Month';
+  
   // Barchart 1
   public barChartLegend: any;
   public barChartPlugins: any;
@@ -36,14 +46,44 @@ export class DashboardComponent {
   public pieChartPlugins3 = [];
 
   
-  constructor() { }
+  constructor(private suggestionService: SuggestionService,
+    private snackBar: MatSnackBar) { }
   
 
   ngOnInit() {
-    this.loadBarChart1();
-    this.loadPieChart1();
-    this.loadPieChart2();
-    this.loadPieChart3();
+    this.filterValue = '1';
+    this.getChartValues(this.filterValue);
+  }
+
+  filterChart(type: string){
+    this.filterValue = type;
+    this.startDate = '';
+    this.endDate = '';
+    this.appliedFilterValue = type == '12' ? '1 Year' : type == '6' ? '6 Month' : '1 Month';
+    this.getChartValues(this.filterValue);
+  }
+
+  dateChangeStart(event: any) {
+    this.startDate = moment(event?.value, 'DD-MM-YYYY').format('YYYY-MM-DD');
+  }
+
+  dateChangeEnd(event: any) {
+    this.filterValue = '';
+    this.endDate = moment(event?.value, 'DD-MM-YYYY').format('YYYY-MM-DD');
+    this.appliedFilterValue = `From: ${this.startDate} - To: ${this.endDate}`;
+    this.getChartValues(this.filterValue, this.startDate, this.endDate);
+  }
+
+  getChartValues(filterValue?: string, startDate?: string, endDate?: string) {
+    this.showLoader = true;
+    setTimeout(() => {
+      this.loadBarChart1();
+      this.loadPieChart1();
+      this.loadPieChart2();
+      this.loadPieChart3();
+      this.showLoader = false;
+      this.openToaster('Charts loaded successfully!', 3000, false)
+    }, 2000);
   }
 
   loadBarChart1() {
@@ -55,6 +95,8 @@ export class DashboardComponent {
     datasets: [ 
       { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Series A', backgroundColor: '#FF4069'},
       { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B', backgroundColor: '#069BFF' },
+      { data: [ 65, 59, 80, 81, 56, 55, 40 ], label: 'Series A', backgroundColor: '#GG4069'},
+      { data: [28, 48, 40, 19, 86, 27, 90], label: 'Series B', backgroundColor: '#012CGF' },
       ],
     
     };
@@ -173,6 +215,18 @@ export class DashboardComponent {
     } ];
     
     this.pieChartPlugins3 = [];
+  }
+
+  openToaster(content: any, duration: any, type: boolean, action?: any) {
+    let sb = this.snackBar.open(content, action, {
+      duration: duration,
+      // panelClass: [type ? "success" : "error"],
+      horizontalPosition: 'start',
+      verticalPosition: 'bottom'
+    });
+    sb.onAction().subscribe(() => {
+      sb.dismiss();
+    });
   }
   
 

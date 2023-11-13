@@ -30,10 +30,25 @@
 .filterHeader {
   margin: 1em;
 
+  .mat-mdc-card-content {
+    padding-bottom: 0 !important;
+  }
+
   .filterSection {
     button {
       margin-right: 1em;
       height: 30px;
+    }
+
+    .phase-active{
+      // background-color: var(--main-color) !important;
+      border: 2px solid var(--main-color) !important;
+      color: var(--main-color) !important;
+      
+      .mdc-button__label {
+        color: --sub-color3 !important;
+        font-weight: 800 !important;
+      }
     }
 
     .mdc-button__label {
@@ -41,6 +56,18 @@
     }
     .mat-date-range-input {
       font-size: 0.8em !important;
+    }
+
+    .filterLabel {
+      display: inline-block;
+      margin-left: 2em;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+
+      span {
+        font-weight: 700;
+        color: var(--main-color);
+      }
     }
   }
 }

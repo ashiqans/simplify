@@ -1,20 +1,24 @@
+<app-loader *ngIf="showLoader"></app-loader>
 <div class="filterHeader" style="display: none;">
 <mat-card>
   <mat-card-content>
     <div class="filterSection">
       <!-- <h2>Filter:</h2>  -->
-      <button mat-stroked-button color="primary">1M</button>
-      <button mat-stroked-button color="primary">6M</button>
-      <button mat-stroked-button color="primary">1Y</button>
+      <button mat-stroked-button color="primary" (click)="filterChart('1')" [class.phase-active]="filterValue === '1'">1M</button>
+      <button mat-stroked-button color="primary" (click)="filterChart('6')" [class.phase-active]="filterValue === '6'">6M</button>
+      <button mat-stroked-button color="primary" (click)="filterChart('12')" [class.phase-active]="filterValue === '12'">1Y</button>
       <mat-form-field class="mainFilterField dateRange" floatLabel="always">
         <mat-label>Select a Date Range</mat-label>
-        <mat-date-range-input [rangePicker]="picker">
-          <input matStartDate placeholder="DD-MM-YYYY">
-          <input matEndDate placeholder="DD-MM-YYYY">
+        <mat-date-range-input [rangePicker]="picker" [max]="maxDate">
+          <input matStartDate placeholder="DD-MM-YYYY" readonly (click)="picker.open()" (dateChange)="dateChangeStart($event)" [(ngModel)]="startDate">
+          <input matEndDate placeholder="DD-MM-YYYY" readonly (click)="picker.open()" (dateChange)="dateChangeEnd($event)" [(ngModel)]="endDate">
         </mat-date-range-input>
         <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-date-range-picker #picker></mat-date-range-picker>
       </mat-form-field>
+      <div class="filterLabel">
+        <mat-label>Applied Filter: <span>{{ appliedFilterValue }}</span></mat-label>
+      </div>
     </div>
   </mat-card-content>
 </mat-card>
@@ -22,22 +26,22 @@
 
 <div class="chartContainer" id="scrollBar" style="display: none;">
   <div id="row1">
-    <!-- Pie chart -->
-    <div class="chart4">
-      <mat-card>
-        <mat-card-content>
-          <canvas baseChart
-            [type]="'pie'"
-            [datasets]="pieChartDatasets3"
-            [labels]="pieChartLabels3"
-            [options]="pieChartOptions3"
-            [plugins]="pieChartPlugins3"
-            [legend]="pieChartLegend3">
-          </canvas>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
+        <!-- Bar chart -->
+        <div class="chart1">
+          <mat-card>
+            <mat-card-content>
+              <!-- style="margin-top: 3em;" -->
+              <canvas baseChart style="min-height: 300px"
+                    [data]="barChartData"
+                    [options]="barChartOptions"
+                    [plugins]="barChartPlugins"
+                    [legend]="barChartLegend"
+                    [type]="'bar'">
+              </canvas>
+            </mat-card-content>
+          </mat-card>
+        </div>
+    
     <!-- pie chart -->
     <div class="chart2">
       <mat-card>
@@ -72,20 +76,22 @@
       </mat-card>
     </div>
 
-    <!-- Bar chart -->
-    <div class="chart1">
+    <!-- Pie chart -->
+    <div class="chart4">
       <mat-card>
         <mat-card-content>
-          <!-- style="margin-top: 3em;" -->
-          <canvas baseChart style="min-height: 300px"
-                [data]="barChartData"
-                [options]="barChartOptions"
-                [plugins]="barChartPlugins"
-                [legend]="barChartLegend"
-                [type]="'bar'">
+          <canvas baseChart
+            [type]="'pie'"
+            [datasets]="pieChartDatasets3"
+            [labels]="pieChartLabels3"
+            [options]="pieChartOptions3"
+            [plugins]="pieChartPlugins3"
+            [legend]="pieChartLegend3">
           </canvas>
         </mat-card-content>
       </mat-card>
     </div>
+
   </div>
 </div>
+<!-- style="display: none;" -->
