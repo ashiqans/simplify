@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
@@ -44,6 +44,7 @@ export const MY_FORMATS = {
   
 export class ViewSuggestionComponent {
   @ViewChild('imageViewerDialog') imageViewerDialog!: TemplateRef<any>;
+  @ViewChild('listView', { static: false }) public listView!: ElementRef;
   filterForm!: FormGroup;
   addSuggestionForm!: FormGroup;
   viewSuggestionForm!: FormGroup;
@@ -83,6 +84,10 @@ export class ViewSuggestionComponent {
   indexExpanded: any;
   minDate: Date = new Date()
   maxDate: Date = new Date()
+  totalListCount=0;
+  pageIndex= 0;
+  pageSize = 10;
+  mainFilterApplied = false;
 
   constructor(private formBuilder: FormBuilder,
     private datePipe: DatePipe,
@@ -126,7 +131,7 @@ export class ViewSuggestionComponent {
       status: '',
       grade: '',
       fromDate: '',
-      toDate: ''
+      toDate: '',
     })
   }
 
@@ -191,14 +196,18 @@ export class ViewSuggestionComponent {
     console.log(this.viewSuggestionForm.controls['sc'].get('rejectionRemarks'))
   }
 
-  getSuggestionList() {
+  getSuggestionList(pageIndex?: any, pageSize?: any) {
     let payload = {
 
     }
     this.showLoader = true;
-    this.suggestionService.getSuggestionList(payload).subscribe(res => {
+    this.suggestionService.getSuggestionList(payload, pageIndex, pageSize).subscribe(res => {
       if (res?.Status == 1) {
         this.suggestionList = res?.result;
+
+        // this.suggestionList = [this.suggestionList, ...res?.result];
+        // this.totalListCount = res?.totalListCount;
+
         this.openToaster('Suggestion List fetched successfully!', 3000, true);
         this.selectedSuggestionIndex = 0;
         // this.selectedSuggestion = this.suggestionList[0];
@@ -274,7 +283,8 @@ export class ViewSuggestionComponent {
     // let from = moment(this.filterForm.get('fromDate')?.value);
     // console.log(from.format('DD-MM-YYYY'))
     this.showLoader = true;
-
+    this.mainFilterApplied = true;
+    
     let fromDate = this.filterForm.get('fromDate')?.value != '' ? moment(this.filterForm.get('fromDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('fromDate')?.value;
     let toDate = this.filterForm.get('toDate')?.value != '' ? moment(this.filterForm.get('toDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('toDate')?.value;
 
@@ -288,9 +298,13 @@ export class ViewSuggestionComponent {
       ToDate: toDate
     }
 
-    this.suggestionService.filterSuggestion(mainFilterPayload).subscribe(res => {
+    this.suggestionService.getSuggestionList(mainFilterPayload, this.pageIndex, this.pageSize).subscribe(res => {
       if (res?.Status == 1) {
         this.suggestionList = [...res?.result];
+
+        // this.suggestionList = [this.suggestionList, ...res?.result];
+        // this.totalListCount = res?.totalListCount;
+
         // this.filterForm.reset();
         mainFilterPayload = {}
         this.openToaster('Suggestion List fetched successfully!', 3000, true);
@@ -306,6 +320,7 @@ export class ViewSuggestionComponent {
   }
 
   cancelFilter() {
+    this.mainFilterApplied = false;
     this.filterForm.reset();
     this.filterForm.patchValue({
       FromDate: '',
@@ -332,9 +347,13 @@ export class ViewSuggestionComponent {
     }
 
     this.showLoader = true;
-    this.suggestionService.getSuggestionList(payload).subscribe(res => {
+    this.suggestionService.getSuggestionList(payload, this.pageIndex, this.pageSize).subscribe(res => {
       if (res?.Status == 1) {
         this.suggestionList = res?.result;
+
+        // this.suggestionList = [this.suggestionList, ...res?.result];
+        // this.totalListCount = res?.totalListCount;
+
         this.openToaster('Suggestion List fetched successfully!', 3000, true);
         this.selectedSuggestionIndex = 0;
         this.getSuggestionDetail(this.suggestionList[0]?.ID)
@@ -762,6 +781,20 @@ export class ViewSuggestionComponent {
       } else {
         this.openToaster('No file to display', 3000, true);
       }
+    }
+  }
+
+  onScrollLoadList() {
+    const nativeElement= this.listView.nativeElement
+    console.log(this.listView)
+
+    if (nativeElement.clientHeight + Math.round(nativeElement.scrollTop) === nativeElement.scrollHeight && this.suggestionList?.length !== this.totalListCount) {
+      if (!this.mainFilterApplied) {
+        this.getSuggestionList(this.pageIndex, this.pageSize);
+      } else {
+        this.applyFilter();
+      }
+      this.pageIndex += 1;
     }
   }
   

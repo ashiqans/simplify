@@ -123,7 +123,7 @@
   <div class="suggestionListSection" >
     <div class="headerText"><p>Suggestion List:</p></div>
 
-    <div class="listCardContainer" id="scrollBar" #listView>
+    <div class="listCardContainer" id="scrollBar" (scroll)="onScrollLoadList()" #listView>
       <div class="suggestionCard">
         <mat-card *ngFor="let suggestion of suggestionList; let i = index;" [ngClass]="{'selected-card': selectedSuggestionIndex === i}" (click)="suggestionSelect(suggestion, i)">
           <mat-card-content>

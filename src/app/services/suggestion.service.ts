@@ -22,8 +22,8 @@ export class SuggestionService {
 
   constructor(private http: HttpClient) { }
 
-  getSuggestionList(payload: any): Observable<any> {
-    return this.http.post(`${this.baseURL}/SuggestionList`, payload);
+  getSuggestionList(payload: any, pageIndex: any, pageSize: any): Observable<any> {
+    return this.http.post(`${this.baseURL}/SuggestionList/${pageIndex}/${pageSize}`, payload);
   }
 
   createSuggestion(payload: any): Observable<any> {
