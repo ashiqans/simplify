@@ -145,6 +145,11 @@
     transition: background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1);
   }
 
+  mat-label {
+    font-weight: var(--font-weight500) !important;
+    margin-right: 0.2em;
+  }
+
   .selected-card {
     border: 3px solid var(--main-color);
     border-radius: 0.1em !important;
@@ -226,6 +231,7 @@
 
     p {
       margin-bottom: 0.2em !important;
+      border-top: 1px solid var(--border-color1);;
     }
   }
 
@@ -426,7 +432,13 @@
 
     p {
       margin-bottom: 0.2em !important;
+      border-top: 1px solid var(--border-color1);
     }
+  }
+
+  mat-label {
+    font-weight: var(--font-weight500) !important;
+    margin-right: 0.2em;
   }
 
   .detail3 {

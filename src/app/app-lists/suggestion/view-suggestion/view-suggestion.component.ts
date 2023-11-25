@@ -141,15 +141,15 @@ export class ViewSuggestionComponent {
         acceptRejectDate: '',
         approve: '',
         reject: '',
-        rejectionRemarks: ['', Validators.required],
+        rejectionRemarks: '', // ['', Validators.required],
         assignedEvaluator: ''
       }),
       dl: this.formBuilder.group({
         approvedDate: '',
-        editSuggestion: ['', Validators.required],
-        beforeImgUpload: ['', Validators.required],
-        category: ['', Validators.required],
-        implementation: ['', Validators.required],
+        editSuggestion: '', // ['', Validators.required],
+        beforeImgUpload: '', // ['', Validators.required],
+        category: '', // ['', Validators.required],
+        implementation: '', // ['', Validators.required],
         submit: '',
         assignedEvaluator: ''
       }),
@@ -157,14 +157,14 @@ export class ViewSuggestionComponent {
         acceptRejectDate: '',
         accept: '',
         reject: '',
-        rejectionRemarks: ['', Validators.required],
-        targetDate: ['', Validators.required],
+        rejectionRemarks: '', // ['', Validators.required],
+        targetDate: '', // ['', Validators.required],
         assignedEvaluator: ''
       }),
       pi: this.formBuilder.group({
         approvedDate: '',
-        description: ['', Validators.required],
-        afterImgUpload: ['', Validators.required],
+        description: '', // ['', Validators.required],
+        afterImgUpload: '', // ['', Validators.required],
         costSavings: [''],
         benefits: '',
         submit: '',
@@ -173,14 +173,14 @@ export class ViewSuggestionComponent {
       }),
       fi: this.formBuilder.group({
         approvedDate: '',
-        costSavings: ['', Validators.required],
+        costSavings: '', // ['', Validators.required],
         submit: '',
         submitEvaluator: ''
       }),
       ce: this.formBuilder.group({
         approvedDate: '',
-        grade: ['', Validators.required],
-        comment: ['', Validators.required],
+        grade: '', // ['', Validators.required],
+        comment: '', // ['', Validators.required],
         submit: '',
         submitEvaluator: ''
       }),
@@ -188,7 +188,7 @@ export class ViewSuggestionComponent {
         approvedDate: '',
         grade: '',
         paymentCredited: '', // ['', Validators.required],
-        imgUpload: ['', Validators.required],
+        imgUpload: '', // ['', Validators.required],
         submit: '',
         winnersBoard: ''
       })
@@ -285,8 +285,8 @@ export class ViewSuggestionComponent {
     this.showLoader = true;
     this.mainFilterApplied = true;
     
-    let fromDate = this.filterForm.get('fromDate')?.value != '' ? moment(this.filterForm.get('fromDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('fromDate')?.value;
-    let toDate = this.filterForm.get('toDate')?.value != '' ? moment(this.filterForm.get('toDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('toDate')?.value;
+    let fromDate = this.filterForm.get('fromDate')?.value != '' && this.filterForm.get('fromDate')?.value != 'Invalid date' ? moment(this.filterForm.get('fromDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('fromDate')?.value;
+    let toDate = this.filterForm.get('toDate')?.value != '' && this.filterForm.get('toDate')?.value != 'Invalid date' ? moment(this.filterForm.get('toDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('toDate')?.value;
 
     let mainFilterPayload: any = {
       EmpID: this.filterForm.get('empId')?.value,
@@ -417,11 +417,17 @@ export class ViewSuggestionComponent {
   }
 
   suggestionSelect(suggestion: any, index: any) {
+    this.viewSuggestionForm.reset();
+    this.viewSuggestionForm.updateValueAndValidity();
+
     this.selectedSuggestionIndex = index;
     if(this.suggestionId != suggestion?.ID) this.getSuggestionDetail(suggestion?.ID);
   }
 
   getSuggestionDetail(sugId: any) {
+    this.viewSuggestionForm.reset();
+    this.viewSuggestionForm.updateValueAndValidity();
+
     this.showLoader = true;
     // sugId = 64// temp
     this.suggestionId = sugId;
@@ -651,16 +657,8 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm?.get('sc.rejectionRemarks')?.setValue(value?.s1?.S1ApprovalRemarks);
     this.selectedSuggestion.s1.S1Evaluator = value?.s1?.S1Evaluator;
     this.detailTree[0]?.s1c == 'Disable' ? this.viewSuggestionForm.controls['sc'].disable() : this.viewSuggestionForm.controls['sc'].enable();
-    // console.log(this.viewSuggestionForm?.get('sc.rejectionRemarks'))
-    // this.viewSuggestionForm?.get('sc.rejectionRemarks')?.markAsDirty();
-    // this.viewSuggestionForm?.get('sc.rejectionRemarks')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('sc.rejectionRemarks')?.updateValueAndValidity()
 
     // Stage 2
-    // this.viewSuggestionForm?.get('dl.editSuggestion')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('dl.implementation')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('dl.category')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('dl.beforeImgUpload')?.markAsUntouched();
     this.viewSuggestionForm?.get('dl.editSuggestion')?.setValue(value?.s2?.S2SuggestionTitle);
     this.viewSuggestionForm?.get('dl.implementation')?.setValue(value?.s2?.S2Implementation);
     this.viewSuggestionForm?.get('dl.category')?.setValue(value?.s2?.S2Category);
@@ -673,8 +671,6 @@ export class ViewSuggestionComponent {
     this.viewSuggestionForm?.get('im.targetDate')?.setValue(targetDate);
     this.viewSuggestionForm?.get('im.rejectionRemarks')?.setValue(value?.s3?.S3ApprovalRemarks);
     this.detailTree[2]?.s3c == 'Disable' ? this.viewSuggestionForm.controls['im'].disable() : this.viewSuggestionForm.controls['im'].enable();
-    // this.viewSuggestionForm?.get('im.targetDate')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('im.rejectionRemarks')?.markAsUntouched();
 
     // Stage 4
     this.viewSuggestionForm?.get('pi.description')?.setValue(value?.s4?.S4Description);
@@ -684,32 +680,75 @@ export class ViewSuggestionComponent {
       this.viewSuggestionForm?.get('pi.costSavings')?.setValidators(Validators.required)
     }
     this.detailTree[3]?.s4c == 'Disable' ? this.viewSuggestionForm.controls['pi'].disable() : this.viewSuggestionForm.controls['pi'].enable();
-    // this.viewSuggestionForm?.get('pi.description')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('pi.costSavings')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('pi.afterImgUpload')?.markAsUntouched();
 
     // Stage 5
     this.viewSuggestionForm?.get('fi.costSavings')?.setValue(value?.s5?.S5ActualCostSavings);
     this.detailTree[4]?.s5c == 'Disable' ? this.viewSuggestionForm.controls['fi'].disable() : this.viewSuggestionForm.controls['fi'].enable();
-    // this.viewSuggestionForm?.get('fi.costSavings')?.markAsUntouched();
 
     // Stage 6
     this.viewSuggestionForm?.get('ce.grade')?.setValue(value?.s6?.S6Grade);
     this.viewSuggestionForm?.get('ce.comment')?.setValue(value?.s6?.S6Comment);
     this.detailTree[5]?.s6c == 'Disable' ? this.viewSuggestionForm.controls['ce'].disable() : this.viewSuggestionForm.controls['ce'].enable();
-    // this.viewSuggestionForm?.get('ce.grade')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('ce.comment')?.markAsUntouched();
 
     // Stage 7
     this.viewSuggestionForm?.get('hr.paymentCredited')?.setValue(value?.s7?.S7PaymentCredited);
     this.viewSuggestionForm?.get('hr.imgUpload')?.setValue(value?.s7?.S7EmpPhotoName);
     this.detailTree[6]?.s7c == 'Disable' ? this.viewSuggestionForm.controls['hr'].disable() : this.viewSuggestionForm.controls['hr'].enable();
-    // this.viewSuggestionForm?.get('hr.paymentCredited')?.markAsUntouched();
-    // this.viewSuggestionForm?.get('hr.imgUpload')?.markAsUntouched();
+
+    // *Form control validation check
+    if (this.detailTree[0]?.s1s == 'Show') {
+      this.viewSuggestionForm?.get('sc.rejectionRemarks')?.setValidators(Validators.required);
+      // this.viewSuggestionForm?.get('sc.rejectionRemarks')?.markAsUntouched();
+      this.viewSuggestionForm?.get('sc.rejectionRemarks')?.updateValueAndValidity();
+    }
+
+    if (this.detailTree[1]?.s2s == 'Show') {
+      this.viewSuggestionForm?.get('dl.editSuggestion')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('dl.implementation')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('dl.category')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('dl.beforeImgUpload')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('dl.editSuggestion')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('dl.implementation')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('dl.category')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('dl.beforeImgUpload')?.updateValueAndValidity();
+    }
+
+    if (this.detailTree[2]?.s3s == 'Show') {
+      this.viewSuggestionForm?.get('im.targetDate')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('im.rejectionRemarks')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('im.targetDate')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('im.rejectionRemarks')?.updateValueAndValidity();
+    }
+
+    if (this.detailTree[3]?.s4s == 'Show') {
+      this.viewSuggestionForm?.get('pi.description')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('pi.afterImgUpload')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('pi.description')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('pi.afterImgUpload')?.updateValueAndValidity();
+    }
+
+    if (this.detailTree[4]?.s5s == 'Show') {
+      this.viewSuggestionForm?.get('fi.costSavings')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('fi.costSavings')?.updateValueAndValidity();
+    }
+
+    if (this.detailTree[5]?.s6s == 'Show') {
+      this.viewSuggestionForm?.get('ce.grade')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('ce.comment')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('ce.grade')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('ce.comment')?.updateValueAndValidity();
+    }
+
+    if (this.detailTree[6]?.s7s == 'Show') {
+      this.viewSuggestionForm?.get('hr.imgUpload')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('hr.imgUpload')?.updateValueAndValidity();
+    }
 
     // this.viewSuggestionForm.markAsPristine();
     // this.viewSuggestionForm.markAsUntouched();
     // this.viewSuggestionForm.reset(this.viewSuggestionForm.value);
+
+    // Form control validation check*
     
     // Mat expansional panel open
     this.indexExpanded = this.detailTree[0]?.s1c == 'Enable' ? 1 : this.detailTree[1]?.s2c == 'Enable' ? 2 : this.detailTree[2]?.s3c == 'Enable' ? 3 : this.detailTree[3]?.s4c == 'Enable' ? 4 : this.detailTree[4]?.s5c == 'Enable' ? 5 : this.detailTree[5]?.s6c == 'Enable' ? 6 : 7;

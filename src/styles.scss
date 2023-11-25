@@ -13,6 +13,7 @@
   --success: #B2FF59;
   --error: #FF6E40;
   --font-stack: 'Roboto', sans-serif;
+  --font-weight500: 600;
 }
 
 
@@ -129,6 +130,7 @@ mat-sidenav[style] {
   width: fit-content !important;
   --mdc-chip-container-height: 1.5em !important;
   background-color: var(--main-color) !important;
+  margin-bottom: 0.5em;
 
   .mat-mdc-chip-action-label {
     font-size: 1em !important;
