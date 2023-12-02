@@ -12,7 +12,7 @@ import { takeWhile, scan, tap } from "rxjs/operators";
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 class ImageSnippet {
-  constructor(public src: string, public file: File) {}
+  constructor(public src: string, public file: File) { }
 }
 
 export const MY_FORMATS = {
@@ -41,14 +41,14 @@ export const MY_FORMATS = {
     DatePipe
   ]
 })
-  
+
 export class ViewSuggestionComponent {
   @ViewChild('imageViewerDialog') imageViewerDialog!: TemplateRef<any>;
   @ViewChild('listView', { static: false }) public listView!: ElementRef;
   filterForm!: FormGroup;
   addSuggestionForm!: FormGroup;
   viewSuggestionForm!: FormGroup;
-  showAddSuggestion: boolean = false; 
+  showAddSuggestion: boolean = false;
   filterType: string = 'All';
   showLoader: boolean = false;
   department: any = [];
@@ -57,8 +57,8 @@ export class ViewSuggestionComponent {
   suggestionList: any = [];
   selectedSuggestionIndex: any;
   panelOpenState = false;
-  implementationList: any = [{id: 'S', value: 'Self'},{id: 'ME', value: 'ME'},{id: 'M', value: 'Maintenance'}];
-  categoryList: any = [{id: 'P', value: 'Productivity'},{id: 'C', value: 'Cost'},{id: 'Q', value: 'Quality'},{id: 'D', value: 'Delivery'},{id: 'S', value: 'Safety'}];
+  implementationList: any = [{ id: 'S', value: 'Self' }, { id: 'ME', value: 'ME' }, { id: 'M', value: 'Maintenance' }];
+  categoryList: any = [{ id: 'P', value: 'Productivity' }, { id: 'C', value: 'Cost' }, { id: 'Q', value: 'Quality' }, { id: 'D', value: 'Delivery' }, { id: 'S', value: 'Safety' }];
   gradeList: any = [{ id: 'A+', value: 'A+' }, { id: 'A', value: 'A' }, { id: 'B', value: 'B' }, { id: 'C', value: 'C' }, { id: 'D', value: 'D' }];
   // hrFormControl: any;
   viewSuggestionControls: any = [];
@@ -68,14 +68,15 @@ export class ViewSuggestionComponent {
   selectedSuggestionDetail: any;
   suggestionId: any;
   loginId: any = 0;
+  userDetails: any;
   detailTree: any = [
-    {s1s: 'Show', s1c: 'Disable'},
-    {s2s: 'Show', s2c: 'Disable'},
-    {s3s: 'Show', s3c: 'Disable'},
-    {s4s: 'Show', s4c: 'Disable'},
-    {s5s: 'Show', s5c: 'Disable'},
-    {s6s: 'Show', s6c: 'Disable'},
-    {s7s: 'Show', s7c: 'Disable'}
+    { s1s: 'Show', s1c: 'Disable' },
+    { s2s: 'Show', s2c: 'Disable' },
+    { s3s: 'Show', s3c: 'Disable' },
+    { s4s: 'Show', s4c: 'Disable' },
+    { s5s: 'Show', s5c: 'Disable' },
+    { s6s: 'Show', s6c: 'Disable' },
+    { s7s: 'Show', s7c: 'Disable' }
   ]
   imageType: any = {
     name: '',
@@ -84,10 +85,12 @@ export class ViewSuggestionComponent {
   indexExpanded: any;
   minDate: Date = new Date()
   maxDate: Date = new Date()
-  totalListCount=0;
-  pageIndex= 0;
+  totalListCount = 0;
+  pageIndex = 0;
   pageSize = 10;
   mainFilterApplied = false;
+  hideZone = false;
+  suggestionListCount: any;
 
   constructor(private formBuilder: FormBuilder,
     private datePipe: DatePipe,
@@ -98,8 +101,10 @@ export class ViewSuggestionComponent {
     this.suggestionFilterMain();
     this.viewSuggestionTimeline();
     this.loginId = sessionStorage.getItem('empId') ? sessionStorage.getItem('empId') : 0;
+    this.userDetails = sessionStorage.getItem('LogInDetails') ? sessionStorage.getItem('LogInDetails') : null;
+    this.userDetails = this.userDetails ? JSON.parse(this.userDetails) : null;
   }
-  
+
   ngOnInit(): void {
     // this.openSnackBar('This is a test message for snackbar')
     this.getSuggestionList();
@@ -147,6 +152,9 @@ export class ViewSuggestionComponent {
       dl: this.formBuilder.group({
         approvedDate: '',
         editSuggestion: '', // ['', Validators.required],
+        editIssue: '',
+        editIdea: '',
+        editRemarks: '',
         beforeImgUpload: '', // ['', Validators.required],
         category: '', // ['', Validators.required],
         implementation: '', // ['', Validators.required],
@@ -188,6 +196,7 @@ export class ViewSuggestionComponent {
         approvedDate: '',
         grade: '',
         paymentCredited: '', // ['', Validators.required],
+        creditedAmount: '',
         imgUpload: '', // ['', Validators.required],
         submit: '',
         winnersBoard: ''
@@ -203,6 +212,7 @@ export class ViewSuggestionComponent {
     this.showLoader = true;
     this.suggestionService.getSuggestionList(payload, pageIndex, pageSize).subscribe(res => {
       if (res?.Status == 1) {
+        this.suggestionListCount = res
         this.suggestionList = res?.result;
 
         // this.suggestionList = [this.suggestionList, ...res?.result];
@@ -229,7 +239,7 @@ export class ViewSuggestionComponent {
       empName: ['', Validators.required],
       department: ['', Validators.required],
       line: ['', Validators.required],
-      zone: ['', Validators.required],
+      zone: '',
       title: ['', Validators.required],
       issue: ['', Validators.required],
       idea: ['', Validators.required],
@@ -270,7 +280,7 @@ export class ViewSuggestionComponent {
       }
       this.showLoader = false;
     }, error => {
-        this.openToaster('Suggestion not created!', 3000, false);
+      this.openToaster('Suggestion not created!', 3000, false);
     })
   }
 
@@ -284,7 +294,7 @@ export class ViewSuggestionComponent {
     // console.log(from.format('DD-MM-YYYY'))
     this.showLoader = true;
     this.mainFilterApplied = true;
-    
+
     let fromDate = this.filterForm.get('fromDate')?.value != '' && this.filterForm.get('fromDate')?.value != 'Invalid date' ? moment(this.filterForm.get('fromDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('fromDate')?.value;
     let toDate = this.filterForm.get('toDate')?.value != '' && this.filterForm.get('toDate')?.value != 'Invalid date' ? moment(this.filterForm.get('toDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('toDate')?.value;
 
@@ -374,7 +384,16 @@ export class ViewSuggestionComponent {
     this.suggestionService.line(event?.value?.ID).subscribe(res => {
       if (res?.Status == 1) {
         this.addSuggestionForm.get('line')?.enable();
-        this.line = res?.result
+        this.line = res?.result;
+        if (event?.value?.ID == 1 || event?.value?.ID == 2) {
+          this.hideZone = false;
+          this.addSuggestionForm.get('zone')?.setValidators(Validators.required);
+          this.addSuggestionForm.get('zone')?.updateValueAndValidity();
+        } else {
+          this.hideZone = true;
+          this.addSuggestionForm.get('zone')?.clearValidators();
+          this.addSuggestionForm.get('zone')?.updateValueAndValidity();
+        }
       }
       this.showLoader = false;
     })
@@ -417,16 +436,18 @@ export class ViewSuggestionComponent {
   }
 
   suggestionSelect(suggestion: any, index: any) {
-    this.viewSuggestionForm.reset();
+    this.viewSuggestionForm.clearValidators();
     this.viewSuggestionForm.updateValueAndValidity();
+    this.viewSuggestionForm.reset();
 
     this.selectedSuggestionIndex = index;
-    if(this.suggestionId != suggestion?.ID) this.getSuggestionDetail(suggestion?.ID);
+    if (this.suggestionId != suggestion?.ID) this.getSuggestionDetail(suggestion?.ID);
   }
 
   getSuggestionDetail(sugId: any) {
-    this.viewSuggestionForm.reset();
+    this.viewSuggestionForm.clearValidators();
     this.viewSuggestionForm.updateValueAndValidity();
+    this.viewSuggestionForm.reset();
 
     this.showLoader = true;
     // sugId = 64// temp
@@ -438,6 +459,16 @@ export class ViewSuggestionComponent {
         this.showLoader = false;
         console.log(this.selectedSuggestion)
         this.toggleStager(res?.result);
+        // *Implementation in stage 2
+        if (res?.Department == 'ME') {
+          this.implementationList = [{ id: 'S', value: 'Self' }, { id: 'M', value: 'Maintenance' }]
+        } else if (res?.Department == 'Maintenance') {
+          this.implementationList = [{ id: 'S', value: 'Self' }, { id: 'ME', value: 'ME' }]
+        } else {
+          [{ id: 'S', value: 'Self' }, { id: 'ME', value: 'ME' }, { id: 'M', value: 'Maintenance' }];
+        }
+
+        // Implementation in stage 2*
       }
     })
   }
@@ -450,15 +481,15 @@ export class ViewSuggestionComponent {
         LoginID: this.loginId,
         ApprovalStatus: 'Approved',
         RejectReason: this.viewSuggestionForm.controls['sc'].get('rejectionRemarks')?.value
-      } 
+      }
       this.suggestionService.updateStage(1, payload).subscribe(res => {
         if (res?.Status == 1) {
           this.selectedSuggestion.s1.S1Evaluator = res?.result?.Evaluator;
           this.getSuggestionDetail(this.suggestionId);
           // this.toggleStager(res?.result);
           this.openToaster(res?.RespMsg, 5000, true);
-          console.log(res) 
-        } else if(res?.Status == 0) {
+          console.log(res)
+        } else if (res?.Status == 0) {
           this.openToaster(res?.result, 5000, true);
         }
         this.showLoader = false;
@@ -471,7 +502,10 @@ export class ViewSuggestionComponent {
         LoginID: this.loginId,
         Category: this.viewSuggestionForm.controls['dl'].get('category')?.value,
         Implementation: this.viewSuggestionForm.controls['dl'].get('implementation')?.value,
-        SuggestionTitle: this.viewSuggestionForm.controls['dl'].get('editSuggestion')?.value,
+        Title: this.viewSuggestionForm.controls['dl'].get('editSuggestion')?.value,
+        Issue: this.viewSuggestionForm.controls['dl'].get('editIssue')?.value,
+        Idea: this.viewSuggestionForm.controls['dl'].get('editIdea')?.value,
+        Remarks: this.viewSuggestionForm.controls['dl'].get('editRemarks')?.value,
         BeforePhotoFileName: fileName
       }
       this.suggestionService.fileUpload(this.fileDetail, fileName).subscribe(fileResp => {
@@ -484,12 +518,12 @@ export class ViewSuggestionComponent {
               this.getSuggestionDetail(this.suggestionId);
               // this.toggleStager(res?.result);
               this.openToaster(res?.RespMsg, 5000, true);
-              console.log(res) 
-            } else if(res?.Status == 0) {
+              console.log(res)
+            } else if (res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
             this.showLoader = false;
-          }) 
+          })
         }
       });
     } else if (stage == 'S3' && this.viewSuggestionForm.controls['im'].status == 'VALID') {
@@ -502,15 +536,15 @@ export class ViewSuggestionComponent {
         TargetDate: targetDate
       }
       this.suggestionService.updateStage(3, payload).subscribe(res => {
-            if (res?.Status == 1) {
-              this.selectedSuggestion.s3.S3Evaluator = res?.result?.Evaluator;
-              this.getSuggestionDetail(this.suggestionId);
-              // this.toggleStager(res?.result);
-              this.openToaster(res?.RespMsg, 5000, true);
-            } else if(res?.Status == 0) {
-              this.openToaster(res?.result, 5000, true);
-            }
-            this.showLoader = false;
+        if (res?.Status == 1) {
+          this.selectedSuggestion.s3.S3Evaluator = res?.result?.Evaluator;
+          this.getSuggestionDetail(this.suggestionId);
+          // this.toggleStager(res?.result);
+          this.openToaster(res?.RespMsg, 5000, true);
+        } else if (res?.Status == 0) {
+          this.openToaster(res?.result, 5000, true);
+        }
+        this.showLoader = false;
       })
     } else if (stage == 'S4' && this.viewSuggestionForm.controls['pi'].status == 'VALID') {
       const fileExtension = this.fileDetail?.type?.split('/')[1];
@@ -530,11 +564,11 @@ export class ViewSuggestionComponent {
               this.getSuggestionDetail(this.suggestionId);
               // this.toggleStager(res?.result);
               this.openToaster(res?.RespMsg, 5000, true);
-            } else if(res?.Status == 0) {
+            } else if (res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
             this.showLoader = false;
-          }) 
+          })
         }
       });
     } else if (stage == 'S5' && this.viewSuggestionForm.controls['fi'].status == 'VALID') {
@@ -544,15 +578,15 @@ export class ViewSuggestionComponent {
         ActualCostSavings: this.viewSuggestionForm.controls['fi'].get('costSavings')?.value,
       }
       this.suggestionService.updateStage(5, payload).subscribe(res => {
-            if (res?.Status == 1) {
-              this.selectedSuggestion.s5.S5Evaluator = res?.result?.Evaluator;
-              this.getSuggestionDetail(this.suggestionId);
-              // this.toggleStager(res?.result);
-              this.openToaster(res?.RespMsg, 5000, true);
-            } else if(res?.Status == 0) {
-              this.openToaster(res?.result, 5000, true);
-            }
-            this.showLoader = false;
+        if (res?.Status == 1) {
+          this.selectedSuggestion.s5.S5Evaluator = res?.result?.Evaluator;
+          this.getSuggestionDetail(this.suggestionId);
+          // this.toggleStager(res?.result);
+          this.openToaster(res?.RespMsg, 5000, true);
+        } else if (res?.Status == 0) {
+          this.openToaster(res?.result, 5000, true);
+        }
+        this.showLoader = false;
       })
     } else if (stage == 'S6' && this.viewSuggestionForm.controls['ce'].status == 'VALID') {
       let payload = {
@@ -562,15 +596,15 @@ export class ViewSuggestionComponent {
         Comment: this.viewSuggestionForm.controls['ce'].get('comment')?.value
       }
       this.suggestionService.updateStage(6, payload).subscribe(res => {
-            if (res?.Status == 1) {
-              this.selectedSuggestion.s6.S6Evaluator = res?.result?.Evaluator;
-              this.getSuggestionDetail(this.suggestionId);
-              // this.toggleStager(res?.result);
-              this.openToaster(res?.RespMsg, 5000, true);
-            } else if(res?.Status == 0) {
-              this.openToaster(res?.result, 5000, true);
-            }
-            this.showLoader = false;
+        if (res?.Status == 1) {
+          this.selectedSuggestion.s6.S6Evaluator = res?.result?.Evaluator;
+          this.getSuggestionDetail(this.suggestionId);
+          // this.toggleStager(res?.result);
+          this.openToaster(res?.RespMsg, 5000, true);
+        } else if (res?.Status == 0) {
+          this.openToaster(res?.result, 5000, true);
+        }
+        this.showLoader = false;
       })
     } else if (stage == 'S7' && this.viewSuggestionForm.controls['hr'].status == 'VALID') {
       const fileExtension = this.fileDetail?.type?.split('/')[1];
@@ -578,6 +612,7 @@ export class ViewSuggestionComponent {
       let payload = {
         SugID: this.suggestionId,
         LoginID: this.loginId,
+        CreditedAmount: this.viewSuggestionForm.controls['hr'].get('creditedAmount')?.value,
         EmpPhotoName: fileName
       }
       this.suggestionService.fileUpload(this.fileDetail, fileName).subscribe(fileResp => {
@@ -587,18 +622,18 @@ export class ViewSuggestionComponent {
               this.selectedSuggestion.s7.S7Evaluator = res?.result?.Evaluator;
               this.getSuggestionDetail(this.suggestionId);
               this.openToaster(res?.RespMsg, 5000, true);
-            } else if(res?.Status == 0) {
+            } else if (res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
             this.showLoader = false;
-          }) 
+          })
         }
       });
     } else {
       this.openToaster('Please enter proper values and then proceed!', 5000, true);
       this.showLoader = false;
     }
-    
+
   }
 
   rejectStage(stage: string) {
@@ -616,7 +651,7 @@ export class ViewSuggestionComponent {
           this.getSuggestionDetail(this.suggestionId);
           // this.toggleStager(res?.result);
           this.openToaster(res?.RespMsg, 5000, true);
-        } else if(res?.Status == 0) {
+        } else if (res?.Status == 0) {
           this.openToaster(res?.result, 5000, true);
         }
         this.showLoader = false;
@@ -644,13 +679,13 @@ export class ViewSuggestionComponent {
 
   toggleStager(value: any) {
     this.detailTree = [
-      {s1s: value?.S1Status, s1c: value?.S1Control},
-      {s2s: value?.S2Status, s2c: value?.S2Control},
-      {s3s: value?.S3Status, s3c: value?.S3Control},
-      {s4s: value?.S4Status, s4c: value?.S4Control},
-      {s5s: value?.S5Status, s5c: value?.S5Control},
-      {s6s: value?.S6Status, s6c: value?.S6Control},
-      {s7s: value?.S7Status, s7c: value?.S7Control}
+      { s1s: value?.S1Status, s1c: value?.S1Control },
+      { s2s: value?.S2Status, s2c: value?.S2Control },
+      { s3s: value?.S3Status, s3c: value?.S3Control },
+      { s4s: value?.S4Status, s4c: value?.S4Control },
+      { s5s: value?.S5Status, s5c: value?.S5Control },
+      { s6s: value?.S6Status, s6c: value?.S6Control },
+      { s7s: value?.S7Status, s7c: value?.S7Control }
     ]
 
     // Stage 1
@@ -659,7 +694,10 @@ export class ViewSuggestionComponent {
     this.detailTree[0]?.s1c == 'Disable' ? this.viewSuggestionForm.controls['sc'].disable() : this.viewSuggestionForm.controls['sc'].enable();
 
     // Stage 2
-    this.viewSuggestionForm?.get('dl.editSuggestion')?.setValue(value?.s2?.S2SuggestionTitle);
+    this.viewSuggestionForm?.get('dl.editSuggestion')?.setValue(value?.s2?.S2Title);
+    this.viewSuggestionForm?.get('dl.editIssue')?.setValue(value?.s2?.S2Issue);
+    this.viewSuggestionForm?.get('dl.editIdea')?.setValue(value?.s2?.S2Idea);
+    this.viewSuggestionForm?.get('dl.editRemarks')?.setValue(value?.s2?.S2Remarks);
     this.viewSuggestionForm?.get('dl.implementation')?.setValue(value?.s2?.S2Implementation);
     this.viewSuggestionForm?.get('dl.category')?.setValue(value?.s2?.S2Category);
     this.viewSuggestionForm?.get('dl.beforeImgUpload')?.setValue(value?.s2?.S2BeforePhotoName);
@@ -693,6 +731,7 @@ export class ViewSuggestionComponent {
     // Stage 7
     this.viewSuggestionForm?.get('hr.paymentCredited')?.setValue(value?.s7?.S7PaymentCredited);
     this.viewSuggestionForm?.get('hr.imgUpload')?.setValue(value?.s7?.S7EmpPhotoName);
+    this.viewSuggestionForm?.get('hr.creditedAmount')?.setValue(value?.s7?.S7CreditedAmount);
     this.detailTree[6]?.s7c == 'Disable' ? this.viewSuggestionForm.controls['hr'].disable() : this.viewSuggestionForm.controls['hr'].enable();
 
     // *Form control validation check
@@ -704,10 +743,16 @@ export class ViewSuggestionComponent {
 
     if (this.detailTree[1]?.s2s == 'Show') {
       this.viewSuggestionForm?.get('dl.editSuggestion')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('dl.editIssue')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('dl.editIdea')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('dl.editRemarks')?.setValidators(Validators.required);
       this.viewSuggestionForm?.get('dl.implementation')?.setValidators(Validators.required);
       this.viewSuggestionForm?.get('dl.category')?.setValidators(Validators.required);
       this.viewSuggestionForm?.get('dl.beforeImgUpload')?.setValidators(Validators.required);
       this.viewSuggestionForm?.get('dl.editSuggestion')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('dl.editIssue')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('dl.editIdea')?.updateValueAndValidity();
+      this.viewSuggestionForm?.get('dl.editRemarks')?.updateValueAndValidity();
       this.viewSuggestionForm?.get('dl.implementation')?.updateValueAndValidity();
       this.viewSuggestionForm?.get('dl.category')?.updateValueAndValidity();
       this.viewSuggestionForm?.get('dl.beforeImgUpload')?.updateValueAndValidity();
@@ -740,6 +785,8 @@ export class ViewSuggestionComponent {
     }
 
     if (this.detailTree[6]?.s7s == 'Show') {
+      this.viewSuggestionForm?.get('hr.creditedAmount')?.setValidators(Validators.required);
+      this.viewSuggestionForm?.get('hr.creditedAmount')?.updateValueAndValidity();
       this.viewSuggestionForm?.get('hr.imgUpload')?.setValidators(Validators.required);
       this.viewSuggestionForm?.get('hr.imgUpload')?.updateValueAndValidity();
     }
@@ -749,7 +796,7 @@ export class ViewSuggestionComponent {
     // this.viewSuggestionForm.reset(this.viewSuggestionForm.value);
 
     // Form control validation check*
-    
+
     // Mat expansional panel open
     this.indexExpanded = this.detailTree[0]?.s1c == 'Enable' ? 1 : this.detailTree[1]?.s2c == 'Enable' ? 2 : this.detailTree[2]?.s3c == 'Enable' ? 3 : this.detailTree[3]?.s4c == 'Enable' ? 4 : this.detailTree[4]?.s5c == 'Enable' ? 5 : this.detailTree[5]?.s6c == 'Enable' ? 6 : 7;
   }
@@ -759,7 +806,7 @@ export class ViewSuggestionComponent {
     const fileSize = Math.round(file?.size / 1024);
     if (fileSize >= 5000) {
       this.openToaster('Please upload file size in less than 5MB', 10000, true);
-      return; 
+      return;
     }
     if (type == 'dl') {
       this.fileDetail = file;
@@ -785,7 +832,7 @@ export class ViewSuggestionComponent {
         setTimeout(() => {
           this.showLoader = false;
           let dialogRef = this.dialog.open(this.imageViewerDialog);
-          dialogRef.afterClosed().subscribe(result => {})
+          dialogRef.afterClosed().subscribe(result => { })
         }, 3000);
       } else {
         this.openToaster('No file to display', 3000, true);
@@ -800,7 +847,7 @@ export class ViewSuggestionComponent {
         setTimeout(() => {
           this.showLoader = false;
           let dialogRef = this.dialog.open(this.imageViewerDialog);
-          dialogRef.afterClosed().subscribe(result => {})
+          dialogRef.afterClosed().subscribe(result => { })
         }, 3000);
       } else {
         this.openToaster('No file to display', 3000, true);
@@ -815,7 +862,7 @@ export class ViewSuggestionComponent {
         setTimeout(() => {
           this.showLoader = false;
           let dialogRef = this.dialog.open(this.imageViewerDialog);
-          dialogRef.afterClosed().subscribe(result => {})
+          dialogRef.afterClosed().subscribe(result => { })
         }, 3000);
       } else {
         this.openToaster('No file to display', 3000, true);
@@ -824,7 +871,7 @@ export class ViewSuggestionComponent {
   }
 
   onScrollLoadList() {
-    const nativeElement= this.listView.nativeElement
+    const nativeElement = this.listView.nativeElement
     console.log(this.listView)
 
     if (nativeElement.clientHeight + Math.round(nativeElement.scrollTop) === nativeElement.scrollHeight && this.suggestionList?.length !== this.totalListCount) {
@@ -836,7 +883,7 @@ export class ViewSuggestionComponent {
       this.pageIndex += 1;
     }
   }
-  
+
   scrollToTop(el: any) {
     const duration = 600;
     const interval = 5;
@@ -847,4 +894,11 @@ export class ViewSuggestionComponent {
       takeWhile(val => val > 0)).subscribe();
   }
 
- }
+  logOut() {
+    // setTimeout(() => {
+    // this.router.navigate(['login']);
+    // sessionStorage.clear();
+    // }, 1000);
+  }
+
+}

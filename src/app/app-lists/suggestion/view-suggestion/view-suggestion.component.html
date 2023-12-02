@@ -46,9 +46,9 @@
                   <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
                     {{ food.viewValue }}
                   </mat-option> -->
-                  <mat-option value="1">Value 1</mat-option>
-                  <mat-option value="2">Value 2</mat-option>
-                  <mat-option value="3">Value 3</mat-option>
+                  <mat-option value="Implemented">Implemented</mat-option>
+                  <mat-option value="Pending">Pending</mat-option>
+                  <mat-option value="Rejected">Rejected</mat-option>
                 </mat-select>
 
                 <!-- <mat-error
@@ -62,9 +62,11 @@
                   <!-- <mat-option *ngFor="let food of foods" [value]="food.value">
                     {{ food.viewValue }}
                   </mat-option> -->
-                  <mat-option value="1">Value 1</mat-option>
-                  <mat-option value="2">Value 2</mat-option>
-                  <mat-option value="3">Value 3</mat-option>
+                  <mat-option value="A+">A+</mat-option>
+                  <mat-option value="A">A</mat-option>
+                  <mat-option value="B">B</mat-option>
+                  <mat-option value="C">C</mat-option>
+                  <mat-option value="D">D</mat-option>
                 </mat-select>
                 <!-- <mat-error
                   *ngIf="filterForm.controls?.['grade']?.touched && filterForm.controls?.['grade']?.errors?.['required']">
@@ -95,19 +97,19 @@
         <mat-card-content>
           <div class="filterCard">
             <div class="cardButton" (click)="cardFilterChange('All')" [ngClass]="filterType == 'All' ? 'active' : ''">
-              <span id="noSpan">{{ filterType == 'All' ? suggestionList?.length : '-' }}</span>
+              <span id="noSpan">{{ suggestionListCount?.SugTotalCount }}</span>
               <span id="textSpan">All Suggestions</span>
             </div>
 
             <div class="cardButton" (click)="cardFilterChange('My')" [ngClass]="filterType == 'My' ? 'active' : ''">
-              <span id="noSpan"> {{ filterType == 'My' ? suggestionList?.length : '-' }}</span>
+              <span id="noSpan"> {{ suggestionListCount?.MyTotalCount }}</span>
               <span id="textSpan">My Suggestions</span>
             </div>
           </div>
 
           <div class="filterCard">
           <div class="cardButton" (click)="cardFilterChange('Pen')" [ngClass]="filterType == 'Pen' ? 'active' : ''">
-            <span id="noSpan">{{ filterType == 'Pen' ? suggestionList?.length : '-' }}</span>
+            <span id="noSpan">{{ suggestionListCount?.MyPendingCount }}</span>
             <span id="textSpan">My Pending Suggestions</span>
           </div>
           </div>
@@ -154,7 +156,7 @@
                   <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Department:</mat-label><p [title]="suggestion?.Department"> {{ suggestion?.Department }} </p></span>
                   <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Line:</mat-label> 
                     <p [title]="suggestion?.Line">{{ suggestion?.Line }}</p></span>
-                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Zone:</mat-label> <p [title]="suggestion?.Zone">{{ suggestion?.Zone }}</p></span>
+                  <span id="iconLabel" *ngIf="suggestion?.Zone != ''"><mat-icon>donut_large</mat-icon><mat-label>Zone:</mat-label> <p [title]="suggestion?.Zone">{{ suggestion?.Zone }}</p></span>
                 </div>
               </div>
               <div class="detail4">
@@ -184,7 +186,10 @@
     <!-- <h1>Add suggestion & suggestion tracker here</h1> -->
     <!-- Add Suggestion section starts -->
     <div class="addSuggestion" *ngIf="showAddSuggestion">
-      <div class="headerText"><p>Create Suggestion:</p></div>
+      <div class="headerTextContainer">
+        <div class="headerText"><p>Create Suggestion:</p></div>
+        <div class="headerTextUser" (click)="logOut()"><p>Welcome {{ userDetails?.EmpName }}, {{ userDetails?.EmpID }}</p></div>
+      </div>
       <div class="createSuggestionContainer" id="scrollBar">
       <mat-card>
         <mat-card-content>
@@ -218,7 +223,7 @@
             <!-- Row 2 -->
             <div class="flexItem">
               <mat-form-field class="flexItemLeft" floatLabel="always">
-                <mat-label>Employee Department</mat-label>
+                <mat-label>Department</mat-label>
                 <mat-select placeholder="Select your Department" formControlName="department" ngDefaultControl required (selectionChange)="departmentChange($event)">
                   <mat-option *ngFor="let dept of department" [value]="dept">
                     {{ dept?.Department }}
@@ -231,7 +236,7 @@
               </mat-form-field>
 
               <mat-form-field class="flexItemRight" floatLabel="always">
-                <mat-label>Employee Line</mat-label>
+                <mat-label>Line</mat-label>
                 <mat-select placeholder="Select your Line" formControlName="line" ngDefaultControl required (selectionChange)="lineChange($event)">
                   <mat-option *ngFor="let li of line" [value]="li">
                     {{ li?.Line }}
@@ -243,8 +248,8 @@
                 </mat-error>
               </mat-form-field>
 
-              <mat-form-field class="flexItemLeft" floatLabel="always">
-                <mat-label>Employee Zone</mat-label>
+              <mat-form-field class="flexItemLeft" floatLabel="always" *ngIf="!hideZone">
+                <mat-label>Zone</mat-label>
                 <mat-select placeholder="Select your Zone" formControlName="zone" ngDefaultControl (selectionChange)="zoneChange($event)">
                   <mat-option *ngFor="let zo of zone" [value]="zo">
                     {{ zo?.Zone }}
@@ -326,8 +331,10 @@
 
     <!-- View status section starts -->
     <div class="viewStatus" *ngIf="selectedSuggestion && !showAddSuggestion">
+      <div class="headerTextContainer">
       <div class="headerText"><p>View Suggestion:</p></div>
-
+      <div class="headerTextUser" (click)="logOut()"><p>Welcome {{ userDetails?.EmpName }}, {{ userDetails?.EmpID }}</p></div>
+    </div>
       <div class="viewSuggestionDetails">
         <mat-card>
           <mat-card-content>
@@ -358,7 +365,7 @@
                   <span id="iconLabel"><mat-icon>card_travel</mat-icon><mat-label>Department:</mat-label><p [title]="selectedSuggestion?.Department"> {{ selectedSuggestion?.Department }} </p></span>
                   <span id="iconLabel"><mat-icon>explore</mat-icon><mat-label>Line:</mat-label> 
                     <p [title]="selectedSuggestion?.Line">{{ selectedSuggestion?.Line }}</p></span>
-                  <span id="iconLabel"><mat-icon>donut_large</mat-icon><mat-label>Zone:</mat-label> <p [title]="selectedSuggestion?.Zone">{{ selectedSuggestion?.Zone }}</p></span>
+                  <span id="iconLabel" *ngIf="selectedSuggestion?.Zone != ''"><mat-icon>donut_large</mat-icon><mat-label>Zone:</mat-label> <p [title]="selectedSuggestion?.Zone">{{ selectedSuggestion?.Zone }}</p></span>
                 </div>
               </div>
               <div class="detail4">
@@ -403,7 +410,7 @@
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS">
-                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s1?.S1Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s1?.S1Evaluator }}</mat-label>
+                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s1?.S1Evaluator != ''">Assigned to : {{ selectedSuggestion?.s1?.S1Evaluator }}</mat-label>
                   </div>
                   <div class="flexItemVS actionBtnVS"  *ngIf="selectedSuggestion?.s1?.S1CompletedStatus != 'Completed'">
                     <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s1?.S1CompletedStatus == 'NotCompleted' || selectedSuggestion?.s1?.S1ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['sc'].disabled || viewSuggestionForm.controls['sc'].invalid" (click)="approveStage('S1')">Approve</button>
@@ -430,24 +437,40 @@
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemLeft mr" floatLabel="always">
                       <mat-label>Edit Suggestion Title</mat-label>
-                      <input matInput type="text" placeholder="Edit Suggestion Title" minlength="2"
-                        maxlength="50" formControlName="editSuggestion">
+                      <!-- <input matInput type="text" placeholder="Edit Suggestion Title" minlength="2"
+                        maxlength="50" formControlName="editSuggestion"> -->
+                        <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Edit Suggestion Title" formControlName="editSuggestion" minlength="2" maxlength="50"></textarea>
                         <mat-error
                         *ngIf="viewSuggestionForm?.get('dl.editSuggestion')?.touched && viewSuggestionForm?.get('dl.editSuggestion')?.errors?.['required']">
                         Please enter Suggestion Title
                       </mat-error>
                     </mat-form-field>
                     <mat-form-field class="flexItemRight" floatLabel="always">
-                      <mat-label>Before photo upload</mat-label>
-                      <mat-toolbar>
-                        <input matInput placeholder="Upload image" formControlName="beforeImgUpload"/>
-                        <mat-icon>upload</mat-icon>
-                        <!-- <mat-icon (click)="openImageViewer('dl')">visibility</mat-icon> -->
-                      </mat-toolbar>
-                      <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'dl')"/>
-                      <mat-error *ngIf="viewSuggestionForm?.get('dl.beforeImgUpload')?.touched && viewSuggestionForm?.get('dl.beforeImgUpload')?.errors?.['required']">Please select Before Photo Uplaod</mat-error>
+                      <mat-label>Edit Suggestion Issue</mat-label>
+                        <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Edit Suggestion issue" formControlName="editIssue" minlength="2" maxlength="50"></textarea>
+                        <mat-error
+                        *ngIf="viewSuggestionForm?.get('dl.editIssue')?.touched && viewSuggestionForm?.get('dl.editIssue')?.errors?.['required']">
+                        Please enter Suggestion Issue
+                      </mat-error>
                     </mat-form-field>
-                    <mat-icon class="imageViewButton" [ngClass]="viewSuggestionForm?.get('dl.beforeImgUpload')?.value == '' ? 'disable' : ''"  (click)="openImageViewer('dl')" matTooltip="View File">visibility</mat-icon>
+                  </div>
+                  <div class="flexItemVS">
+                    <mat-form-field class="flexItemLeft mr" floatLabel="always">
+                      <mat-label>Edit Suggestion Idea</mat-label>
+                        <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Edit Suggestion Idea" formControlName="editIdea" minlength="2" maxlength="50"></textarea>
+                        <mat-error
+                        *ngIf="viewSuggestionForm?.get('dl.editIdea')?.touched && viewSuggestionForm?.get('dl.editIdea')?.errors?.['required']">
+                        Please enter Suggestion Idea
+                      </mat-error>
+                    </mat-form-field>
+                    <mat-form-field class="flexItemRight" floatLabel="always">
+                      <mat-label>Edit Suggestion Remarks</mat-label>
+                      <textarea matInput type="text" cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="1" cdkAutosizeMaxRows="2" placeholder="Edit Suggestion Remarks" formControlName="editRemarks" minlength="2" maxlength="50"></textarea>
+                      <mat-error
+                      *ngIf="viewSuggestionForm?.get('dl.editRemarks')?.touched && viewSuggestionForm?.get('dl.editRemarks')?.errors?.['required']">
+                      Please enter suggestion Remarks
+                    </mat-error>
+                    </mat-form-field>
                   </div>
                   <div class="flexItemVS">
                     <mat-form-field class="flexItemRight mr" floatLabel="always">
@@ -471,7 +494,20 @@
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS">
-                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s2?.S2Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s2?.S2Evaluator }}</mat-label>
+                    <mat-form-field class="flexItemRight" floatLabel="always">
+                      <mat-label>Before photo upload</mat-label>
+                      <mat-toolbar>
+                        <input matInput placeholder="Upload image" formControlName="beforeImgUpload"/>
+                        <mat-icon>upload</mat-icon>
+                        <!-- <mat-icon (click)="openImageViewer('dl')">visibility</mat-icon> -->
+                      </mat-toolbar>
+                      <input type="file" accept=".jpeg,.jpg,.png" id="fileInput" (change)="uploadFiles($event, 'dl')"/>
+                      <mat-error *ngIf="viewSuggestionForm?.get('dl.beforeImgUpload')?.touched && viewSuggestionForm?.get('dl.beforeImgUpload')?.errors?.['required']">Please select Before Photo Uplaod</mat-error>
+                    </mat-form-field>
+                    <mat-icon class="imageViewButton" [ngClass]="viewSuggestionForm?.get('dl.beforeImgUpload')?.value == '' ? 'disable' : ''"  (click)="openImageViewer('dl')" matTooltip="View File">visibility</mat-icon>
+                  </div>
+                  <div class="flexItemVS">
+                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s2?.S2Evaluator != ''">Assigned to : {{ selectedSuggestion?.s2?.S2Evaluator }}</mat-label>
                   </div>
                   <div class="flexItemVS actionBtn"  *ngIf="selectedSuggestion?.s2?.S2CompletedStatus != 'Completed'">
                     <button mat-raised-button color="primary" (click)="approveStage('S2')" [disabled]="viewSuggestionForm.controls['dl'].disabled || viewSuggestionForm.controls['dl'].invalid">Submit</button>
@@ -512,7 +548,7 @@
                     </mat-form-field>
                     </div>
                     <div class="flexItemVS">
-                      <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s3?.S3Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s3?.S3Evaluator }}</mat-label>
+                      <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s3?.S3Evaluator != ''">Assigned to : {{ selectedSuggestion?.s3?.S3Evaluator }}</mat-label>
                     </div>
                     <div class="flexItemVS actionBtn" *ngIf="selectedSuggestion?.s3?.S3CompletedStatus != 'Completed'">
                       <button mat-raised-button color="primary" *ngIf="selectedSuggestion?.s3?.S3CompletedStatus == 'NotCompleted' || selectedSuggestion?.s3?.S3ApprovalStatus == 'Approved'" [disabled]="viewSuggestionForm.controls['im'].disabled || viewSuggestionForm.controls['im'].invalid" (click)="approveStage('S3')">Approve</button>
@@ -568,7 +604,7 @@
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS labelText">
-                    <mat-label class="flexItemVsLabel mr" *ngIf="selectedSuggestion?.s4?.S4Evaluator != ''">Assigned to Evaluator: {{ selectedSuggestion?.s4?.S4Evaluator }}</mat-label>
+                    <mat-label class="flexItemVsLabel mr" *ngIf="selectedSuggestion?.s4?.S4Evaluator != ''">Assigned to : {{ selectedSuggestion?.s4?.S4Evaluator }}</mat-label>
                     <!-- <mat-label class="flexItemVsLabel">Assigned to Evaluator: Name</mat-label> -->
                   </div>
                   <div class="flexItemVS actionBtn">
@@ -600,7 +636,7 @@
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS labelText">
-                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s5?.S5Evaluator != ''">Submit to Evaluator: {{ selectedSuggestion?.s5?.S5Evaluator }}</mat-label>
+                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s5?.S5Evaluator != ''">Submit to : {{ selectedSuggestion?.s5?.S5Evaluator }}</mat-label>
                   </div>
                   <div class="flexItemVS"  *ngIf="selectedSuggestion?.s5?.S5CompletedStatus != 'Completed'">
                     <button mat-raised-button color="primary" (click)="approveStage('S5')" [disabled]="viewSuggestionForm.controls['fi'].disabled || viewSuggestionForm.controls['fi'].invalid">Submit</button>
@@ -641,7 +677,7 @@
                     </mat-form-field>
                   </div>
                   <div class="flexItemVS labelText">
-                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s6?.S6Evaluator != ''">Submit to Evaluator: {{ selectedSuggestion?.s6?.S6Evaluator }}</mat-label>
+                    <mat-label class="flexItemVsLabel" *ngIf="selectedSuggestion?.s6?.S6Evaluator != ''">Submit to : {{ selectedSuggestion?.s6?.S6Evaluator }}</mat-label>
                   </div>
                   <div class="flexItemVS labelText"  *ngIf="selectedSuggestion?.s6?.S6CompletedStatus != 'Completed'">
                     <button mat-raised-button color="primary" (click)="approveStage('S6')" [disabled]="viewSuggestionForm.controls['ce'].disabled || viewSuggestionForm.controls['ce'].invalid">Submit</button>
@@ -662,8 +698,16 @@
                   <mat-expansion-panel-header>
                     <mat-panel-title> HR Evaluator </mat-panel-title>
                   </mat-expansion-panel-header>
+                  
                   <div class="flexItemVS labelText">
                     <mat-label class="flexItemVsLabel pb" *ngIf="selectedSuggestion?.s7?.S7CompletedStatus == 'Completed'">Approved Date: {{ selectedSuggestion?.s7?.S7ApprovalDate }}</mat-label>
+
+                    <mat-form-field class="flexItemLeft pt" floatLabel="always">
+                      <mat-label>Credited Amount</mat-label>
+                      <input matInput type="text" placeholder="Enter Credited Amount" minlength="2"
+                        maxlength="50" formControlName="creditedAmount">
+                        <mat-error *ngIf="viewSuggestionForm?.get('hr.creditedAmount')?.touched && viewSuggestionForm?.get('hr.creditedAmount')?.errors?.['required']">Please enter Credited Amount</mat-error>
+                    </mat-form-field>
                   </div>
                   <!-- <div class="flexItemVS labelText">
                     <mat-form-field class="flexItemRight mr" floatLabel="always">
@@ -678,7 +722,8 @@
 
                     <button mat-raised-button color="primary">Payment Credited</button>
                   </div> -->
-                  <div class="flexItemVS labelText">
+
+                  <div class="flexItemRight">
                     <mat-form-field class="flexItemRight mr" floatLabel="always">
                     <mat-label>Employee Photo upload</mat-label>
                       <mat-toolbar>

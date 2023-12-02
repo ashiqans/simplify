@@ -20,6 +20,28 @@
   justify-content: flex-start;
   padding: 0 0.5em;
   // position: sticky;
+  // margin-top: 2em;
+}
+
+.headerTextContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.headerTextUser {
+  background: var(--main-color);
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-underline-offset: 0.5em;
+  text-decoration: none;
+  border-radius: 0.5em;
+  padding: 0.5em;
+  cursor: pointer;
+
+  p {
+    margin: auto;
+  }
 }
 
 .filterSection {
