@@ -83,22 +83,22 @@
     margin: 0 !important;
     padding: 0.5em !important;
   }
-  
-  .details {
-    display: flex !important;
-    flex-direction: column !important;
-    
-    li {
-      list-style: none;
-      font-weight: 500;
-    }
-  }
 
   mat-icon {
     margin-top: 0.4em;
     padding: 0.5em;
     cursor: pointer;
   } 
+}
+
+.details {
+  display: flex !important;
+  flex-direction: column !important;
+  
+  li {
+    list-style: none;
+    font-weight: 500;
+  }
 }
 
 .mat-mdc-dialog-actions {

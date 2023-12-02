@@ -188,7 +188,7 @@
     <div class="addSuggestion" *ngIf="showAddSuggestion">
       <div class="headerTextContainer">
         <div class="headerText"><p>Create Suggestion:</p></div>
-        <div class="headerTextUser" (click)="logOut()"><p>Welcome {{ userDetails?.EmpName }}, {{ userDetails?.EmpID }}</p></div>
+        <div class="headerTextUser" *ngIf="loginId != 0" (click)="openLogOutDialog()" title="click to logout from current session!"><p>Welcome {{ userDetails?.EmpName }}, {{ userDetails?.EmpID }}!</p></div>
       </div>
       <div class="createSuggestionContainer" id="scrollBar">
       <mat-card>
@@ -333,7 +333,7 @@
     <div class="viewStatus" *ngIf="selectedSuggestion && !showAddSuggestion">
       <div class="headerTextContainer">
       <div class="headerText"><p>View Suggestion:</p></div>
-      <div class="headerTextUser" (click)="logOut()"><p>Welcome {{ userDetails?.EmpName }}, {{ userDetails?.EmpID }}</p></div>
+      <div class="headerTextUser" *ngIf="loginId != 0" (click)="openLogOutDialog()" title="click to logout from current session!"><p>Welcome {{ userDetails?.EmpName }}, {{ userDetails?.EmpID }}!</p></div>
     </div>
       <div class="viewSuggestionDetails">
         <mat-card>
@@ -781,3 +781,24 @@
   </div>
   <!-- active board Section E -->
 </div>
+
+<!-- logOut modal starts-->
+<ng-template #logDialog>
+  <div class="dialogHeader">
+    <h1 mat-dialog-title>Log out</h1>
+    <mat-icon mat-button matDialogClose="yes">close</mat-icon>
+  </div>
+  <div mat-dialog-content>
+    <ul class="details">
+      <li>Employee Name: {{ userDetails?.EmpName }}</li>
+      <li>Employee ID: {{ userDetails?.EmpID }}</li>
+      <li>Department: {{ userDetails?.Department }}</li>
+    </ul>
+    <p>Are you sure that you want to log out?</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button color="primary" cdkFocusInitial mat-dialog-close="close">No</button>
+    <button mat-raised-button color="warn" (click)="logOut()" mat-dialog-close="close">Yes</button>
+  </div>
+</ng-template>
+<!-- logOut modal ends -->

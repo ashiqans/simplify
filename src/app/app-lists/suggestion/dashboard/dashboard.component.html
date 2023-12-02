@@ -1,5 +1,5 @@
 <app-loader *ngIf="showLoader"></app-loader>
-<div class="filterHeader" style="display: none;">
+<div class="filterHeader">
 <mat-card>
   <mat-card-content>
     <div class="filterSection">
@@ -24,7 +24,7 @@
 </mat-card>
 </div>
 
-<div class="chartContainer" id="scrollBar" style="display: none;">
+<div class="chartContainer" id="scrollBar">
   <div id="row1">
         <!-- Bar chart -->
         <div class="chart1">
@@ -32,10 +32,10 @@
             <mat-card-content>
               <!-- style="margin-top: 3em;" -->
               <canvas baseChart style="min-height: 300px"
-                    [data]="barChartData"
-                    [options]="barChartOptions"
-                    [plugins]="barChartPlugins"
-                    [legend]="barChartLegend"
+                    [data]="barChartData1"
+                    [options]="barChartOptions1"
+                    [plugins]="barChartPlugins1"
+                    [legend]="barChartLegend1"
                     [type]="'bar'">
               </canvas>
             </mat-card-content>
@@ -44,6 +44,23 @@
     
     <!-- pie chart -->
     <div class="chart2">
+      <mat-card>
+        <mat-card-content>
+          <canvas baseChart style="min-height: 300px"
+                    [data]="barChartData2"
+                    [options]="barChartOptions2"
+                    [plugins]="barChartPlugins2"
+                    [legend]="barChartLegend2"
+                    [type]="'bar'">
+              </canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div id="row2">
+    <!-- Pie chart -->
+    <div class="chart3">
       <mat-card>
         <mat-card-content>
           <canvas baseChart
@@ -57,11 +74,9 @@
         </mat-card-content>
       </mat-card>
     </div>
-  </div>
 
-  <div id="row2">
     <!-- Pie chart -->
-    <div class="chart3">
+    <div class="chart4">
       <mat-card>
         <mat-card-content>
           <canvas baseChart
@@ -71,22 +86,6 @@
             [options]="pieChartOptions2"
             [plugins]="pieChartPlugins2"
             [legend]="pieChartLegend2">
-          </canvas>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <!-- Pie chart -->
-    <div class="chart4">
-      <mat-card>
-        <mat-card-content>
-          <canvas baseChart
-            [type]="'pie'"
-            [datasets]="pieChartDatasets3"
-            [labels]="pieChartLabels3"
-            [options]="pieChartOptions3"
-            [plugins]="pieChartPlugins3"
-            [legend]="pieChartLegend3">
           </canvas>
         </mat-card-content>
       </mat-card>

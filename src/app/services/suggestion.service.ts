@@ -23,8 +23,8 @@ export class SuggestionService {
   constructor(private http: HttpClient) { }
 
   getSuggestionList(payload: any, pageIndex: any, pageSize: any): Observable<any> {
-    // return this.http.post(`${this.baseURL}/SuggestionList/${pageIndex}/${pageSize}`, payload);
-    return this.http.post(`${this.baseURL}/SuggestionList`, payload);
+    return this.http.post(`${this.baseURL}/SuggestionListPagination`, payload);
+    // return this.http.post(`${this.baseURL}/SuggestionList`, payload);
   }
 
   createSuggestion(payload: any): Observable<any> {
@@ -65,20 +65,20 @@ export class SuggestionService {
     return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
   }
 
-  getChart1(fileName: string) {
-    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  getDepartmentChart(payload: any) {
+    return this.http.post<any>(`${this.baseURL}/DepartmentChart`, payload);
   }
 
-  getChart2(fileName: string) {
-    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  getLineChart(payload: any) {
+    return this.http.post<any>(`${this.baseURL}/LineChart`, payload);
   }
 
-  getChart3(fileName: string) {
-    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  getCategoryChart(payload: any) {
+    return this.http.post<any>(`${this.baseURL}/SugestionsCountChart`, payload);
   }
 
-  getChart4(fileName: string) {
-    return this.http.get<any>(`${this.baseURL}/images/${fileName}`);
+  getSuggestionChart(payload: any) {
+    return this.http.post<any>(`${this.baseURL}/SugestionsCountChart`, payload);
   }
 
   setAuthorBook(books: []) {

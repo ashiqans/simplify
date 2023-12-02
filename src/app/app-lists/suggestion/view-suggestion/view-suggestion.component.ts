@@ -10,6 +10,8 @@ import { SnackbarComponent } from '../../../snackbar/snackbar.component';
 import { interval as observableInterval } from "rxjs";
 import { takeWhile, scan, tap } from "rxjs/operators";
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Router } from '@angular/router';
+import { AuthenticationService } from 'src/app/services/authentication.service';
 
 class ImageSnippet {
   constructor(public src: string, public file: File) { }
@@ -45,6 +47,7 @@ export const MY_FORMATS = {
 export class ViewSuggestionComponent {
   @ViewChild('imageViewerDialog') imageViewerDialog!: TemplateRef<any>;
   @ViewChild('listView', { static: false }) public listView!: ElementRef;
+  @ViewChild('logDialog') logDialog!: TemplateRef<any>;
   filterForm!: FormGroup;
   addSuggestionForm!: FormGroup;
   viewSuggestionForm!: FormGroup;
@@ -86,7 +89,7 @@ export class ViewSuggestionComponent {
   minDate: Date = new Date()
   maxDate: Date = new Date()
   totalListCount = 0;
-  pageIndex = 0;
+  pageIndex = 1;
   pageSize = 10;
   mainFilterApplied = false;
   hideZone = false;
@@ -96,7 +99,9 @@ export class ViewSuggestionComponent {
     private datePipe: DatePipe,
     private suggestionService: SuggestionService,
     private snackBar: MatSnackBar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private router: Router,
+    private authService: AuthenticationService,
   ) {
     this.suggestionFilterMain();
     this.viewSuggestionTimeline();
@@ -108,7 +113,7 @@ export class ViewSuggestionComponent {
   ngOnInit(): void {
     // this.openSnackBar('This is a test message for snackbar')
     this.getSuggestionList();
-    console.log(this.viewSuggestionForm)
+    // console.log(this.viewSuggestionForm)
     // this.hrFormControl = this.viewSuggestionForm.controls['hr'];
     this.viewSuggestionControls = [
       this.viewSuggestionForm.controls['sc'],
@@ -202,21 +207,23 @@ export class ViewSuggestionComponent {
         winnersBoard: ''
       })
     })
-    console.log(this.viewSuggestionForm.controls['sc'].get('rejectionRemarks'))
+    // console.log(this.viewSuggestionForm.controls['sc'].get('rejectionRemarks'))
   }
 
   getSuggestionList(pageIndex?: any, pageSize?: any) {
+    // this.suggestionListCount ? this.suggestionListCount?.TotalPageNumber
     let payload = {
-
+      pagenumber: pageIndex
     }
     this.showLoader = true;
     this.suggestionService.getSuggestionList(payload, pageIndex, pageSize).subscribe(res => {
       if (res?.Status == 1) {
-        this.suggestionListCount = res
-        this.suggestionList = res?.result;
+        this.suggestionListCount = res;
+        // this.suggestionList = res?.result;
 
-        // this.suggestionList = [this.suggestionList, ...res?.result];
-        // this.totalListCount = res?.totalListCount;
+
+        this.suggestionList = [...this.suggestionList, ...res?.result];
+        this.totalListCount = res?.SugTotalCount;
 
         this.openToaster('Suggestion List fetched successfully!', 3000, true);
         this.selectedSuggestionIndex = 0;
@@ -290,8 +297,10 @@ export class ViewSuggestionComponent {
   }
 
   applyFilter() {
-    // let from = moment(this.filterForm.get('fromDate')?.value);
-    // console.log(from.format('DD-MM-YYYY'))
+    if (!this.mainFilterApplied) {
+      this.pageIndex = 1;
+      this.suggestionList = [];
+    }
     this.showLoader = true;
     this.mainFilterApplied = true;
 
@@ -305,15 +314,17 @@ export class ViewSuggestionComponent {
       Status: this.filterForm.get('status')?.value,
       Grade: this.filterForm.get('grade')?.value,
       FromDate: fromDate,
-      ToDate: toDate
+      ToDate: toDate,
+      pagenumber: this.pageIndex
     }
 
     this.suggestionService.getSuggestionList(mainFilterPayload, this.pageIndex, this.pageSize).subscribe(res => {
       if (res?.Status == 1) {
-        this.suggestionList = [...res?.result];
+        this.suggestionListCount = res;
+        // this.suggestionList = [...res?.result];
 
-        // this.suggestionList = [this.suggestionList, ...res?.result];
-        // this.totalListCount = res?.totalListCount;
+        this.suggestionList = [...this.suggestionList, ...res?.result];
+        this.totalListCount = res?.SugTotalCount;
 
         // this.filterForm.reset();
         mainFilterPayload = {}
@@ -359,6 +370,7 @@ export class ViewSuggestionComponent {
     this.showLoader = true;
     this.suggestionService.getSuggestionList(payload, this.pageIndex, this.pageSize).subscribe(res => {
       if (res?.Status == 1) {
+        this.suggestionListCount = res;
         this.suggestionList = res?.result;
 
         // this.suggestionList = [this.suggestionList, ...res?.result];
@@ -366,6 +378,10 @@ export class ViewSuggestionComponent {
 
         this.openToaster('Suggestion List fetched successfully!', 3000, true);
         this.selectedSuggestionIndex = 0;
+        // if (this.suggestionId == this.suggestionList[0]?.ID) {
+        //   this.showLoader = false;
+        //   return;
+        // }
         this.getSuggestionDetail(this.suggestionList[0]?.ID)
       } else if (res?.Status == 0) {
         this.showLoader = false;
@@ -457,7 +473,7 @@ export class ViewSuggestionComponent {
       if (res?.Status == 1) {
         this.selectedSuggestion = res?.result;
         this.showLoader = false;
-        console.log(this.selectedSuggestion)
+        // console.log(this.selectedSuggestion)
         this.toggleStager(res?.result);
         // *Implementation in stage 2
         if (res?.Department == 'ME') {
@@ -488,7 +504,7 @@ export class ViewSuggestionComponent {
           this.getSuggestionDetail(this.suggestionId);
           // this.toggleStager(res?.result);
           this.openToaster(res?.RespMsg, 5000, true);
-          console.log(res)
+          // console.log(res)
         } else if (res?.Status == 0) {
           this.openToaster(res?.result, 5000, true);
         }
@@ -518,7 +534,7 @@ export class ViewSuggestionComponent {
               this.getSuggestionDetail(this.suggestionId);
               // this.toggleStager(res?.result);
               this.openToaster(res?.RespMsg, 5000, true);
-              console.log(res)
+              // console.log(res)
             } else if (res?.Status == 0) {
               this.openToaster(res?.result, 5000, true);
             }
@@ -872,15 +888,15 @@ export class ViewSuggestionComponent {
 
   onScrollLoadList() {
     const nativeElement = this.listView.nativeElement
-    console.log(this.listView)
-
-    if (nativeElement.clientHeight + Math.round(nativeElement.scrollTop) === nativeElement.scrollHeight && this.suggestionList?.length !== this.totalListCount) {
+    if (nativeElement.clientHeight + Math.round(nativeElement.scrollTop) >= (nativeElement.scrollHeight - 1) && this.suggestionList?.length !== this.totalListCount && this.pageIndex != this.suggestionListCount?.TotalPageNumber) {
+      // if (this.pageIndex == this.suggestionListCount?.TotalPageNumber) return;
       if (!this.mainFilterApplied) {
+        this.pageIndex += 1;
         this.getSuggestionList(this.pageIndex, this.pageSize);
       } else {
+        this.pageIndex += 1;
         this.applyFilter();
       }
-      this.pageIndex += 1;
     }
   }
 
@@ -895,10 +911,21 @@ export class ViewSuggestionComponent {
   }
 
   logOut() {
-    // setTimeout(() => {
-    // this.router.navigate(['login']);
-    // sessionStorage.clear();
-    // }, 1000);
+    this.showLoader = true;
+    setTimeout(() => {
+      this.showLoader = false;
+    this.router.navigate(['login']);
+    sessionStorage.clear();
+    }, 1000);
+  }
+
+  openLogOutDialog() {
+    this.userDetails = sessionStorage.getItem('LogInDetails') ? sessionStorage.getItem('LogInDetails') : null;
+    this.userDetails = this.userDetails ? JSON.parse(this.userDetails) : null;
+    let dialogRef = this.dialog.open(this.logDialog, {
+      data: {name: 'testy', animal: 'elephant'},
+    });
+    dialogRef.afterClosed().subscribe(result => { });
   }
 
 }

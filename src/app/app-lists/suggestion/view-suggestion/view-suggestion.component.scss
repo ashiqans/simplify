@@ -813,3 +813,34 @@ display:block !important;
 
 
 // Timeline style ends
+
+.dialogHeader {
+  display: flex;
+  justify-content: space-between;
+  height: 3em;
+
+  .h2 {
+    margin: 0 !important;
+    padding: 0.5em !important;
+  }
+
+  mat-icon {
+    margin-top: 0.4em;
+    padding: 0.5em;
+    cursor: pointer;
+  } 
+}
+
+.details {
+  display: flex !important;
+  flex-direction: column !important;
+  
+  li {
+    list-style: none;
+    font-weight: 500;
+  }
+}
+
+.mat-mdc-dialog-actions {
+  justify-content: end;
+}
