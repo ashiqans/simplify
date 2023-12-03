@@ -844,3 +844,21 @@ display:block !important;
 .mat-mdc-dialog-actions {
   justify-content: end;
 }
+
+.complete {
+  background-color: var(--complete) !important;
+  padding: 0.5em 1em;
+  border-radius: 1em;
+}
+
+.reject {
+  background-color: var(--reject) !important;
+  padding: 0.5em 1em;
+  border-radius: 1em;
+}
+
+.pending {
+  background-color: var(--pending) !important;
+  padding: 0.5em 1em;
+  border-radius: 1em;
+}

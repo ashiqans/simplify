@@ -74,7 +74,7 @@ export class SuggestionService {
   }
 
   getCategoryChart(payload: any) {
-    return this.http.post<any>(`${this.baseURL}/SugestionsCountChart`, payload);
+    return this.http.post<any>(`${this.baseURL}/CategoryChart`, payload);
   }
 
   getSuggestionChart(payload: any) {

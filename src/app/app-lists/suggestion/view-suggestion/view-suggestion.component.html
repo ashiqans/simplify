@@ -161,7 +161,10 @@
               </div>
               <div class="detail4">
                 <span id="iconLabel"><mat-icon>work</mat-icon><mat-label>Emp. ID:</mat-label>{{ suggestion?.EmpID }}</span>
-                <span><mat-label> Status: </mat-label><mat-chip class="listCardChip">{{ suggestion?.Status }}</mat-chip></span>
+                <span *ngIf="suggestion?.PaymentCredited == 'Yes'"><mat-label>Payment Credited</mat-label></span>
+                <span><mat-label> Status: </mat-label><span 
+                  [ngClass]="{'complete': suggestion?.Status == 'Completed','reject': suggestion?.Status == 'Rejected', 'pending': suggestion?.Status == 'Pending'}"
+                >{{ suggestion?.Status }}</span></span>
               </div>
             </div>
           </mat-card-content>
@@ -370,7 +373,9 @@
               </div>
               <div class="detail4">
                 <span id="iconLabel"><mat-icon>work</mat-icon><mat-label>Emp. ID:</mat-label>{{ selectedSuggestion?.EmpID }}</span>
-                <span> <mat-label>Status: </mat-label><mat-chip class="listCardChip">{{ selectedSuggestion?.Status }}</mat-chip></span>
+                <span *ngIf="selectedSuggestion?.PaymentCredited == 'Yes'"><mat-label>Payment Credited</mat-label></span>
+                <span> <mat-label>Status: </mat-label><span 
+                  [ngClass]="{'complete': selectedSuggestion?.Status == 'Completed','reject': selectedSuggestion?.Status == 'Rejected', 'pending': selectedSuggestion?.Status == 'Pending'}">{{ selectedSuggestion?.Status }}</span></span>
               </div>
             </div>
           </mat-card-content>
@@ -723,7 +728,7 @@
                     <button mat-raised-button color="primary">Payment Credited</button>
                   </div> -->
 
-                  <div class="flexItemRight">
+                  <div class="flexItemVS">
                     <mat-form-field class="flexItemRight mr" floatLabel="always">
                     <mat-label>Employee Photo upload</mat-label>
                       <mat-toolbar>

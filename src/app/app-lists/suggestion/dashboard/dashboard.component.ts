@@ -53,6 +53,8 @@ export class DashboardComponent {
 
   ngOnInit() {
     this.filterValue = '1';
+    this.fromDate = moment(moment(new Date()).add(-1, 'months'), 'DD-MM-YYYY').format('YYYY-MM-DD');
+    this.toDate = moment(new Date(), 'DD-MM-YYYY').format('YYYY-MM-DD');
     this.getChartValues(this.filterValue);
   }
 
@@ -61,6 +63,9 @@ export class DashboardComponent {
     this.startDate = '';
     this.endDate = '';
     this.appliedFilterValue = type == '12' ? '1 Year' : type == '6' ? '6 Month' : '1 Month';
+    const dateFilterMonth = type == '12' ? 12 : type == '6' ? 6 : 1;
+    this.fromDate = moment(moment(new Date()).add(-dateFilterMonth, 'months'), 'DD-MM-YYYY').format('YYYY-MM-DD');
+    this.toDate = moment(new Date(), 'DD-MM-YYYY').format('YYYY-MM-DD');
     this.getChartValues(this.filterValue);
   }
 
@@ -77,20 +82,20 @@ export class DashboardComponent {
 
   getChartValues(filterValue?: string, startDate?: string, endDate?: string) {
     this.showLoader = true;
+    this.loadDepartmentChart();
+    this.loadLineChart();
+    this.loadCategoryChart();
+    this.loadSuggestionChart();
     setTimeout(() => {
-      this.loadDepartmentChart();
-      this.loadLineChart();
-      this.loadCategoryChart();
-      this.loadSuggestionChart();
       this.showLoader = false;
-      this.openToaster('Charts loaded successfully!', 3000, false)
+      this.openToaster('Charts loaded successfully!', 3000, false);
     }, 2000);
   }
 
   loadDepartmentChart() {
     let payload = {
-      FromDate: '2023-11-02',
-      ToDate: '2023-12-02'
+      FromDate: this.filterValue != '' ? this.fromDate : this.startDate,
+      ToDate: this.filterValue != '' ? this.toDate : this.endDate
     };
     let chartData: any;
     this.suggestionService.getDepartmentChart(payload).subscribe(res => {
@@ -156,8 +161,8 @@ export class DashboardComponent {
 
   loadLineChart() {
     let payload = {
-      FromDate: '2023-11-02',
-      ToDate: '2023-12-02'
+      FromDate: this.filterValue != '' ? this.fromDate : this.startDate,
+      ToDate: this.filterValue != '' ? this.toDate : this.endDate
     };
     let chartData: any;
     this.suggestionService.getLineChart(payload).subscribe(res => {
@@ -185,8 +190,8 @@ export class DashboardComponent {
 
   loadCategoryChart() {
     let payload = {
-      FromDate: '2023-11-02',
-      ToDate: '2023-12-02'
+      FromDate: this.filterValue != '' ? this.fromDate : this.startDate,
+      ToDate: this.filterValue != '' ? this.toDate : this.endDate
     };
     let chartData: any;
     this.suggestionService.getCategoryChart(payload).subscribe(res => {
@@ -233,8 +238,8 @@ export class DashboardComponent {
 
   loadSuggestionChart() {
     let payload = {
-      FromDate: '2023-11-02',
-      ToDate: '2023-12-02'
+      FromDate: this.filterValue != '' ? this.fromDate : this.startDate,
+      ToDate: this.filterValue != '' ? this.toDate : this.endDate
     };
     let chartData: any;
     this.suggestionService.getSuggestionChart(payload).subscribe(res => {

@@ -280,6 +280,7 @@ export class ViewSuggestionComponent {
 
     this.suggestionService.createSuggestion(suggestionPayload).subscribe(res => {
       if (res?.Status == '1') {
+        this.suggestionList = [];
         this.getSuggestionList();
         this.openToaster('Suggestion created successfully!', 3000, true);
         this.addSuggestionForm.reset();

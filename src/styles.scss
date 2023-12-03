@@ -12,6 +12,9 @@
   --grey: #444;
   --success: #B2FF59;
   --error: #FF6E40;
+  --complete: #8BC34A;
+  --reject: #F44336;
+  --pending: #039BE5;
   --font-stack: 'Roboto', sans-serif;
   --font-weight500: 600;
 }
@@ -119,11 +122,11 @@ mat-sidenav[style] {
 
 .listCardChip {
   --mdc-chip-container-height: 1.5em !important;
-  background-color: var(--sub-color4) !important;
+  // background-color: var(--sub-color4) !important;
 
   .mat-mdc-chip-action-label {
     font-size: 1em !important;
-  }
+}
 }
 
 .listCardTitleChip {
