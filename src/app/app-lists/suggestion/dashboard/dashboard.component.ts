@@ -143,7 +143,7 @@ export class DashboardComponent {
         plugins: {
           title: {
             display: true,
-            text: 'Department Chart',
+            text: chartData?.name,
             position: 'bottom'
           },
           // legend: {
@@ -180,7 +180,7 @@ export class DashboardComponent {
         plugins: {
           title: {
             display: true,
-            text: 'Line Chart',
+            text: chartData?.name,
             position: 'bottom'
           },
         }
@@ -209,7 +209,7 @@ export class DashboardComponent {
         }
       };
       this.pieChartLabels1 = chartData?.labels;
-      chartData['values'] = [6, 26, 13, 33, 20];
+      // chartData['values'] = [6, 26, 13, 33, 20];
       this.pieChartDatasets1 = [
         {
           data: chartData?.values,
@@ -257,7 +257,7 @@ export class DashboardComponent {
         }
       };
       this.pieChartLabels2 = chartData?.labels;
-      chartData['values'] = [25, 71, 4];
+      // chartData['values'] = [25, 71, 4];
       this.pieChartDatasets2 = [{
         data: chartData?.values,
         // label: chartData?.labels,
