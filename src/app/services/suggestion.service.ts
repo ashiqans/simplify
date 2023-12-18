@@ -16,7 +16,7 @@ export interface User {
   providedIn: 'root'
 })
 export class SuggestionService {
-  baseURL: string = 'https://rajadeveloper-001-site1.ftempurl.com';
+  baseURL: string = 'http://rajadeveloper-001-site1.ftempurl.com';
   private authorBook = new BehaviorSubject([]);
   private getAuthorBooks = this.authorBook.asObservable();
 
