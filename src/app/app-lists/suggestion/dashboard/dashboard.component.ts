@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ChartConfiguration, ChartOptions } from 'chart.js';
+import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import moment from 'moment';
 import { SuggestionService } from 'src/app/services/suggestion.service';
 
@@ -101,7 +102,7 @@ export class DashboardComponent {
     this.suggestionService.getDepartmentChart(payload).subscribe(res => {
       chartData = res?.result;
       this.barChartLegend1 = true;
-      this.barChartPlugins1 = [];
+      this.barChartPlugins1 = [DataLabelsPlugin];
       this.barChartData1 = {
         labels: chartData?.labels,
         datasets: chartData?.values,
@@ -146,14 +147,14 @@ export class DashboardComponent {
             text: chartData?.name,
             position: 'bottom'
           },
-          // legend: {
-          //   display: true,
-          //   position: 'bottom',
-          // },
-          // datalabels: {
-          //   anchor: 'end',
-          //   align: 'end'
-          // }
+          legend: {
+            display: true,
+            position: 'bottom',
+          },
+          datalabels: {
+            anchor: 'end',
+            align: 'end'
+          }
         }
       };
     });
