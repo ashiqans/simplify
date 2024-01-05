@@ -300,8 +300,9 @@ export class ViewSuggestionComponent {
   applyFilter() {
     if (!this.mainFilterApplied) {
       this.pageIndex = 1;
-      this.suggestionList = [];
+      // this.suggestionList = [];
     }
+    this.suggestionList = [];
     this.showLoader = true;
     this.mainFilterApplied = true;
 
@@ -348,6 +349,7 @@ export class ViewSuggestionComponent {
       FromDate: '',
       ToDate: ''
     })
+    this.suggestionList = [];
     this.getSuggestionList();
   }
 

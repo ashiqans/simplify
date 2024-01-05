@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ChartConfiguration, ChartOptions } from 'chart.js';
-import DataLabelsPlugin from 'chartjs-plugin-datalabels';
+import { Chart, ChartConfiguration, ChartOptions } from 'chart.js';
+// import DataLabelsPlugin from 'chartjs-plugin-datalabels';
 import moment from 'moment';
 import { SuggestionService } from 'src/app/services/suggestion.service';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
+Chart.register(ChartDataLabels);
 
 @Component({
   selector: 'app-dashboard',
@@ -101,13 +103,13 @@ export class DashboardComponent {
     let chartData: any;
     this.suggestionService.getDepartmentChart(payload).subscribe(res => {
       chartData = res?.result;
-      this.barChartLegend1 = true;
-      this.barChartPlugins1 = [DataLabelsPlugin];
-      this.barChartData1 = {
-        labels: chartData?.labels,
-        datasets: chartData?.values,
+      // this.barChartLegend1 = true;
+      // this.barChartPlugins1 = [pluginDataLabels];
+      // this.barChartData1 = {
+      //   labels: chartData?.labels,
+      //   datasets: chartData?.values,
       
-      };
+      // };
 
       // this.barChartData2 = {
       //   labels: ['2006', '2007', '2008', '2009', '2010', '2011', '2012'],
@@ -149,13 +151,25 @@ export class DashboardComponent {
           },
           legend: {
             display: true,
-            position: 'bottom',
+            position: 'top',
           },
           datalabels: {
+            display: true,
             anchor: 'end',
-            align: 'end'
+            align: 'end',
+            color: 'black',
+            font: {
+              size: 12,
+            }
           }
         }
+      };
+      this.barChartLegend1 = true;
+      this.barChartPlugins1 = [ChartDataLabels];
+      this.barChartData1 = {
+        labels: chartData?.labels,
+        datasets: chartData?.values,
+      
       };
     });
   }
@@ -169,7 +183,7 @@ export class DashboardComponent {
     this.suggestionService.getLineChart(payload).subscribe(res => {
       chartData = res?.result;
       this.barChartLegend2 = true;
-      this.barChartPlugins2 = [];
+      this.barChartPlugins2 = [ChartDataLabels ];
       this.barChartData2 = {
         labels: chartData?.labels,
         datasets: chartData?.values,
@@ -184,6 +198,14 @@ export class DashboardComponent {
             text: chartData?.name,
             position: 'bottom'
           },
+          datalabels: {
+            anchor: 'end',
+            align: 'end',
+            font: {
+              weight: 'bold',
+              size: 12,
+            }
+          }
         }
       };
     });
@@ -206,6 +228,16 @@ export class DashboardComponent {
             display: true,
             text: chartData?.name,
             position: 'bottom'
+          },
+          datalabels: {
+            display: false,
+            anchor: 'center',
+            align: 'center',
+            color: 'black',
+            font: {
+              weight: 'bold',
+              size: 12,
+            }
           }
         }
       };
@@ -254,6 +286,16 @@ export class DashboardComponent {
             display: true,
             text: chartData?.name,
             position: 'bottom'
+          },
+          datalabels: {
+            display: false,
+            anchor: 'center',
+            align: 'center',
+            color: 'black',
+            font: {
+              weight: 'bold',
+              size: 12,
+            }
           }
         }
       };

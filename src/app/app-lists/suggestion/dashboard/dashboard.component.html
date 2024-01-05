@@ -26,61 +26,8 @@
 
 <div class="chartContainer" id="scrollBar">
   <div id="row1">
-        <!-- Bar chart -->
-        <div class="chart1">
-          <mat-card>
-            <mat-card-content>
-              <!-- <select class="selectContainer">
-                <option value="1">1</option>
-                <option value="2">2</option>
-                <option value="3">3</option>
-              </select> -->
-              <!-- style="margin-top: 3em;" -->
-              <canvas baseChart style="min-height: 300px"
-                    [data]="barChartData1"
-                    [options]="barChartOptions1"
-                    [plugins]="barChartPlugins1"
-                    [legend]="barChartLegend1"
-                    [type]="'bar'">
-              </canvas>
-            </mat-card-content>
-          </mat-card>
-        </div>
-    
-    <!-- pie chart -->
-    <div class="chart2">
-      <mat-card>
-        <mat-card-content>
-          <canvas baseChart style="min-height: 300px"
-                    [data]="barChartData2"
-                    [options]="barChartOptions2"
-                    [plugins]="barChartPlugins2"
-                    [legend]="barChartLegend2"
-                    [type]="'bar'">
-              </canvas>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
 
-  <div id="row2">
-    <!-- Pie chart -->
-    <div class="chart3">
-      <mat-card>
-        <mat-card-content>
-          <canvas baseChart
-            [type]="'pie'"
-            [datasets]="pieChartDatasets1"
-            [labels]="pieChartLabels1"
-            [options]="pieChartOptions1"
-            [plugins]="pieChartPlugins1"
-            [legend]="pieChartLegend1">
-          </canvas>
-        </mat-card-content>
-      </mat-card>
-    </div>
-
-    <!-- Pie chart -->
+    <!-- Pie chart 1-->
     <div class="chart4">
       <mat-card>
         <mat-card-content>
@@ -92,6 +39,60 @@
             [plugins]="pieChartPlugins2"
             [legend]="pieChartLegend2">
           </canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+      <!-- Pie chart 2-->
+      <div class="chart3">
+        <mat-card>
+          <mat-card-content>
+            <canvas baseChart
+              [type]="'pie'"
+              [datasets]="pieChartDatasets1"
+              [labels]="pieChartLabels1"
+              [options]="pieChartOptions1"
+              [plugins]="pieChartPlugins1"
+              [legend]="pieChartLegend1">
+            </canvas>
+          </mat-card-content>
+        </mat-card>
+      </div>
+  </div>
+
+  <div id="row2">
+    <!-- Bar chart 1-->
+    <div class="chart1">
+      <mat-card>
+        <mat-card-content>
+          <!-- <select class="selectContainer">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select> -->
+          <!-- style="margin-top: 3em;" -->
+          <canvas baseChart style="min-height: 300px"
+                [data]="barChartData1"
+                [options]="barChartOptions1"
+                [plugins]="barChartPlugins1"
+                [legend]="barChartLegend1"
+                [type]="'bar'">
+          </canvas>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <!-- bar chart 2-->
+    <div class="chart2">
+      <mat-card>
+        <mat-card-content>
+          <canvas baseChart style="min-height: 300px"
+                    [data]="barChartData2"
+                    [options]="barChartOptions2"
+                    [plugins]="barChartPlugins2"
+                    [legend]="barChartLegend2"
+                    [type]="'bar'">
+              </canvas>
         </mat-card-content>
       </mat-card>
     </div>
