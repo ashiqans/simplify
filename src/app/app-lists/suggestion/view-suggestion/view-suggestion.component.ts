@@ -306,8 +306,8 @@ export class ViewSuggestionComponent {
     this.showLoader = true;
     this.mainFilterApplied = true;
 
-    let fromDate = this.filterForm.get('fromDate')?.value != '' && this.filterForm.get('fromDate')?.value != 'Invalid date' ? moment(this.filterForm.get('fromDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('fromDate')?.value;
-    let toDate = this.filterForm.get('toDate')?.value != '' && this.filterForm.get('toDate')?.value != 'Invalid date' ? moment(this.filterForm.get('toDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('toDate')?.value;
+    let fromDate = this.filterForm.get('fromDate')?.value != '' && this.filterForm.get('fromDate')?.value != null && this.filterForm.get('fromDate')?.value != 'Invalid date' ? moment(this.filterForm.get('fromDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('fromDate')?.value;
+    let toDate = this.filterForm.get('toDate')?.value != '' && this.filterForm.get('toDate')?.value != null && this.filterForm.get('toDate')?.value != 'Invalid date' ? moment(this.filterForm.get('toDate')?.value).format('YYYY-MM-DD') : this.filterForm.get('toDate')?.value;
 
     let mainFilterPayload: any = {
       EmpID: this.filterForm.get('empId')?.value,
