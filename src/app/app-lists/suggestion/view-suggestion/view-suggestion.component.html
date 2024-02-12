@@ -145,10 +145,10 @@
                 </div>
 
                 <div id="detail2">
-                  <mat-chip class="listCardTitleChip"> {{ suggestion?.Title }}</mat-chip>
-                  <p>{{ suggestion?.Issue }}</p>
-                  <p>{{ suggestion?.Idea }}</p>
-                  <p>{{ suggestion?.Remarks }}</p>
+                  <span id="labelSet"><mat-label>Title: &nbsp;</mat-label><mat-chip class="listCardTitleChip"> {{ suggestion?.Title }}</mat-chip></span>
+                  <span id="labelSet"><mat-label>Issue: &nbsp;</mat-label><p>{{ suggestion?.Issue }}</p></span>
+                  <span id="labelSet"><mat-label>Idea: &nbsp;</mat-label><p>{{ suggestion?.Idea }}</p></span>
+                  <span id="labelSet"><mat-label>Remarks: &nbsp;</mat-label><p>{{ suggestion?.Remarks }}</p></span>
                 </div>
               </div>
               <div class="detail3">
@@ -357,10 +357,10 @@
                 </div>
 
                 <div id="detail2">
-                  <mat-chip class="listCardTitleChip"> {{ selectedSuggestion?.Title }}</mat-chip>
-                  <p>{{ selectedSuggestion?.Issue }}</p>
-                  <p>{{ selectedSuggestion?.Idea }}</p>
-                  <p>{{ selectedSuggestion?.Remarks }}</p>
+                  <span id="labelSet"><mat-label>Title: &nbsp;</mat-label><mat-chip class="listCardTitleChip"> {{ selectedSuggestion?.Title }}</mat-chip></span>
+                  <span id="labelSet"><mat-label>Issue: &nbsp;</mat-label><p>{{ selectedSuggestion?.Issue }}</p></span>
+                  <span id="labelSet"><mat-label>Idea: &nbsp;</mat-label><p>{{ selectedSuggestion?.Idea }}</p></span>
+                  <span id="labelSet"><mat-label>Remarks: &nbsp;</mat-label><p>{{ selectedSuggestion?.Remarks }}</p></span>
                 </div>
               </div>
               <div class="detail3">

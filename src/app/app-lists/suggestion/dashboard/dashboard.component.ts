@@ -230,7 +230,7 @@ export class DashboardComponent {
             position: 'bottom'
           },
           datalabels: {
-            display: false,
+            display: true,
             anchor: 'center',
             align: 'center',
             color: 'black',
@@ -288,7 +288,7 @@ export class DashboardComponent {
             position: 'bottom'
           },
           datalabels: {
-            display: false,
+            display: true,
             anchor: 'center',
             align: 'center',
             color: 'black',

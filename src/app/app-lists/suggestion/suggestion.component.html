@@ -4,8 +4,17 @@
     <app-nav-menu (toggleMenu)="toggleMenu()" [isExpanded]="isExpanded"></app-nav-menu>
   </mat-sidenav>
 
-  <mat-sidenav-content [style.margin-left.px]="!isExpanded ? 60 : 220">
+  <mat-sidenav-content [style.margin-left.px]="!isExpanded ? 60 : 200">
     <div class="content-container">
+      <section class="headerContainer">
+        <div class="filterLabel">
+          <mat-label>Suggestion System </mat-label>
+        </div>
+        <div class="date-time-container">
+            <div class="date">{{ currentDate | date: 'fullDate' }} {{ currentDate | date: 'shortTime' }}</div>
+            <!-- <div class="time">{{ currentDate | date: 'HH:mm:ss' }}</div> -->
+          </div>
+      </section>
       <router-outlet></router-outlet>
     </div>
   </mat-sidenav-content>
