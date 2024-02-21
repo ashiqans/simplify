@@ -15,7 +15,7 @@ export class AuthenticationService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
   isLoggedIn: boolean = false;
-  baseURL: string = "http://rajadeveloper-001-site1.ftempurl.com";
+  baseURL: string = "https://rjapptech.in";
 
   constructor(private http: HttpClient, private router: Router) {
     this.currentUserSubject = new BehaviorSubject<any>('');
